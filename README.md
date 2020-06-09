@@ -91,23 +91,22 @@ Before the course **please prepare your laptop**:
 
 <!-- -->
 
-1.  download the course materials [.7z
-    file](https://github.com/rxmenezes/RcourseNKI/RcourseNKI.7z) (see
-    below) to your laptop. Unpack the zip file to a directory, and
+1.  download the course materials via [.7z
+    file](https://github.com/rxmenezes/RcourseNKI/RcourseNKI.7z) or
+    [.zip file](https://github.com/rxmenezes/RcourseNKI/RcourseNKI.zip)
+    to your laptop. Unpack the compressed file to a directory, and
     please check whether you can open `index.html` file from the
-    directory. Note that you may have to install 7z.
+    directory. Note that, for the first, you may have to install 7z.
 
 Materials
 ---------
 
-After the course material .7z file is downloaded, the course material
-can be assessed:
+After the course material file is downloaded and uncompressed, the
+course material can be assessed:
 
 -   as HTML pages by opening `index.html` in any browser
 -   by clicking on the `RcourseNKI.Rproj` file, which will open the
     entire course as an R project
--   via [the course source git
-    repository](https://github.com/rxmenezes/RcourseNKI)
 
 The materials contain a [`data`
 directory](https://github.com/rxmenezes/RcourseNKI/tree/master/data)

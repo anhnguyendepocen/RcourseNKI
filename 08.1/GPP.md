@@ -49,7 +49,7 @@ function (x, y)
     y <- as.vector(y)
     unique(y[match(as.vector(x), y, 0L)])
 }
-<bytecode: 0x555fe4e8e8a8>
+<bytecode: 0x56518abe08a8>
 <environment: namespace:base>
 ```
 
@@ -68,7 +68,7 @@ typeof
 ```
 function (x) 
 .Internal(typeof(x))
-<bytecode: 0x555fe34730a0>
+<bytecode: 0x5651891c50a0>
 <environment: namespace:base>
 ```
 

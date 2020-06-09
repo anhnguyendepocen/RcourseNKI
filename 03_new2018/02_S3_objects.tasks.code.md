@@ -416,7 +416,7 @@ chisq.test(t.ge, simulate.p.value=TRUE)
 	replicates)
 
 data:  t.ge
-X-squared = 6.3185, df = NA, p-value = 0.04798
+X-squared = 6.3185, df = NA, p-value = 0.03748
 ```
 
 ```r

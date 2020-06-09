@@ -56,15 +56,15 @@ i) open RStudio
 ii) click on the "File" menu on the top left, and choose "New file">"R Markdown". If RMarkdown is not yet installed on your machine, this will prompt you to install it and any packages required. Just follow the instructions that appear on the screen.
 
 
-4. download the course materials [.7z file](`r params$RCourseURL`/RcourseNKI.7z) (see below) to your laptop. Unpack the zip file to a directory, and please check whether you can open `index.html` file from the directory. Note that you may have to install 7z.
+4. download the course materials via [.7z file](`r params$RCourseURL`/RcourseNKI.7z) or [.zip file](`r params$RCourseURL`/RcourseNKI.zip) to your laptop. Unpack the compressed file to a directory, and please check whether you can open `index.html` file from the directory. Note that, for the first, you may have to install 7z.
 
 ## Materials
 
-After the course material .7z file is downloaded, the course material can be assessed:
+After the course material file is downloaded and uncompressed, the course material can be assessed:
 
 - as HTML pages by opening `index.html` in any browser
 - by clicking on the `RcourseNKI.Rproj` file, which will open the entire course as an R project
-- via [the course source git repository](`r params$RCourseGitURL`)
+
 
 The materials contain a [`data` directory](`r params$RCourseURL`/tree/master/data) with the __data__ __files__ used in the presentations/tasks. The directory can be also accessed at `r params$RCourseURL`/tree/master/data
 
