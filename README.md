@@ -91,16 +91,16 @@ Before the course **please prepare your laptop**:
 
 <!-- -->
 
-1.  download the course materials [.zip
-    file](https://github.com/rxmenezes/RcourseNKI/R_course.zip) (see
+1.  download the course materials [.7z
+    file](https://github.com/rxmenezes/RcourseNKI/RcourseNKI.7z) (see
     below) to your laptop. Unpack the zip file to a directory, and
     please check whether you can open `index.html` file from the
-    directory.
+    directory. Note that you may have to install 7z.
 
 Materials
 ---------
 
-After the course material .zip file is downloaded, the course material
+After the course material .7z file is downloaded, the course material
 can be assessed:
 
 -   as HTML pages by opening `index.html` in any browser

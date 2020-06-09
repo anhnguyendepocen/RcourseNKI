@@ -56,11 +56,11 @@ i) open RStudio
 ii) click on the "File" menu on the top left, and choose "New file">"R Markdown". If RMarkdown is not yet installed on your machine, this will prompt you to install it and any packages required. Just follow the instructions that appear on the screen.
 
 
-4. download the course materials [.zip file](`r params$RCourseURL`/R_course.zip) (see below) to your laptop. Unpack the zip file to a directory, and please check whether you can open `index.html` file from the directory.
+4. download the course materials [.7z file](`r params$RCourseURL`/RcourseNKI.7z) (see below) to your laptop. Unpack the zip file to a directory, and please check whether you can open `index.html` file from the directory. Note that you may have to install 7z.
 
 ## Materials
 
-After the course material .zip file is downloaded, the course material can be assessed:
+After the course material .7z file is downloaded, the course material can be assessed:
 
 - as HTML pages by opening `index.html` in any browser
 - by clicking on the `RcourseNKI.Rproj` file, which will open the entire course as an R project
