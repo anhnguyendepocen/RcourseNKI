@@ -161,6 +161,8 @@ Slots
 -   Slot 3, Data types, part 2:
     -   [Combining text, scripts and output:
         RMarkdown](03_new2018/02_rmarkdown.html)
+        \[[tasks](03_new2018/02_rmarkdown.tasks.nocode.html)\]
+        \[[solutions](03_new2018/02_rmarkdown.tasks.code.html)\]
     -   [Lists](03_new2018/01_lists.html)
         \[[tasks](03_new2018/01_lists.tasks.nocode.html)\]
         \[[solutions](03_new2018/01_lists.tasks.code.html)\]
@@ -174,8 +176,6 @@ Slots
         \[[tasks](03_new2018/04_advanced_factors.tasks.nocode.html)\]
         \[[solutions](03_new2018/04_advanced_factors.tasks.code.html)\]
 -   slot 4:
-    -   [R scripts and reports
-        (https://github.com/rxmenezes/RcourseNKI/Rmarkdown)](04_new2018/02_rmarkdown.html)
     -   [Control flow and user-defined
         functions](https://github.com/rxmenezes/RcourseNKI/04_new2018/01_userDefinedFunctions.html)
         \[[tasks](https://github.com/rxmenezes/RcourseNKI/04_new2018/01_userDefinedFunctions.tasks.nocode.html)\]

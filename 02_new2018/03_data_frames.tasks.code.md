@@ -77,28 +77,28 @@ d[ rows, ]
 ```
 
 ```
-        id     name height weight age gender smokes alcohol exercise ran pulse1
-34  1995_H    Eliza    164     66  23 female     no      no      low ran     74
-60  1996_L   Sidney    180     75  20   male     no     yes moderate ran     65
-4   1993_D   Travis    195     84  18   male     no     yes     high sat     71
-109 1998_Q    Lewis    170     65  18   male     no     yes     high sat     69
-102 1998_J     Raul     68     63  19   male     no      no moderate ran     88
-37  1995_K   Johnny    185     90  18   male     no      no      low ran     80
-15  1993_O Salvador    180     72  18   male     no     yes moderate sat     69
-110 1998_R     Gene    185     85  19   male     no     yes moderate sat     75
-54  1996_F  Brandie    171     67  18 female     no     yes      low sat     76
-59  1996_K Bridgett    160     49  19 female     no      no      low sat     80
-    pulse2 year
-34     168 1995
-60      82 1996
-4       73 1993
-109     64 1998
-102    136 1998
-37     140 1995
-15      67 1993
-110     68 1998
-54      74 1996
-59      72 1996
+        id      name height weight age gender smokes alcohol exercise ran
+107 1998_O    Bettie    161   43.0  19 female     no      no      low sat
+44  1995_R      Ella    170   60.0  19 female     no     yes moderate sat
+27  1995_A     Pedro    170   60.0  18   male     no     yes moderate sat
+69  1996_U     Julio    182   98.0  19   male     no     yes moderate ran
+4   1993_D    Travis    195   84.0  18   male     no     yes     high sat
+56  1996_H Christian    173   70.0  20   male     no     yes     high ran
+77  1997_H     Renee    170   53.5  20 female     no      no      low sat
+54  1996_F   Brandie    171   67.0  18 female     no     yes      low sat
+26  1993_Z      Erma    177   74.0  18 female     no      no moderate ran
+78  1997_I       Tim    170   58.5  20   male     no      no      low sat
+    pulse1 pulse2 year
+107     90     89 1998
+44      80     80 1995
+27      62     59 1995
+69      76    150 1996
+4       71     73 1993
+56      64    126 1996
+77      60     62 1997
+54      76     74 1996
+26      70     96 1993
+78      80     82 1997
 ```
 
 - Sorting (ordering) a table (by multiple keys):

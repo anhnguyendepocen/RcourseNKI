@@ -130,7 +130,6 @@ catSlot( l );
 ```
 
 - slot 4:
-    - [R scripts and reports (Rmarkdown)](04_new2018/02_rmarkdown.html)
     - [Control flow and user-defined functions](04_new2018/01_userDefinedFunctions.html)
         [[tasks](04_new2018/01_userDefinedFunctions.tasks.nocode.html)]
         [[solutions](04_new2018/01_userDefinedFunctions.tasks.code.html)] 
