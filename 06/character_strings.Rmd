@@ -1,0 +1,239 @@
+---
+title: "Character string processing & Pattern matching"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+#pulse <- read.table("https://barmsijs.lumc.nl/R_course/data/pulse.txt", header = T) 
+#survey <- read.delim("https://barmsijs.lumc.nl/R_course/data/survey.txt") 
+pulse <- read.table("../data/pulse.txt")
+survey <- read.delim("../data/survey.txt")
+source( "../R_course_setup.R" )
+```
+
+# Character string processing & Pattern matching
+
+## Learning goals
+
+- Character string manipulation : string concatenation,splitting, etc. 
+- Pattern matching and replacement  
+
+## Quotes and escape characters (characters with special meaning)
+
+```
+\n  newline                   \v	vertical tab
+\r	carriage return           \\	backslash \
+\t	tab                       \'	ASCII apostrophe '
+\b	backspace                 \"	ASCII quotation mark "
+\a	alert (bell)              \`	ASCII grave accent (backtick) `
+\f	form feed                 \\.   dot (escaped twice ; special meaning in RE)
+```
+
+## Character string
+
+Character string or simply `character`, as it is called in R, is a sequence of characters and a character vector is vector of character strings. 
+
+
+```{r}
+( cs <- "This is a character string" ) 
+( cv <- c(cs, "and this is another !") )
+```
+
+Single and double quotes can be used interchangeably, however, double quotes are preferred.
+
+```{r}
+"string" 
+'string' 
+"'strings'"
+'"string"'   
+```
+
+Formatting the output with `print` and `cat` functions. The function `print` does more formatting than `cat`. On the other hand `cat` interprets escape characters such as whitespaces [\\t\\n\\r,...], note that the behavior will differ depending on the platform. The function `cat` is useful and often used to print progress and/or debugging information in functions. 
+
+```{r}
+print(1:50)
+cat(1:50)
+print("separate\nlines")
+cat("separate\nlines") 
+cat("column1\tcolumn2") 
+
+```
+
+Some useful function:
+
+```{r}
+letters
+LETTERS
+month.name
+month.abb
+```
+
+## paste(..., sep = " ", collapse = NULL) : 
+
+Concatenates one or more vectors into a character vector.  
+
+```{r}
+paste("Bonnie","@", "lumc.nl")
+paste("Travis","@", "lumc.nl", sep="")
+paste("Travis", "lumc.nl", sep="@")
+paste("Travis", 1,"@", "lumc.nl", sep="") # convert numeric to character 
+paste("Travis","@","lumc.nl",";","Bonnie","@","lumc.nl", sep="")
+paste(c("Bonnie","Travis"),"@", "lumc.nl", sep="") # recycling 
+```
+
+Recycling occurs in expressions involving multiple vectors of different sizes. The rule is that smaller vectors are recycled, partially if necessary, as often as possible to match the size of the largest vector.
+
+
+```{r}
+
+paste(c("Bonnie","Travis"),"@", "lumc.nl", sep="") 
+paste(c("Bonnie","Travis"),"@", "lumc.nl", sep="", collapse = ";") 
+paste(c("Bonnie","Travis"), "lumc.nl", sep="@", collapse = ";")
+```
+
+```{r}
+
+```
+
+## Pulse data set
+
+```{r, echo=FALSE}
+set.seed(12345)
+```
+
+```{r}
+head(pulse) 
+allNames <- as.vector(pulse$name)
+head(allNames)
+length(allNames)
+( pulseNames <- sample(allNames, size = 5) ) # select randomly 5 names from allNames
+domains <- c("lumc.nl", "leidenuniv.nl", "vumc.nl")
+emails  <- paste(pulseNames,domains, sep="@") 
+emails
+```
+
+## tolower, toupper, nchar
+
+```{r}
+toupper(emails) # convert to uppercase
+tolower(emails) # convert to lowercase
+nchar(emails)   # nr. of characters in string
+```
+
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "characterVectors", "character_strings.Rmd" )
+```
+
+## Split character string : strsplit(x, split, ...) : 
+
+The `strsplit` function splits each element of the character vector `x` by substring `split` into substrings and returns a list of character vectors as the result.
+
+
+```{r}
+strsplit("Bonnie@lumc.nl", "@")
+unlist( strsplit("Bonnie@lumc.nl", "@") )
+strsplit(c("Bonnie@lumc.nl","Melanie@lumc.nl"), "@")
+strsplit("Bonnie@lumc.nl", "n")
+strsplit("Bonnie@lumc.nl", "") # useful
+userDomains <- strsplit(emails,"@")
+userDomains
+```
+
+
+## rbind(...), cbind(...) : combine by rows or columns
+
+```{r,comment=NA}
+
+letters[1:3]
+LETTERS[1:3]
+rbind(letters[1:3], LETTERS[1:3])
+cbind(letters[1:3], LETTERS[1:3])
+```
+
+## strsplit(x, split, ...)
+
+
+```{r}
+userDomains <- strsplit(emails,"@")
+userDomains
+rbind(userDomains[[1]],userDomains[[2]],userDomains[[3]],userDomains[[4]],userDomains[[5]])
+```
+
+
+## do.call(what, args, ...) : execute function on list of arguments
+
+```{r, comment=NA}
+do.call(rbind, userDomains) # <=>  rbind(userDomains[[1]],userDomains[[2]],...)
+```
+
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "strsplit", "character_strings.Rmd" )
+```
+
+## grep(pattern, x, ignore.case = FALSE, value = FALSE, ... )
+
+Search for matches of `pattern` in strings of character vector `x`.
+
+```{r, comment=NA}
+emails
+grep("Dona", emails)
+grep("Dona", emails, value = TRUE) 
+grep("dona", emails, value = TRUE) # case-sensitive
+grep("dona", emails, value = TRUE, ignore.case = TRUE)
+grep("dona", emails, value = TRUE, ignore.case = TRUE, invert = TRUE)
+
+```
+
+
+## grepl(pattern, x, ignore.case = FALSE, ...) 
+
+Same functionality as `grep` except it returns a logical vector of matches found. 
+
+```{r, comment=NA}
+emails
+foundSubject <- grepl("Dona", emails)
+foundSubject
+emails[foundSubject]       # value
+emails[ ! foundSubject ]   # invert
+```
+
+
+## substr(x, start, stop) : extract/replace substrings
+
+
+```{r, comment=NA}
+substr(x = "abc",start = 1,stop = 1)
+substr("abc",1,nchar("abc"))
+(abcs <- rep("abc",3))
+substr(abcs,1,1:nchar("abc"))
+(e <- head(emails))
+substr(e,1,1) 
+tolower(substr(e,1,1))
+substr(e,1,1) <- tolower(substr(e,1,1)) # replace first character with its lowercase
+e
+```
+
+## gsub/sub(pattern, replacement, x, ignore.case = FALSE, ...)
+
+```{r, comment=NA}
+sub("@", "(at)", emails)
+sub("\\.", "\n", "git.lumc.nl")   # first occurence only 
+gsub("\\.", "\n", "git.lumc.nl") # global: apply to all occurrences 
+cat( gsub("\\.", "\n", "git.lumc.nl") )
+```
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "grep", "character_strings.Rmd" )
+```
+
+
+## Extra exercises 
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "extra", "character_strings.Rmd" )
+```
+
+

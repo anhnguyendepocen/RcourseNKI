@@ -1,0 +1,155 @@
+---
+title: "Using R for data analysis"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+source( "R_course_setup.R" );
+```
+
+# Using R for data analysis
+
+[R](https://www.r-project.org/) is an open-source, free environment for statistical computing and graphics. 
+It provides a large repository of statistical analysis methods, both classic and new. 
+However, R has a steep learning curve, due partly to its using a command-line type of user interface, rather than the usual pull-down menus. 
+The course aims at helping researchers climb this curve, enabling them to perform basic data analysis and graphic displays at the end of the course, as well as giving a platform from which they can deepen their R knowledge later on if necessary.
+
+## Teachers
+
+- [Renee Menezes](http://www.bigstatistics.nl/renee), Biostatistics Unit, NKI (__coordinator__)
+- Renaud Tissier, Biostatistics Unit, NKI
+- Miriam Haaksma, PSOE, NKI
+
+## Goals & Topics
+
+After the course you will be able to:
+
+- understand and write simple R scripts
+- use R to perform simple statistical analyses of your own data
+- use and adapt R scripts and functions 
+- generate analysis reports from your own data in html format
+
+We will cover the following topics:
+
+- R expressions
+- R data objects (vectors (arrays), data frames (tables), lists) creation and usage
+- [R Markdown](http://rmarkdown.rstudio.com/) for building reproducible reports [[cheat sheet](http://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)]
+- R functions for descriptive statistics and linear model fitting; R formula objects
+- histograms, scatter plots, boxplots (in basic R) 
+
+## Prerequisites
+
+The course assumes no prior programming knowledge. Elementary statistics knowledge is necessary.
+
+Participants must **bring own laptops** capable of running [RStudio](https://www.rstudio.com/products/rstudio/). 
+
+Before the course **please prepare your laptop**:
+
+- go to [the RStudio download page](https://www.rstudio.com/products/rstudio/download/#download), select a version of RStudio appropriate for your laptop, download it and then install. Please check whether you can start RStudio.
+- download the course materials [.zip file](`r params$RCourseURL`/R_course.zip) (see below) to your laptop. Unpack the zip file to a directory, and please check whether you can open `index.html` file from the directory.
+
+## Materials
+
+The course materials are served:
+
+- as [HTML pages](`r params$RCourseURL`/index.html) at `r params$RCourseURL`/index.html
+- as a [.zip file](`r params$RCourseURL`/R_course.zip)
+- as a [.tar.gz file](`r params$RCourseURL`/R_course.tgz)
+- in [the course source git repository](`r params$RCourseGitURL`)
+
+The materials contain a [`data` directory](`r params$RCourseURL`/data) with the __data__ __files__ used in the presentations/tasks. The directory can be also accessed at `r params$RCourseURL`/data
+
+## Programme
+
+### First NKI edition, June 15th, 16th, 18th 
+
+This course will be given online via Zoom. All course days are in the period 9:00-16:00, with the last hour reserved for general Q&A.
+
+
+
+## Slots
+
+
+
+```{r echo=FALSE,message=FALSE,results='asis'}
+l <- list(
+  slot = "1",
+  title = "Basics of R",
+  dir = "01_new2018",
+  topics = list(
+    list( title = "Course data sets", file = "00_datasets" ),
+    list( title = "Introduction", file = "01_introduction" ),
+    list( title = "Basics", file = "02_basics" ),
+    list( title = "Projects and scripts", file = "03_projects_and_scripts" ),
+    list( title = "Data frames (basics)", file = "04_dataframes" ),
+    list( title = "Basic data types", file = "05_character_factor_basics" ),
+    list( title = "Functions and help files", file = "06_help" )
+  )
+)
+catSlot( l );
+```
+
+```{r echo=FALSE,message=FALSE,results='asis'}
+l <- list(
+  slot = "2",
+  title = "Data types, part 1",
+  dir = "02_new2018",
+  topics = list(
+    list( title = "Basic data types (cont.)", file = "01_basic_data_types_cont" ),
+    list( title = "Selecting/indexing/subsetting", file = "02_selecting" ),
+    list( title = "Data frames (cont.)", file = "03_data_frames" ),
+    list( title = "Matrices", file = "05_matrices" )
+  )
+)
+catSlot( l );
+```
+
+```{r echo=FALSE,message=FALSE,results='asis'}
+l <- list(
+  slot = "3",
+  title = "Data types, part 2",
+  dir = "03_new2018",
+  topics = list(
+    list( title = "Lists", file = "01_lists" ),
+    list( title = "Basic statistical tests", file = "02_S3_objects" ),
+    list( title = "Regression and formula objects", file = "03_regression" ),
+    list( title = "Factors (advanced)", file = "04_advanced_factors" )
+  )
+)
+catSlot( l );
+```
+
+- slot 4:
+    - [R scripts and reports (https://barmsijs.lumc.nl/R_course/Rmarkdown)](04_new2018/02_rmarkdown.html)
+    - [Control flow and user-defined functions](https://barmsijs.lumc.nl/R_course/04_new2018/01_userDefinedFunctions.html)
+        [[tasks](https://barmsijs.lumc.nl/R_course/04_new2018/01_userDefinedFunctions.tasks.nocode.html)]
+        [[solutions](https://barmsijs.lumc.nl/R_course/04_new2018/01_userDefinedFunctions.tasks.code.html)] 
+
+- slot 5:
+    - [Character string processing & Pattern matching](https://barmsijs.lumc.nl/R_course/06/character_strings.html)
+        [[tasks](https://barmsijs.lumc.nl/R_course/06/character_strings.tasks.nocode.html)]
+        [[solutions](https://barmsijs.lumc.nl/R_course/06/character_strings.tasks.code.html)]
+    - [S3 and S4 classes](https://barmsijs.lumc.nl/R_course/08/s3s4.html)
+        [[tasks](https://barmsijs.lumc.nl/R_course/08/s3s4.tasks.nocode.html)]
+        [[solutions](https://barmsijs.lumc.nl/R_course/08/s3s4.tasks.code.html)]
+- slot 6:
+    - [Making errors the right way](https://barmsijs.lumc.nl/R_course/05.renee/03_makingErrors.html)
+    - Reproducible research
+
+<!-- - [Regression](https://barmsijs.lumc.nl/R_course/07.2017/01_regression.html)
+        [[tasks](https://barmsijs.lumc.nl/R_course/07.2017/01_regression.tasks.nocode.html)]
+        [[solutions](https://barmsijs.lumc.nl/R_course/07.2017/01_regression.tasks.code.html)] 
+    - [[Extra exercises](https://barmsijs.lumc.nl/R_course/07.2017/02_plenty.tasks.nocode.html)]
+        [[solutions](https://barmsijs.lumc.nl/R_course/07.2017/02_plenty.tasks.code.html)] -->
+
+
+## Useful links
+
+- [R for Data Science](http://r4ds.had.co.nz/)
+- [RStudio Cheat Sheets](https://www.rstudio.com/resources/cheatsheets/)
+- [LUMC Git course](https://git.lumc.nl/courses/gitcourse)
+- [A curated list of R tutorials for Data Science, NLP and Machine Learning](https://github.com/ujjwalkarn/DataScienceR)
+- [Great R packages for data import, wrangling and visualization](http://www.computerworld.com/article/2921176/business-intelligence/great-r-packages-for-data-import-wrangling-visualization.html)
+- [ggplot2: great R package for beautiful plots - cheat sheet](http://www.rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf)
+
+

@@ -1,0 +1,370 @@
+---
+title: "Good programming practice (GPP)"
+author: ''
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment=NA)
+set.seed(1234)
+```
+
+
+```{r, eval=FALSE, include=FALSE, echo=FALSE, comment=NA}
+
+## Notes
+
+- everything is a function
+  - what is the result of  typeof(if (FALSE) return("unreachable!"))
+- example: m[i,j] <- if (…) … 
+
+```
+
+
+## Goal
+
+- General coding conventions and style 
+- User-defined Functions 
+
+## Some general coding conventions 
+
+To improve *readability* and *maintenance* easier:
+
+  - File Names: end in .R
+  - Identifiers: FunctionName, variableName, kConstantName
+  - Line Length: maximum 70-80 characters
+  - Indentation
+  - Curly Braces: first on same line, last on own line
+  - else: Surround else with braces
+  - Assignment: use <-, not =
+  - Semicolons: don't use them
+  - General layout and ordering  (library, functions, main)
+  - Use existing R functions if possible.
+  - Write generic parts as functions
+  - Inline documentation
+  - Record sessionInfo() into project results. 
+
+```{r, include=FALSE}
+#- *Premature optimisation is the root of all evil  , Donald Knuth*
+
+```
+
+ 
+## R functions
+
+```{r, echo=T, eval=TRUE}
+intersect
+class
+typeof
+```
+
+
+## Running example : GC content
+
+```{r, echo=FALSE}
+
+strToChars <- function(x) {
+  #
+  # Description: converts a string to a character vector
+  #
+  unlist(strsplit(x,split=""))  
+}
+
+checkSequence <- function(sequence, sequenceType) {         
+  #
+  # Description: checks whether 'sequence' string
+  # of type 'sequenceType' {DNA,RNA}
+  #
+  bases <- switch(sequenceType, 
+                  DNA = "A|C|G|T", 
+                  RNA = "A|C|G|U")
+  lettersInAlphabet <- sum(grepl(bases, strToChars(toupper(sequence))))  
+  
+  return(lettersInAlphabet == length(strToChars(sequence)))
+}
+
+gcFrequency <- function(sequence, sequenceType=c("DNA", "RNA")) {
+  # M. van Iterson 
+  # June 3, 2015
+  # input: 
+  #        sequence DNA or RNA as a string
+  #        sequenceType either 'DNA' or 'RNA'
+  # output: 
+  #        gc-frequency of the sequence
+    
+  sequenceType <- match.arg(sequenceType)       
+  
+  # extract nucleotides using CAPITALS
+  SEQUENCE    <- toupper(sequence)
+  nucleotides <- strToChars(SEQUENCE)
+
+  # check if the sequence is a proper DNA or RNA sequence
+  if(!checkSequence(sequence, sequenceType))
+     stop(paste("Sequence:", sequence, " is not a ", sequenceType, " sequence !"))
+      
+  # calculated GC frequency
+  seqLength <- length(nucleotides)
+  gcCounts <- sum(grepl("C|G", nucleotides))  
+  gcFreqs <- gcCounts/seqLength   
+  
+  return(gcFreqs)
+}
+
+
+
+```
+
+- DNA/RNA are sequences of nucleobases with DNA={A,C,G,T} and RNA={A,C,G,U}
+- GC frequency is the proportions of G's and C's in a sequence.
+
+```{r}
+( DNA1 <- paste(sample(c("A", "C", "G", "T"), 20, replace=TRUE), collapse="") )
+( RNA1 <- paste(sample(c("A", "C", "G", "U"), 20, replace=TRUE), collapse="") )
+```
+
+
+
+```{r, echo=FALSE}
+cat('DNA GC frequency:')
+gcFrequency(DNA1, sequenceType = "DNA")
+cat('RNA GC frequency:')
+gcFrequency(RNA1, sequenceType = "RNA")
+```
+
+
+## GC content in a DNA sequence
+
+```{r}
+DNA1
+( nucleotides <- unlist(strsplit(DNA1,"")) )
+sum(grepl("[CG]", nucleotides))
+sum(grepl("[CG]", nucleotides))/nchar(DNA1)
+
+```
+
+
+## gcFrequency function
+
+```{r}
+gcFrequency <- function(sequence) {
+  seqLength   <- nchar(sequence)
+  nucleotides <- unlist(strsplit(sequence,""))
+  gcCounts    <- sum(grepl("[CG]", nucleotides))
+  return(gcCounts/seqLength)
+}
+
+DNA1
+gcFrequency(DNA1)
+
+```
+
+
+## Function arguments
+
+```{r, error=TRUE}
+( DNA2 <- paste(sample(c("a", "c", "g", "t"), 20, replace=TRUE), collapse="") ) 
+gcFrequency(DNA2)
+( DNA3 <- 12345 )
+gcFrequency(DNA3) 
+```
+
+## stop(...)/warning(...)
+
+When to issue:
+ 
+ - **Warnings** : possibility of recovery and no potential harm to the end result
+ 
+ - **Errors**   : no possibility for recovery and potential harm to the end result
+
+```{r, error=TRUE, warning=TRUE}
+stop("your error message !")
+warning("your warning message !")
+```
+
+
+##  Function argument check
+
+```{r, error=TRUE}
+
+gcFrequency <- function(sequence) {
+  sequence    <- as.character(sequence) 
+  seqLength   <- nchar(sequence)
+  nucleotides <- unlist(strsplit(sequence,""))
+  # Check if the sequence is a proper DNA sequence
+  if(sum(grepl("[ACGT]", nucleotides)) != nchar(sequence))
+    stop(paste("The sequence:", sequence, " is not a DNA sequence !"))
+  gcCounts <- sum(grepl("[CG]", nucleotides))
+  gcCounts/seqLength
+}
+
+
+DNA1
+gcFrequency(DNA1) 
+
+DNA2
+gcFrequency(DNA2)
+
+DNA3
+gcFrequency(DNA3)
+
+```
+
+## Function argument check (cont.)
+
+```{r, error=TRUE}
+
+gcFrequency <- function(sequence) {
+  # Function 'toupper' coerces objects to character
+  SEQUENCE    <- toupper(as.character(sequence))  
+  seqLength   <- nchar(SEQUENCE)
+  nucleotides <- unlist(strsplit(SEQUENCE,""))
+  # Check if the sequence is a proper DNA sequence
+  if(sum(grepl("[ACGT]", nucleotides)) != nchar(SEQUENCE))
+    stop(paste("The sequence:", sequence, "is not a DNA sequence!"))
+  gcCounts <- sum(grepl("[CG]", nucleotides))
+  gcCounts/seqLength
+}
+
+DNA2 
+gcFrequency(DNA2)
+
+```
+
+
+## Tasks
+
+  1.  Update `gcFrequency` such that it can handle RNA sequences.
+    - RNA sequences contain `Uracil` (U) instead of `Thymine` (T)
+  2.  Modify the function, if necessary, so it can distinguish between DNA and RNA. Test it by an invalid input such as :  `uuuatataggguctggctat`. 
+
+
+```{r, eval=FALSE, include=F}
+#
+#
+#
+gcFrequency <- function(sequence) {
+  #
+  # description: Takes a Character vector of length 1 representing 
+  # DNA/RNA sequence and returns the GC proportion as the result. 
+  #
+
+  # Function 'toupper' coerces objects to character
+  SEQUENCE    <- toupper(sequence)  
+  seqLength   <- nchar(SEQUENCE)
+  nucleotides <- unlist(strsplit(SEQUENCE,""))
+  # Check if the sequence is a proper DNA sequence
+  if(sum(grepl("[ACGTU]", nucleotides)) != nchar(SEQUENCE) |
+     (sum(grepl("[U]", nucleotides))>0 & sum(grepl("[T]", nucleotides))>0)
+     )
+    stop(paste("The sequence:", sequence, "is not a DNA/RNA sequence!"))
+  gcCounts <- sum(grepl("[CG]", nucleotides))
+  gcCounts/seqLength 
+}  
+  
+```
+
+
+
+
+
+```{r, error=TRUE, eval=FALSE, include=FALSE}
+
+## Function argument 'seuqenceType'
+
+
+gcFrequency <- function(sequence, sequenceType=c("DNA", "RNA")) {
+  
+  # Check sequence type is  DNA or RNA
+  sequenceType <- match.arg(sequenceType)
+  bases <- c(DNA="[ACGT]")
+  if(sequenceType != "DNA") 
+    bases <- c(DNA="[ACGU]")
+  
+  SEQUENCE    <- toupper(sequence)
+  seqLength   <- nchar(SEQUENCE)
+  nucleotides <- unlist(strsplit(as.character(SEQUENCE),""))
+  # Check if the sequence is a proper DNA or RNA sequence
+  if(sum(grepl(bases, nucleotides)) != nchar(SEQUENCE))
+    stop(paste("The sequence:", 
+               sequence, "is probably not a", sequenceType, "sequence!"))
+  # calculated GC frequency
+  gcCounts <- sum(grepl("[CG]", nucleotides))
+  return(gcCounts/seqLength) 
+}
+
+DNA2 <- paste(sample(c("A", "C", "G", "U"), 20, replace=TRUE), collapse="") 
+gcFrequency(DNA2,sequenceType =  "DNA")
+gcFrequency(DNA2,sequenceType =  "RNA")
+
+## Homework
+
+# Remark : A pre-condition is that `sequence` must be a non-empty string.
+# 
+# 1. Write a function `checkSequence(sequence, sequenceType)` that checks the input sequence given a sequence type and returns logical true in case of DNA or RNA and false otherwise.
+# 
+# 2. Update gcFrequency with the use of function `checkSequence`.
+# 
+# 3. Rewrite the the function checkSequence such that it returns a correct DNA or RNA sequence as a vector of nucleotides and a NULL in case of failure. Update gcFrequency with the new checkSequence function. 
+
+
+## Notes on warnings or errors
+
+# When to issue:
+# 
+# - **Warnings** : possibility of recovery and no potential harm to the end result
+# 
+# - **Errors**   : no possibility for recovery and potential harm to the end result
+# 
+# Resolve by:
+# 
+# - Make the right choice !
+# 
+# - try(...)/tryCatch(...) 
+
+```
+
+```{r, eval=FALSE, include=FALSE}
+
+## Debugging : browser()
+
+ln <- function(x) {
+  browser()
+  if (x<0)
+      stop("x must be >= 0 !")
+  else 
+    log(x)
+}
+```
+
+```{r , eval=FALSE, include=FALSE}
+> browser()
+Called from: top level 
+Browse[1]> help
+n          next
+s          step into
+f          finish
+c or cont  continue
+Q          quit
+where      show stack
+help       show help
+<expr>     evaluate expression
+```
+
+
+```{r, eval=FALSE, include=FALSE}
+## Debugging : debug()/undebug()
+
+ln <- function(x) {
+  if (x<0)
+      stop("x must be >= 0 !")
+  else 
+    log(x)
+}
+
+debug(ln)
+# run program containing ln(...)
+undebug(ln)
+
+
+```
+

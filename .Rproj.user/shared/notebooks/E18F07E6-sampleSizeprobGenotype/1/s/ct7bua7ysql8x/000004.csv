@@ -1,0 +1,8 @@
+"0","pv <- NULL"
+"0","probs <- c(0.001, 0.01, 0.05, 0.1, 0.25)"
+"0","for(xn in nvec)"
+"0","  pv <- rbind(pv, 1-pbinom(0, size = xn, prob = probs, lower.tail=TRUE))"
+"0",""
+"0","pmat <- matrix(pv, nrow = 21, ncol = length(probs), byrow = TRUE)"
+"0","rownames(pmat) <- nvec"
+"0","colnames(pmat) <- probs"

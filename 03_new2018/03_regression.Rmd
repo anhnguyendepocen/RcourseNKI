@@ -1,0 +1,217 @@
+---
+title: "Regression and formula objects"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+
+```{r setup, include=FALSE}
+source( "../R_course_setup.R" );
+```
+```{r echo=FALSE}
+pulse <- read.delim("../data/pulse.txt")
+survey <- read.delim("../data/survey.txt")
+```
+
+
+# Formula objects
+
+Formula objects are the way to tell R that one variable depends on another. 
+
+## Basics of formula objects
+
+To specify a (statistical) model in which `y` depends on `x`, say
+
+```{r}
+y ~ x
+```
+
+We use a formula for more readable specification of code. For example, when plotting. Instead of
+
+```{r}
+plot(pulse$pulse1, pulse$pulse2)
+```
+
+we say
+
+```{r}
+plot(pulse2 ~ pulse1, data=pulse)
+```
+
+Note the reverse order!
+
+If a function allows a formula as input it always has a `data` argument. This gives the data.frame (or other environment) in which the variables in the formula are interpreted.
+
+
+## Use of formula objects in statistics
+
+Formula objects can also be used in the syntax of tests and other functions, making them simpler. For example, consider the problem of comparing values of `pulse1` between males and females. We can use an unpaired t test for this, by writing:
+
+
+```{r}
+pulse1.male <- pulse$pulse1[survey$gender == 'male']
+pulse1.female <- pulse$pulse1[survey$gender == 'female']
+t.test(pulse1.male, pulse1.female)
+```
+
+A much simpler way is to use a formula:
+
+```{r}
+t.test(pulse1 ~ gender, data = pulse)
+```
+
+Many functions allow (or require!) formula as input.
+
+
+## (*) The formula class
+
+A formula is just a R object.
+
+```{r}
+class(y~x)
+```
+
+It can be stored in a variable and reused.
+
+```{r}
+form <- pulse1 ~ gender
+t.test(form, data=pulse)
+```
+
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "formula", "03_regression.Rmd" );
+```
+
+
+
+# Simple linear regression
+
+## The `lm` function
+
+The command for linear regression is `lm` (for *linear model*). The linear model returns an object of class `lm`.
+
+```{r}
+fit <- lm(weight ~ height, data = pulse)
+```
+
+The output of `lm` is an object of class `lm`. 
+
+```{r}
+fit
+names(fit)
+```
+
+Some S3 objects have special functions defined for them. The following functions extract useful information from the `lm` object.
+
+```{r}
+summary(fit)
+coef(fit)
+residuals(fit)
+fitted.values(fit)
+```
+
+Note that `summary(fit)` returns itself an object in which some additional things are calculated.
+
+```{r}
+summa <- summary(fit)
+class(summa)
+names(summa)
+```
+
+Most useful is the regression table
+
+```{r}
+coef(summa)
+```
+
+and the confidence intervals for all or some regression coefficients
+
+```{r}
+confint(fit)
+confint(fit, "height")
+```
+
+
+##  Visualizing a regression 
+
+We can easily visualize the regression using the same formula and fit object
+
+```{r}
+plot(weight ~ height, data=pulse)
+abline(coef(fit))
+```
+
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "lm", "03_regression.Rmd" );
+```
+
+
+
+# Multiple regression and prediction
+
+## Multiple terms in a formula
+
+We can have multiple terms in a formula. This way we can do multiple regression
+
+```{r}
+fit <- lm(pulse2 ~ pulse1 + height, data=pulse)
+fit
+summary(fit)
+```
+
+
+## Predicting
+
+We can use regression for prediction using the predict function. To predict we need two things. First, a fitted model object.
+
+```{r}
+fit <- lm(pulse2 ~ pulse1 + height, data=pulse)
+```
+
+Second, a data.frame with new data for our covariates
+
+```{r}
+new.data <- data.frame(pulse1=c(90, 80), height=c(c(173, 185)))
+```
+
+Now we can predict a value for a person with these covariates
+
+```{r}
+predict(fit, new.data)
+```
+
+
+## (*) Interaction
+
+Specifying interactions between variables in a formula: use `:` or `*`:
+
+- `:` interaction only
+- `*` interaction and main effects
+
+Let us say that we want to explain `pulse2` by `pulse1`, `exercise` and `alcohol`, as well as a variable representing an interaction between `exercise` and `alcohol`. Two alternative ways of specifying the same model are
+
+```{r}
+lm(pulse2 ~ pulse1 + exercise + alcohol + exercise:alcohol, data=pulse)
+lm(pulse2 ~ pulse1 + exercise*alcohol, data=pulse)
+```
+
+
+## (*) The intercept term
+
+We see that R automatically adds an intercept term to the model. You can suppress the intercept too, by adding either `+0` or `-1` to the formula. Suppressing the intercept has different effects if there are factor variables in your model or not. 
+
+Suppression of the intercept means regression through the origin
+
+```{r}
+lm(weight ~ 0 + height, data=pulse)
+```
+
+Note that this is different if we have factors (see next part)!
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "multiple", "03_regression.Rmd" );
+```
+
+
+

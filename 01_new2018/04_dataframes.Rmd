@@ -1,0 +1,148 @@
+---
+title: "Data frames (basics)"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup,include=FALSE,eval=TRUE}
+source( "../R_course_setup.R" );
+```
+
+# Data frames (basics)
+
+So we are now able to read in data sets (tables). A data set in R is called a `data.frame`. 
+
+```{r result="asis", echo=FALSE, comment="", eval=TRUE}
+pulse <- catReadTable( "pulse.txt", "pulse" )
+```
+```{r eval=FALSE}
+pulse <- read.delim( "../data/pulse.txt" )
+```
+
+```{r result="asis", echo=FALSE, comment="", eval=TRUE}
+survey <- catReadTable( "survey.txt", "survey" )
+```
+```{r eval=FALSE}
+survey <- read.delim( "../data/survey.txt" )
+```
+
+R can have many data sets in memory simultaneously. You will always have to specify which data set you are working in.
+
+## Exploring 
+
+### Dimensions
+
+Rows in a data.frame are typically subjects; columns are variables.
+
+To find the size of a data.frame
+```{r}
+ncol(pulse)
+nrow(pulse)
+dim(pulse)
+```
+
+### Showing head and tail
+
+To get a quick impression of a data.frame:
+
+- `head` prints the first 6 rows
+- `tail` prints the last 6 rows
+
+If you want more or less than 6, add the number you want as a second argument to the function:
+```{r}
+head(pulse)
+tail(pulse, 3)
+```
+
+We've already seen `View`.
+
+With `names` (alternatively `colnames`) you find the names of the variables (columns) in the data.frame:
+```{r}
+names(pulse)
+```
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "explore", "04_dataframes.Rmd" );
+```
+
+
+## Extracting 
+
+### Columns
+
+To extract a column of a data.frame use `$`. The result is a vector:
+```{r}
+pulse$age
+```
+
+Note the autocomplete in RStudio that helps suggest the right column.
+
+To add a column to a data.frame, use the assigmnent:
+```{r}
+pulse$pulse.diff <- pulse$pulse2 - pulse$pulse1
+head( pulse )
+```
+
+
+### Row names
+
+A data.frame always has row names. Note that these names are not themselves a column of the data.frame!
+```{r}
+rownames(pulse)
+```
+
+Name of each row must be unique.
+
+### Elements
+
+An individual entry to a data.frame can be extracted using square brackets `[`, either using the names of row and column (note the quotes) or their indices. Row comes before the comma, column after.
+```{r}
+pulse["1993_E", "height"]
+pulse[5, 2]
+```
+
+You can also use ranges like with vectors
+```{r}
+pulse[4:6, 1:5]
+```
+
+Much more about using square brackets later in the course.
+
+
+### (*) Removing a column 
+
+To remove a column from a data.frame, assign `NULL` to that column:
+```{r}
+pulse$pulse.diff <- NULL
+```
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "columns", "04_dataframes.Rmd" );
+```
+
+## Example data
+
+R contains many example data sets. To see which, see:
+```{r, eval=FALSE}
+data()
+```
+
+Example data are immediately accessible in R. For example:
+```{r}
+BOD
+```
+
+Some description is always available:
+```{r, eval=FALSE}
+?BOD
+help("BOD")
+```
+
+We will make use of example data from the `MASS` package. Packages are bundles with additional functions and data. To make `MASS` available in your R session, say:
+```{r}
+library(MASS)
+```
+More about packages later.
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "newFrame", "04_dataframes.Rmd" );
+```

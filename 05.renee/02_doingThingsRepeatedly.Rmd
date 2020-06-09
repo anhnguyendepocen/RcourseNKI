@@ -1,0 +1,237 @@
+---
+title: "Doing things repeatedly"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+
+```{r setup, include=FALSE}
+source( "../R_course_setup.R" );
+```
+
+
+```{r, echo=F}
+square.add.one <- function( x ){
+  x <- x^2
+  x + 1
+}
+
+my.analysis <- function( form ){
+boxplot(form)
+my.ttest <- t.test(form)
+list(t.stat = my.ttest$statistic, t.pvalue = my.ttest$p.value)
+}
+```
+
+```{r,echo=F}
+pulse <- read.delim("pulse.txt")
+pulse$name <- as.character(pulse$name)
+survey <- read.delim("survey.txt")
+```
+
+# The *apply() family
+
+We have seen that we can apply a function repeatedly for different arguments, so as to for example run an analysis for different questions as with the pulse data:
+
+```{r,eval=FALSE}
+result.gender <- my.analysis( form = bmi ~ pulse$gender)
+result.alcohol <- my.analysis( form = bmi ~ pulse$alcohol)
+```
+
+While this is possible, it is not practical, especially if the repetition goes on over a number of variables. If we must repeat a statement multiple times it is useful to do that in an efficient and clear way.
+As an object-oriented language, one of the things R is good at is doing things repeatedly. 
+
+## sapply()
+
+One very useful function is sapply(), which allows us to perform an action, such as run a function, for all entries in a vector. Let us define
+
+```{r}
+x <- c(1,5,10,20,50)
+```
+
+We can square each of its elements and add one to the result by applying the square.add.one() function to each entry separately, as below:
+
+```{r}
+square.add.one( x[1] )
+square.add.one( x[2] )
+square.add.one( x[3] )
+square.add.one( x[4] )
+square.add.one( x[5] )
+```
+
+This can be done on a single line, by using sapply() instead:
+
+```{r}
+sapply( x , square.add.one )
+```
+
+The function sapply not only applies square.add.one() to each entry in "x" separately, but also gathers all results into a single object. Here the result of square.add.one() consists of a single value per entry in "x", so the result of sapply() is a vector concatenating all these results.
+
+```{r}
+class( sapply( x , square.add.one ) )
+```
+
+Say now that we wish to calculate both the square and the logarithm for each entry in "x". We first write this function:
+
+```{r}
+sq.log <- function(x){
+  xsq <- x^2
+  xlog <- log(x)
+  c(xsq,xlog)
+}
+```
+
+Now we can calculate the square and the logarithm for all individual entries in "x" by using:
+
+```{r}
+res <- sapply( x , sq.log)
+res
+```
+
+Note that results were organized in such a way that each column corresponds to an entry of "x", the first row representing the square and the second representing the logarithm. This object is, thus,  a matrix:
+
+
+```{r}
+class(res)
+```
+
+
+If the result of the function applied to a single entry in "x" is neither a single value or a vector, the result of sapply() will be a list.
+
+Could we use sapply to run my.analysis() on many individual formulae? Let us check. First define the vector of formulae:
+
+```{r}
+xf <- c( bmi ~ pulse$gender , bmi ~ pulse$alcohol )
+class(xf)
+```
+
+As "xf" is a list, we cannot use it in the context of sapply(). However, there is a related function in the same *apply() family that can be used with lists: lapply().
+
+### Quick exercise
+
+Write a function to add 1 and compute the logarithm of a value. Then use it together with sapply() to  add 1 and compute the logarithm of the variable 'pulse' in the survey data, saving the result in a variable. Compare the first 10 entries to the ones given below.
+
+```{r, echo=FALSE}
+p1log <- function(x){
+  x <- log(x+1)
+  x
+}
+p1log.pulse <- sapply(survey$pulse, p1log)
+p1log.pulse[1:10]
+```
+
+## lapply()
+
+Essentially, lapply() does the same as sapply(), except that it applies the function to entries in a list, rather than in a vector.
+We could  use lapply() to run the function my.analysis() for many different formulae. We would simply do:
+
+```{r,eval=FALSE}
+xf <- c( bmi ~ pulse$gender , bmi ~ pulse$alcohol )
+lapply( xf , my.analysis )
+```
+
+### Quick exercise
+
+Explore the relationship between 'pulse' values for different sexes as well as different 'exercise' levels (considering only "none" and "freq") in the survey data by means of both a boxplot as well as a t-test. Compare your results with the ones given below.
+
+```{r, echo=FALSE}
+xf <- c( survey$pulse ~ survey$gender , survey$pulse[survey$exercise!="some"] ~ survey$exercise[survey$exercise!="some"] )
+lapply( xf , my.analysis )
+```
+
+## apply()
+
+Yet another related function, apply(), is to be used in the context of matrices. It essentially applies a function to either the rows or the columns of a matrix. We will create a matrix mat:
+
+```{r}
+mat <- matrix(c(1:9),nrow=3,ncol=3)
+mat
+```
+
+We can then compute the sums of its columns by
+
+```{r}
+apply( mat , 2 , sum)
+```
+
+Here the number "2" indicates that the second index, the columns, are to be preserved - so the sum will be done over all rows, per column.
+
+We could also compute how many values per row are larger than 5. For this, first we create a logical matrix indicating if each entry in mat is larger than 5 or not, then we sum these values per row using apply():
+
+```{r}
+mat>5
+apply( mat>5 , 1 , sum)
+```
+
+Here the number "1" indicates that the first index, the rows, are to be preserved. So the sum will be done over all columns, per row.
+
+### Quick exercise
+
+Compute the mean of 'pulse', 'height' and 'age' of the survey data using apply(). Do you get informative results? If not, check the help page of both mean() and apply() to see how to get around the problem encountered. Compare your resullts with the ones below.
+
+```{r, echo=FALSE}
+apply(survey[, c("pulse", "height", "age")], 2, mean )
+# Note that these variables have NAs, and mean() does not eliminate them by default, 
+# yielding instead an NA value. 
+# After checking the help page for mean(), we notice that NAs are not removed by default,
+# but that they are if the slot na.rm is set to TRUE.
+# The help page for apply() shows that extra options for the function used
+# can be declared after the function name itself, separated by commas.
+# In this case, this can be included as follows:
+apply(survey[, c("pulse", "height", "age")], 2, mean, na.rm=TRUE )
+```
+
+
+
+## tapply()
+
+The function corresponds to "split file" in SPSS. It essentially allows you to use a function on subsets of data, typically given by a grouping variable. For example, in the pulse data we could compute the average weight according to whether or not an individual drinks alcohol by using:
+
+
+```{r}
+tapply(pulse$weight, pulse$alcohol, mean)
+```
+
+What tapply() is essentially doing is to gather in a single object the results of:
+
+```{r}
+mean( pulse$weight[ pulse$alcohol=="no" ] )
+mean( pulse$weight[ pulse$alcohol=="yes" ] )
+```
+
+It can also be applied for a combination of grouping factors. So the average weight, for different alcohol use and exercise levels, can be obtained by:
+
+```{r}
+tapply(pulse$weight, list( pulse$alcohol , pulse$exercise ) , mean)
+```
+
+### Quick exercise
+
+Compute the average of 'pulse' considering subgroups of individuals according to smoking habit and gender in the survey data. COmpare your results with the ones below.
+
+```{r, echo=FALSE}
+tapply(survey$pulse, list(survey$smokes, survey$gender), mean)
+tapply(survey$pulse, list(survey$smokes, survey$gender), mean, na.rm=TRUE)
+```
+
+# for loops
+
+In R we can also use for() loops. For example, we have used sapply to compute the squared plus 1 of observations, as below:
+
+```{r}
+x <- c(1,5,10,20,50)
+sapply( x , square.add.one )
+```
+
+Instead, we could use:
+
+```{r}
+sq1.x <- vector("numeric",length=length(x))
+for(i in 1:length(x)) 
+  {
+  sq1.x[i] <- x[i]^2 + 1
+  }
+```
+
+Similarly to C, there exist also while() and repeat() loops.
+
+Note that for() (and related) loops are not efficiently run in R, in the sense that they tend to use too much RAM. This can be an issue particularly with loops over many iterations and/or involving RAM-consuming operations, such as matrix multiplications involving large matrices.

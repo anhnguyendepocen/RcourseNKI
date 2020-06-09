@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1591255270733.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C755EBF0",
+    "lastKnownWriteTime" : 1591256304,
+    "last_content_update" : 1591256304766,
+    "path" : "~/Documents/NKI/courses/R course NKI/materials/04_new2018/01_userDefinedFunctions.Rmd",
+    "project_path" : "04_new2018/01_userDefinedFunctions.Rmd",
+    "properties" : {
+        "cursorPosition" : "7,30",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

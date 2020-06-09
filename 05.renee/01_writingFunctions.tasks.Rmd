@@ -1,0 +1,147 @@
+---
+title: "Exercises functions"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+
+```{r setup, include=FALSE}
+source( "../R_course_setup.R" );
+```
+
+1. The dataset airquality supplies air quality measurements in New York for five months in 1973. Some measurements failed and are missing.
+
+1.1 Are any Wind measurements missing?
+
+```{r}
+str(airquality)
+sum(is.na(airquality$Wind))
+# Above we computed how many are missing - just to know if any are missing we can also use the function any(), which yields TRUE if any of the arguments are true.
+# In this case, we wish to know if any of the Wind measurements is NA, so we use:
+any( is.na(airquality$Wind) )
+```
+
+1.2 How many Ozone measurements are missing?
+
+```{r}
+sum( is.na(airquality$Ozone) )   
+```
+
+1.3  Select those Wind measurements for which both Ozone and Solar measurements are not missing.
+
+```{r}
+# We could do this in various ways. One is to first define a variable that indicates if either Ozone or Solar are missing:
+sel.mis <- is.na(airquality$Ozone) | is.na(airquality$Solar)
+# Here the the operator "|" represents "OR"
+# Now if we want to find the observations for which neither Ozone nor Solar are missing, we need to use a "Not" operator "!" before the selection variable sel.mis
+airquality$Wind[ ! sel.mis ]
+# Another way of doing this is to ask separately that Ozone is not missing AND Solar is not missing:
+nmis.oz <- !is.na(airquality$Ozone)
+nmis.so <- !is.na(airquality$Solar)
+airquality$Wind[ nmis.oz & nmis.so ]
+```
+
+1.4 What was the average Ozone value in these five months?
+
+```{r}
+mean(airquality$Ozone)
+# Since there are NAs in the variable, we need to indicate that they should be removed when computing the average:
+mean(airquality$Ozone, na.rm=TRUE)
+```
+
+2. The ChickWeight data has data on growth of chicks under different diets.
+
+2.1  Check whether the variable Diet is correctly made as a factor.
+
+```{r}
+CW <- ChickWeight
+CW$Diet
+class(CW$Diet) # alternative
+```
+
+
+2.2  The researcher likes the diets to be coded as A, B, C, and D rather than 1, 2, 3, and 4. Change the coding of the factor Diet. Hint: use levels.
+
+```{r}
+levels(CW$Diet) <- LETTERS[1:4]
+```
+
+2.3 A weight of a chick is considered high if it is above 300. Make a new factor variable giving the weight of chicks as "high" or "low" and add it to the data.frame. Hint: use the function ifelse(), after checking its help file.
+
+```{r}
+high.low <- factor(ifelse(CW$weight > 300, "high", "low"))
+CW$high.low <- high.low
+# Check that the new variable has been added:
+str(CW)
+```
+
+2.4 Count the number of chicks with weight over 300 grams.
+
+```{r}
+sum(CW$weight > 300)
+```
+
+2.5 Write a function that takes a vector x as input and returns the number of observations in x greater than 300. Check that this function works correctly by using it on the weights of all chicks. You should obtain the same answer as in the previous exercise.
+
+```{r}
+over300 <- function(x) {
+  sum(x > 300)
+}
+over300(CW$weight)
+```
+
+2.6 How many diets were used? 
+
+```{r}
+nlevels(CW$Diet)
+```
+
+2.7 Compute the number of chicks with weight above 300 for each diet.
+
+```{r}
+over300(CW$weight[CW$Diet=="A"])
+over300(CW$weight[CW$Diet=="B"])
+over300(CW$weight[CW$Diet=="C"])
+over300(CW$weight[CW$Diet=="D"])
+```
+
+3.  The quakes data set gives location and severity of earthquakes near Fuji.
+
+3.1 Make a scatterplot of latitude versus longitude.
+
+```{r}
+plot(quakes$long, quakes$lat)
+```
+
+3.2 After checking its help file, use the function cut() to divide the magnitude of quakes into three categories: low for quakes up to 4.5, medium for quakes between 4.5 and 5, and hight for quakes of magnitude larger than 5). Then use ifelse() to divide depth into two categories (cut-off at 400), and save the result as a factor.
+
+```{r}
+# Note: when using cut() all cut-offs must be provided, including the lower bound for the first category and the upper bound for the last category.
+# In this case, this means that we must add the minimum value of all quake magnitudes as the first cut-off (any value below it would give the same result), and the maximum value of all quake magnitures as the last cut-off:
+mag3 <- cut(quakes$mag, c(min(quakes$mag), 4.5, 5, max(quakes$mag)), include.lowest=TRUE)
+levels(mag3) <- c("low", "medium", "high")
+depth2 <- factor(ifelse(quakes$depth>400, "deep", "shallow"))
+```
+
+3.3 Redraw the plot, giving symbols by magnitude and colors by depth.
+
+```{r}
+plot(quakes$long, quakes$lat, pch=as.numeric(mag3), col=depth2)
+```
+
+3.4 The magnitude of the earthquakes is given in Richter scale. To recalculate the Richter scale to energy released, calculate the energy released in each earthquake as 10^(3/2) to the power of the Richter measurement.
+
+```{r}
+energy <- (10^(3/2))^quakes$mag
+```
+
+3.5 The cex argument to plot can be used to scale the plot symbols. We'll scale the plot symbols so that the surface of the plot symbol is proportional to the energy released. Calculate plot symbol size as the square root of the energy divided by the median square root energy (to get median symbol size 1).
+
+```{r}
+symbolsize <- sqrt(energy)/median(sqrt(energy))
+```
+
+3.6 Plot the magnitude of earthquakes again, but with plot symbols sized by energy. Keep the coloring by depth.
+
+```{r}
+plot(quakes$long, quakes$lat, cex=symbolsize, col=depth2)
+```

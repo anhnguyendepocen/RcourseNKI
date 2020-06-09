@@ -1,0 +1,297 @@
+---
+title: "Extra exercises"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+# Exercises
+
+The exercises below use various parts of the material seen so far. They are also intended to handle situations we encounter in practice.
+
+## Table and Histogram
+
+The Union of Statistics Undergraduate Students includes many local offices, spread around the world. The local offices regularly organize meetings, with the frequency varying. They Union has made an inventory of all meetings organized. You must analyse this data to answer some of the questions they have.
+
+- Read in the data that contains the overview of meetings: "meetings_locations.txt". Check which and what types of variables it has. What is the total number of meetings?
+
+```{r}
+# Remember to set the work directory to where the file to be read is located! Use setwd()
+data.loc <- read.delim("meetings_locations.txt")
+str(data.loc)
+# The total number of meetings is the same as the number of rows in the data, since there is one meeting per row. So:
+nrow(data.loc)
+```
+
+- The location given is that of a meeting that took place. How many locations have held a meeting a single time? Tip: tabulate the table of locations.
+
+```{r}
+table(table(data.loc$locations))
+# This is much quicker than producing the entire table and checking visually how many entries are equal to 1 - compare:
+table(data.loc$locations)
+```
+
+- To get an idea about the typical number of participants, make a histogram. For this, the number of participants should be a numeric variable, but it is not - you may check that it is not possible to make a histogram with the variable as it now is. The reason for this is that some values are actually characters ("combined") and, while reading in the file, R stores this variable as a factor. This stands for a code to indicate that the meeting was held in combination with other meetings, and somehow the organizers could not evaluate the number of participants of their meeting only. In order to be able to work with this variable, we need to transform it to numeric. To do so, first change values that are not naturally numeric to NA. Then transform it to numeric by first transforming it to character, and only then to numeric. Compare this transformed variable with one where the step of transforming to character is skipped. Do you see a difference? Why do you think they are different?
+
+```{r}
+npart <- data.loc$N.partic
+npart[npart=="combined"] <- NA
+# Check that this variable is still a factor
+class(npart)
+npartic <- as.numeric(as.character(npart))
+# Now the resulting variable is numeric, and we can make a histogram of it:
+hist(npartic)
+# What if we had not transformed npart into character, before transforming it into numeric?
+npart2 <- as.numeric( npart )
+# The problem is that, if we transform a factor directly into numeric, all it happens is that it looses the labels corresponding to the factor levels. So the first meeting had 77 participants, and in variable npart2 this has value 25 - because it was the 25th level of the factor. The numbers do not represent the number of participants.
+# By transforming the factor first to character, we actually extract the labels corresponding to the factor levels - the participants numbers. 
+# Compare the first three observations of each of these 3 variables - first, the factor:
+npart[1:3]
+# Then, the variable transformed correctly:
+npartic[1:3]
+# Now the variable that used only the internal factor numbers:
+npart2[1:3]
+```
+
+- The Union also wants to have an overview of the number of meetings per year. For this, first make a table of the number of meetings per year. Then make a bar plot using this table as input (Hint: use the function barplot() ). Change the  labels on the x-axis so that they are visible (Hint:  display them vertically using the slot "las" of the function par() ).
+
+```{r}
+table(data.loc$year)
+barplot( table(data.loc$year) )
+par(las=2)
+barplot( table(data.loc$year) )
+```
+
+## Using `apply`
+
+The Puromycin data has enzyme reaction velocities under different concentrations and different treatments. There are two measurements per concentration/treatment combination. We want to summarize the results in a table that gives the average of the two measurements for every combination of concentration and treatment.
+
+- Note that the second argument of tapply may be a list, so that we can summarize by two or more variables simultaneously. Make a list containing the two variables conc and state.
+
+```{r}
+PM <- Puromycin
+mylist <- list(PM$conc, PM$state)
+```
+
+- Use tapply() to make the summarizing table.
+
+```{r}
+tapply(PM$rate, mylist, mean)
+```
+
+##  Apply and functions
+
+The OrchardSprays dataset has a so-called Latin Square design. This means that a field is divided into regular subfields by rows and columns, and that every row and column position is used exactly once for each treatment (like in a Sudoku).
+
+- Find the row positions corresponding to treatment A.
+
+```{r}
+OS <- OrchardSprays
+OS$rowpos[OS$treatment=="A"]
+```
+
+- Does every measurement for treatment A have a different row position? Hint: use duplicated.
+
+```{r}
+any(duplicated(OS$rowpos[OS$treatment=="A"]))
+```
+
+- Turn your check for treatment A into a function, and use that function to repeat the same check for treatment B.
+
+```{r}
+check.dup <- function(tr) {
+  any(duplicated(OS$rowpos[OS$treatment==tr]))
+}
+```
+
+- Check the same for all other treatments. Hint: use sapply and LETTERS.
+
+```{r}
+sapply(LETTERS[1:8], check.dup)
+```
+
+- We will now visualize the Latin square design. Make a matrix of 8 rows and 8 columns, with entries of the matrix giving the treatment used in that row and column. Hint: make sure the data matrix is ordered first by column and then by row (use order), and use the command matrix.
+
+```{r}
+ordering <- order(OS$colpos, OS$rowpos)
+matrix(OS$treatment[ordering], 8, 8)
+```
+
+- Display the measured decrease values in their proper location in the Latin Square.
+
+```{r}
+matrix(OS$decrease[ordering], 8, 8)
+```
+
+## Read.table
+
+The file tweedekamer.txt contains historical data on numbers of parliament seats of parties in the Dutch parliament from 1956 to the present. Download the file to your computer.
+
+- Find out what the current working directory of your R session is. Hint: use getwd.
+
+```{r}
+getwd()
+```
+
+-	Set the current working directory to the location where you downloaded the file tweedekamer.txt.
+
+```{r, eval=FALSE}
+setwd("c:/rcourse") # or wherever
+
+```
+
+-	Use read.table to read the file tweedekamer2012.txt. Make sure you set the argument quote="".
+
+```{r}
+tk <- read.table("tweedekamer2012.txt", sep="\t", quote="", header=T, row.names=1, check.names=F)
+```
+
+-	Check whether row and column names have been read correctly. Hint: use head. If necessary, adjust the arguments of read.table. Hint: look at check.names.
+
+```{r}
+head(tk)
+```
+
+- How many parties and how many elections are in the data? Hint: use dim.
+
+```{r}
+dim(tk)
+```
+
+-	Try reading the file without using quote="". Find out what goes wrong by using read.table with the argument fill=TRUE.
+
+```{r}
+tk2 <- read.table("tweedekamer2012.txt", sep="\t", header=T, row.names=1, check.names=F, fill=T)
+```
+
+-	Write the result to an R-readable .RData file using save.
+
+```{r, eval=FALSE}
+save(tk, file="tweedekamer2012.RData")
+```
+
+## Logical vectors, rowSums and apply
+
+Load the tweedekamer2012.txt data set again using read.table or load.
+
+-	Convert the data.frame into a matrix.
+
+```{r}
+tk <- as.matrix(tk)
+```
+
+-	Create a numeric election year variable from the column names of your matrix. Hint: use as.numeric.
+
+```{r}
+year <- as.numeric(colnames(tk))
+```
+
+-	Calculate the number of parties represented in parliament after each election, and plot this number as a function of time as a line plot. Hint: Use colSums and logicals.
+
+```{r}
+plot(year, colSums(tk>0), type='l')
+```
+
+-	Make the same plot as a barplot. Make the labels perpendicular to the axis for readability. Hint: see las in ?par.
+
+```{r}
+barplot(colSums(tk>0), las=2)
+```
+
+-	Find the names of all parties that have (so far) only been present in a single parliament.
+
+```{r}
+rownames(tk)[rowSums(tk>0)==1]
+```
+
+-	Find the name of the largest party in each parliament.
+
+```{r}
+largest <- rownames(tk)[apply(tk, 2, which.max)]
+names(largest) <- colnames(tk)
+```
+
+-	Plot the number of seats of the largest party as a function of time in a barplot. Color the bars by the name of the largest party, and make a proper legend.
+
+```{r}
+lseats <- apply(tk, 2, max)
+barplot(lseats, las=2)
+```
+
+
+## Combining information from multiple tables
+
+Load the data set politics2012.RData, with information on parliament and cabinets in the Netherlands since 1956. Part of this data you have already seen. 
+
+- Check which objects this file contains by using the function show() with argument "load("politics2012.RData")". Then load the file.
+
+```{r}
+show(load("politics2012.RData"))
+load("politics2012.RData")
+```
+
+-  How many prime ministers have there been, and how many different parties have they come from? Hint: use unique.
+
+```{r}
+length(unique(cabinet$PM))
+```
+
+- Make a list of character vectors out of the coalition variable using strsplit(). Give this list the names of the cabinets.
+
+```{r}
+coal<- strsplit(cabinet$coalition, ", ")
+```
+
+- Make a barplot of the number of coalition partners as a function of time.
+
+```{r}
+ncoal <- sapply(coal, length)
+barplot(ncoal, names.arg=cabinet$year, las=2)
+```
+
+- The parliament variable in the cabinet data.frame gives the election year of the active parliament and the time of the cabinet and links the cabinet data.frame to the parliament data. Find the vector of distribution of parliament seats at the time of the Biesheuvel I cabinet.
+
+```{r}
+bies.par <- parliament[,cabinet["Biesheuvel I", "parliament"]]
+```
+
+- Find the largest party in parliament at the time of the Biesheuvel I cabinet.
+
+```{r}
+names(bies.par)[which.max(bies.par)]
+```
+
+- Turn your code for the previous exercise into a function, and calculate the largest party in parliament at the time of the cabinet for each cabinet.
+
+```{r}
+largest.party <- function(cab) {
+  cab.par <- parliament[,cabinet[cab, "parliament"]]
+  names(cab.par)[which.max(cab.par)]
+}
+lp <- sapply(rownames(cabinet), largest.party)
+```
+
+- How often was the prime minister a member of the largest party in parliament?
+
+```{r}
+sum(lp==cabinet$party)
+length(lp)
+```
+
+- How many seats in parliament did the parties in the Biesheuvel I cabinet have in total? Hint: use %in%.
+
+```{r}
+names(coal) <- rownames(cabinet)
+bies.coal <- coal[["Biesheuvel I"]]
+sum(bies.par[names(bies.par) %in% bies.coal])
+```
+
+- Turn your code for the previous question into a function, calculate the number of coalition seats for every cabinet, and display the result in a barplot.
+
+```{r}
+coal.seats <- function(cab) {
+  cab.coal <- coal[[cab]]
+  cab.par <- parliament[,cabinet[cab, "parliament"]]
+  sum(cab.par[names(cab.par) %in% cab.coal])
+}
+sapply(rownames(cabinet), coal.seats)
+```
+

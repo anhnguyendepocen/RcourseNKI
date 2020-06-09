@@ -1,0 +1,270 @@
+---
+title: "Data frames"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup,include=FALSE,eval=TRUE}
+source( "../R_course_setup.R" );
+```
+
+# Data frames 
+
+## What is a data frame
+
+<center>![Vectors](Data_types_mdfl.png)</center>
+
+Data frame is a collection of variables represented as vectors of the same length.
+
+Therefore, all the vectors (columns) should have unique names.
+
+Rows represent separate records.
+
+Rows might have names as well (although for new code, better create a separate column with names).
+
+## Creating
+
+### From manually provided vectors
+
+An example data frame built of `character`, `numeric` and `logical` vectors:
+
+```{r}
+ids <- c( "A", "B", "D", "E" );
+ns <- c( "Amy", "Bob", "Dan", "Eve" )
+as <- c( 40, NA, 6, 16 )
+ss <- c( TRUE, NA, FALSE, FALSE )
+
+d <- data.frame(
+  row.names = ids,
+  name = ns,
+  age = as,
+  smoker = ss
+)
+d
+```
+
+The class of `d` is:
+```{r}
+class( d )
+```
+
+Function `str` gives a compact display of an object structure/content:
+```{r}
+str( d )
+```
+
+### Import from files
+
+Datasets my come in various formats, e.g. `.tsv`, `.csv`, `.xls(x)`, `.sav`, `.txt` etc. R provides functions to import these formats as data.frame. 
+
+_Note_: always after a file is read the columns must be checked whether their class and values are as expected. Additional conversions might be necessary (e.g. declaring factor levels, order of factor levels).
+
+#### TSV file
+
+For files stored in [tab-separated files (`tsv`) format](https://en.wikipedia.org/wiki/Tab-separated_values) use:
+
+```{r eval=FALSE}
+d <- read.table( "data/pulse.tsv", header = TRUE, sep = "\t" )
+```
+```{r result="as.is", echo=FALSE, comment="",eval=TRUE}
+catReadTable( "pulse.tsv", "d" )
+d <- read.table( "../data/pulse.tsv", header = TRUE, sep = "\t" )
+```
+```{r}
+str( d )
+```
+
+#### CSV file
+
+Data frames (tables) stored in files in [comma-separated values (`csv`) format](https://en.wikipedia.org/wiki/Comma-separated_values) can be read with:
+```{r eval=FALSE}
+d <- read.csv( "data/pulse.csv" );
+```
+```{r result="as.is", echo=FALSE, comment="",eval=TRUE}
+d <- catReadCsv( "pulse.csv", "d" )
+```
+```{r}
+str( d )
+```
+
+#### Microsoft Excel file
+
+Reading Microsoft Excel files requires an additional library/package, which needs to be installed first. There exists several packages providing reading of Excel files.
+
+##### With package readxl
+
+```{r eval=FALSE,echo=TRUE}
+# install.packages( "readxl" )
+library( readxl );
+d <- read_excel( "data/pulse.xlsx", sheet = 1 );
+str( d );
+```
+```{r eval=TRUE,echo=FALSE}
+# install.packages( "readxl" )
+library( readxl )
+d <- read_excel( "../data/pulse.xlsx", sheet = 1 )
+str( d )
+```
+
+##### With package gdata
+
+Please note that `gdata` package requires additional PERL packages to be installed; `readxl` seems to be easier to use.
+
+```{r eval=FALSE,echo=TRUE}
+# install.packages( "gdata" )
+library( gdata )
+d <- read.xls( "data/pulse.xlsx", sheet = 1 )
+str( d )
+```
+
+#### SPSS files
+
+Reading SPSS files requires an additional library/package `foreign` (normally installed with R distribution). 
+
+```{r eval=FALSE,echo=TRUE}
+library( foreign )
+d <- read.spss( "data/pulse.sav", to.data.frame = TRUE )
+str( d )
+```
+```{r eval=TRUE,echo=FALSE,warning=FALSE,message=FALSE}
+library( foreign )
+d <- read.spss( "../data/pulse.sav", to.data.frame = TRUE );
+str( d )
+```
+
+## Properties
+
+Let's discuss the data frame `pulse`:
+```{r eval=FALSE}
+pulse <- read.table( "data/pulse.txt", header = TRUE, sep = "\t" )
+```
+```{r result="as.is", echo=FALSE, comment="",eval=TRUE}
+pulse <- catReadTable( "pulse.txt", "pulse" )
+```
+
+To shorten output we will use the first 20 rows of the `pulse` data frame:
+```{r}
+pulse <- head( pulse, 20 )
+```
+
+### Dimensions
+
+There are several functions to get dimensions of a data frame:
+
+- `ncol( pulse )` provides the number of columns:
+```{r}
+ncol( pulse )
+```
+
+- `nrow( pulse )` provides the number of rows:
+```{r}
+nrow( pulse )
+```
+
+- `dim( pulse )` returns a vector with two elements: number of rows and number of columns
+```{r}
+dim( pulse )
+```
+
+### Columns/rows names
+
+`colnames( pulse )` is used to get the names of the columns. In data frames, the same result is returned by `names( d )`:
+```{r}
+colnames( pulse )
+names( pulse )
+```
+
+To get names of the rows use:
+```{r}
+rownames( pulse )
+```
+
+## Content
+
+A column of a data frame might be accessed through the `$` operator.
+
+Additionally, the content of a data frame can be accessed with the square bracket `[ ]` (square brackets) operator used in two different ways:
+
+- with one argument `[ col(s) ]` referring to a column
+- with two arguments `[ row(s), col(s) ]`
+
+<!-- Note, that sometimes it is not obvious what is returned by those operators.
+When a single column is requested, should it be:
+
+- a vector with the column elements (so, a 1-dimensional structure)?
+- a data frame with a single column (so, a 2-dimensional structure)? -->
+
+### Dollar operator
+
+The `$` method returns a _single_ column as a _vector_:
+```{r}
+pulse$weight
+```
+
+When the column name is valid the returned value is a _vector_:
+```{r}
+class( pulse$weight )
+```
+
+When the name is invalid, `NULL` is returned:
+```{r}
+pulse$wrong
+```
+
+Be careful, the `$` notation searches for a column name starting with a provided prefix:
+```{r}
+pulse$we
+```
+
+
+### Square brackets operator, single argument
+
+Square brackets notation with a single argument return requested columns as a _data frame_ (compare to the dollar operator section):
+```{r}
+pulse[ 'weight' ]
+class( pulse[ 'weight' ] )
+```
+
+```{r}
+pulse[ 3 ]
+class( pulse[ 3 ] )
+```
+
+Since the returned object is a `data.frame`, multiple columns might be returned (for example in a different order):
+```{r}
+pulse[ c( 'height', 'weight' ) ]
+```
+
+When a name is invalid, an error is produced:
+```{r error=TRUE}
+pulse[ 'wrong' ]
+```
+
+### Square brackets operator, two arguments
+
+Single brackets notation with two arguments `[ row(s), col(s) ]` might be used to get (multiple) row(s) and (multiple) column(s):
+```{r}
+pulse[ c( 1, 3 ), c( 'height', 'weight' ) ]
+pulse[ c( "1993_C", "1993_A", "wrong" ), c( 'height', 'weight' ) ]
+```
+
+Warning: notice the difference of the class of the output when only a single column is requested:
+```{r}
+pulse[ , c( 'height', 'weight' ) ]
+class( pulse[ , c( 'height', 'weight' ) ] )
+```
+
+```{r}
+pulse[ , c( 'weight' ) ]
+class( pulse[ , c( 'weight' ) ] )
+```
+
+Empty index field means "all" rows or columns:
+```{r}
+pulse[ , ]
+pulse[ , c( 'height', 'weight' ) ]
+pulse[ c( "1993_C", "1993_A" ), ]
+```
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "dataframes", "03_data_frames.Rmd" );
+```

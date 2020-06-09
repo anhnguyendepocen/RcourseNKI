@@ -1,0 +1,332 @@
+---
+title: "Writing your own functions"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+source( "../R_course_setup.R" );
+```
+
+
+# Writing your own functions
+
+```{r,echo=F}
+pulse <- read.delim("../data/pulse.txt")
+pulse$name <- as.character(pulse$name)
+survey <- read.delim("../data/survey.txt")
+bmi <- pulse$weight/(pulse$height/100)^2
+```
+
+
+## Introduction
+
+When we saw how to do statistical tests and plots, we noticed that the same formula object can be used as argument for many things, such as boxplots and t tests. This makes it easier to repeatedly produce a boxplot and run a t test for different comparisons stated by different formulae. For example, for the pulse data  we can study how bmi is related to either gender or to alcohol use by running the code chunk:
+
+```{r, eval=FALSE}
+bmi <- pulse$weight/(pulse$height/100)^2
+
+form <- bmi ~ pulse$gender
+boxplot(form)
+my.ttest <- t.test(form)
+
+form <- bmi ~ pulse$alcohol
+boxplot(form)
+my.ttest <- t.test(form)
+```
+
+The above differs from the exercise we made yesterday in that the formula was stored in an object, and that object is used as input for the boxplot() and t.test() functions.
+
+This of course works, but it is cumbersome as the same code chunk has to be repeated in your script:
+
+```{r,eval=FALSE}
+boxplot(form)
+my.ttest <- t.test(form)
+```
+
+If it is now decided to use a Wilcoxon test instead of a t test, this code chunk would have to be modified in both places where it is used. This sort of practice is prone to errors (a typo in one of the repeated code chunks would cause problems), and it is unnecessary. We could for example save the code chunk above in a file called "my_analysis.R", and call it whenever it is needed:
+
+```{r,eval=FALSE}  
+form <- bmi ~ pulse$gender
+source("my_analysis.R")
+form <- bmi ~ pulse$alcohol
+source("my_analysis.R")
+```
+
+This would make sure that precisely the same script is run for all different formulae, and it works, but a better solution is to write a function to execute the steps in the code chunk to be repeated. We will see later why using a function is better, but let us first see how to write a function.
+
+## Functions
+
+Creating a function in R is simple: state its name, say it is a function and give its arguments. After this, you state what the function should do in the function body. Once created, it can be used directly. 
+
+Say that we want to create a function to add 1 to a number. Then we say:
+
+```{r}
+add.one <- function( x ){
+  x + 1
+}
+```
+
+The function name is "add.one", and its argument is "x". The function body is simply the expression "x+1". The last thing done in the function is the value returned; in this case, it is "x+1". The entire function body is declared between curly brackets "{}".
+
+Note that you get no response from R after the function is created. But it is now an object in the memory, which you can check by using ls(). It can now be used by calling:
+
+```{r}
+add.one( 10 )
+```
+
+A single function can of course involve multiple operations. Say that we want to create a function to square "x" and add 1. We could use:
+
+```{r}
+square.add.one <- function( x ){
+  x <- x^2
+  x + 1
+}
+```
+
+Check that it works:
+
+```{r}
+square.add.one(10)
+```
+
+We could also create a function to compute a t-test statistic. This involves, in the numerator, the difference between the mean of the vector "x" and the mean value we want to compare it to "mu". In the denominator it uses the standard error, which is the standard deviation divided by the square root of the sample size. 
+
+```{r}
+my.ttest <- function(x, mu=0){
+  x.mean <- mean(x)
+  x.n <- length(x)
+  x.se <- sd(x)/sqrt(x.n)
+  my.t <- (x.mean-mu)/x.se
+  my.t
+}
+```
+
+Here we declared the argument "mu" as having a default value of zero. So, if nothing else is stated, the test statistic compares the argument "x" to zero. We can check that this works by extracting the test statistic value from the function t.test():
+
+```{r}
+x <- c(-5,-3,-3,-1.5,0,0.5)
+my.ttest(x)
+t.test(x)$statistic
+```
+
+Above we made use of the default comparison to a mean "mu" 0, both in our own function as in the t.test(). Via the help file for t.test(), you can check that, indeed, t.test() has an argument "mu" representing the mean to compare to, and that its default value is 0. 
+
+Now we compare the mean of "x" to -3, and check that we get the same result as with the t.test() function:
+
+```{r}
+my.ttest(x,mu=-3)
+t.test(x,mu=-3)$statistic
+```
+
+Functions have arguments declared within parentheses "()". This is to make a distinction from matrices, data.frames and vectors: such objects use square brackets "[]" for selecting observations.
+
+We can now return to the example using the pulse data, where a boxplot and a t test are to be done. We first create the function to do all this:
+
+```{r}
+my.analysis <- function( form ){
+boxplot(form)
+my.ttest <- t.test(form)
+list(t.stat = my.ttest$statistic, t.pvalue = my.ttest$p.value)
+}
+```
+
+The last thing done in the function body is what is returned each time the function is called. In this example, this is the creation of a list, made up by the t-test statistic and its p-value. All the list does is to gather these results into a single object, returning them. Had we finished the function body at the previous line 
+"my.ttest <- t.test(form)", the summary of the t test would have been returned in full. So the function allowed us to perform multiple actions (make a boxplot and compute a t test), as well as to produce a shorter output.  
+In both cases, the boxplot is made when the function is called. 
+To run it now we could simply use:
+
+```{r,eval=FALSE}
+result.gender <- my.analysis( form = bmi ~ pulse$gender)
+result.alcohol <- my.analysis( form = bmi ~ pulse$alcohol)
+```
+
+### Quick exercise
+
+Using the survey data, examine the relationship between 'height' and the writing hand 'hand' by making a boxplot and computing a t-test statistic between 'height' values in the two groups. Compare your results to the ones given below.
+
+```{r, echo=FALSE}
+my.analysis( form = survey$height ~ survey$hand )
+```
+
+## Errors in functions
+
+Functions can make R code easier to read, with intuitive names and by gathering statements together into a single operation. So instead of:
+
+```{r}
+x <- 10
+x <- x^2 + 1
+```
+
+we simply use
+
+```{r}
+square.add.one( 10 )
+```
+
+However, by gathering many operations together into a function, locating errors may become harder. For example, if by mistake we use my.ttest with an object "y", involving a single value instead of a vector, the current function still works:
+
+```{r}
+y <- -2
+my.ttest( y )
+```
+
+So we get a result. The result is not really meaningful - having a single observation, it does not make sense to perform a t test. However, no error message has been returned, and the script will continue as usual. 
+If the function is part of a larger script, unexpected results may be produced (much) later, when in fact the problem happened earlier.  For example, the t-test statistic could be used to plot it (marked with a letter "t") on the corresponding density plot of the Student-t distribution. 
+
+```{r}
+tstat <- my.ttest( y )
+tvals <- seq(-3,3,by=0.1)
+plot(tvals, dt(tvals,df=1))
+points( tstat, 0, pch="t")
+```
+
+Here no point marked as "t", corresponding to the t-test statistic, will appear on the graph. There was in fact nothing wrong with the script used to produce the graph, but rather the value of "y" was not a vector, and thus the sd() function returned NA. Again, no error message was returned here - we are allowed to have NAs as arguments in plots.
+
+The conceptual error, that it makes no sense to compute a test statistic for a single value, was not highlighted by the code chunks above. We could improve on the function my.ttest() by requiring it to produce an error message if its argument "x" has a single (non-NA) value. For this, we could use the functions if() and stop(). We first use if() to check if the length of argument "x" is equal to one. If so, we stop the function and return a meaningful error message. If not, the function stop() will be skipped, and the remainder of the function body will be run. 
+Now the function body would be as:
+
+```{r}
+my.ttest <- function(x,mu=0){
+  if(length(x)==1) stop("Error: You are trying to compute a t-test statistic for a single observation, which is meaningless.")
+  x.mean <- mean(x)
+  x.n <- length(x)
+  x.se <- sd(x)/sqrt(x.n)
+  my.t <- (x.mean-mu)/x.se
+  my.t
+}
+```
+
+You may try to run the function using "y" as argument again, to check that this works.
+
+```{r,eval=FALSE}
+my.ttest(y)
+```
+
+### Quick exercise
+
+Use the function my.ttest defined above to compare the differences between variables 'span1' and 'span2' to zero.
+
+```{r}
+my.ttest(survey$span1 - survey$span2, mu=0)
+```
+
+This result yields only the t-test statistic. Modify the function to include the p-value, computed by 'pt(abs(test.stat), df=df, lower.tail=FALSE)*2', where 'test.stat' contains the value for the test statistic. Note that we need to compute the number of degrees of freedom 'df', which is in this case the number of samples minus 1. Make sure that the function returns both the test statistic computed as well as the p-value, by gathering these quantities into a list.
+
+
+```{r}
+my.ttest2 <- function(x, mu=0){
+  if(length(x)==1) stop("Error: You are trying to compute a t-test statistic for a single observation, which is meaningless.")
+  x.mean <- mean(x)
+  x.n <- length(x)
+  x.se <- sd(x)/sqrt(x.n)
+  my.t <- (x.mean-mu)/x.se
+  df <- length(x)-1
+  pv <- pt(abs(my.t), df=df, lower.tail=FALSE)*2
+  list(t.stat = my.t, p.value = pv)
+  }
+```
+
+Now compute both test statistic and p-value for the differences between 'span1' and 'span2'. Check if these results are correct by comparing them to what would have been returned by t.test() itself.
+
+```{r}
+my.ttest2(survey$span1 - survey$span2, mu=0)
+t.test(survey$span1 - survey$span2)
+```
+
+## Checking for NAs
+
+Entries recorded as NA represent values that are not available. In datasets such entries often correspond to values not observed. We have also seen that NAs can creep into our results in unexpected ways, such as when computing the standard deviation of a single value.
+As such, it is important to be able to check if the data has NAs, in an efficient way.
+
+One useful function to do this is is.na(). It essentially returns a logical vector with TRUE corresponding to each not-available observation, and FALSE corresponding to all other observations. Essentially:
+
+```{r}
+is.na( c(1,3,2) )
+is.na( c(1,3,NA) )
+```
+
+As a logical vector, it is possible to use it to select observations. If we wish to select all observations that are available, we can use:
+
+```{r}
+x <- c(1,3,NA)
+is.na(x)
+x[ !is.na(x) ]
+```
+
+Remember that "!" here represents "NOT", so that !is.na() will have TRUE for all observations that are NOT NA.
+
+We can also use is.na() in calculations, for example to obtain the total number of NAs in the data:
+
+```{r}
+sum( is.na( c(1,3,2) ) )
+sum( is.na( c(1,3,NA) ) )
+```
+
+This is very useful, especially for use with large objects, as it enables a quick overview of NAs.
+
+## if()
+
+We have  seen that the function if() is useful to make conditional statements. Often used in functions, it helps us check if things are going as expected. 
+
+Say we wish to compute the mean of a variable "x". If all entries of "x" are numeric this always works, but if at least one entry is NA then a NA value will result:
+
+```{r}
+x <- c(1,3,2)
+mean(x)
+x <- c(1,3,NA)
+mean(x)
+```
+
+Say that you wish to consider all valid entries, so merely ignore NAs when computing the mean. One of the things that can be done to avoid this in a script is to use a if() statement. First, we compute the number of NAs in "x" by using:
+
+```{r}
+sum( is.na(x) )
+```
+
+If there are no NAs in "x", this would yield 0.  Any result larger than zero indicates the presence of NAs in "x".
+
+Then we decide what to do in each case. If there are no NAs in the data, the mean is computed as usual. 
+
+```{r}
+if( sum( is.na(x) ) == 0 ) mean.x <- mean(x)
+```
+
+If there are NAs, we select only the available observations to compute the mean with. In order to indicate this alternative action if the statement "sum( is.na(x) ) == 0" is FALSE, we need to use else after the first statement (and its resulting action) is completed:
+
+```{r}
+if( sum( is.na(x) ) == 0 ) { mean.x <- mean(x) 
+                             } else { mean.x <- mean( x[ !is.na(x) ] ) } 
+```
+
+Here we have used curly brackets to group the statements visually, and allow us to position the else on the line following that where the if() appears.
+
+Note: this is already directly possible with the current version of the mean() function, via its slot na.rm. Check the help file for mean() for details.
+
+
+### Quick exercise
+
+Use the function created to compute the t-test statistic to check if the heights values in the survey data are statistically different from 1.6 metres. Do you get a meaningful answer? Modify the function used to fix the problem and produce the desired test statistic. Check that results are correct by also using the t.test function which, as you can check from its help page, by default eliminates NAs from the variables tested.
+
+```{r}
+my.ttest(survey$height, mu=160)
+my.ttest2(survey$height, mu=160)
+#
+# Both functions we created propagate NA observations, but it might be useful to 
+# eliminate NAs in the variable, then compute test statistic and p-value.
+# To do this, we re-write the function after selecting only values that are not NA in the input variable
+
+my.ttest.nonas <- function(x, mu=0){
+  if(length(x)==1) stop("Error: You are trying to compute a t-test statistic for a single observation, which is meaningless.")
+  x <- x[ !is.na(x)]
+  x.mean <- mean(x)
+  x.n <- length(x)
+  x.se <- sd(x)/sqrt(x.n)
+  my.t <- (x.mean-mu)/x.se
+  df <- length(x)-1
+  pv <- pt(abs(my.t), df=df, lower.tail=FALSE)*2
+  list(t.stat = my.t, p.value = pv)
+}
+
+my.ttest.nonas(survey$height, mu=170)
+t.test(survey$height, mu=170)
+```

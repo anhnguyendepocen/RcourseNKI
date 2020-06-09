@@ -1,0 +1,82 @@
+---
+title: 'S3 and S4 classes (tasks)'
+date: "`r format(Sys.time(), '%d %B %Y')`"
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+```
+
+# S3 and S4 classes (tasks) {#s3s4}
+
+<!-- ## S3 and S4 classes {#s3s4} -->
+
+Start a fresh workspace with no objects in your environment. You can do this either by running `rm(list=ls())` in your console or clicking the brush icon on the `Environment` pane (RStudio top right). Also restart the R session to remove any loaded packages (menu: Session -> Restart R).
+
+Run the following line in your R console:
+
+```{r, echo=TRUE, eval=FALSE}
+source(url("https://barmsijs.lumc.nl/R_course/data/objects.R"))
+```
+
+```{r, echo=FALSE, message=FALSE}
+# source(url("https://barmsijs.lumc.nl/R_course/data/objects.R"))
+source("objects.R")
+```
+
+This will create a set of objects in your environment. Inspect the objects and answer the following questions: 
+
+1. What is the class and the class category (S3/S4/base) of each object?
+
+```{r}
+library(pryr)
+class(o1);otype(o1) 
+class(o2);otype(o2) 
+class(o3);otype(o3) 
+class(o4);otype(o4) 
+class(o5);otype(o5) 
+```
+
+2. List the slots of the objects if possible. 
+
+```{r}
+# o1 is an S4 class category so it has slots that can be retrieved by getSlots() 
+getSlots(class(o1))
+# o2 is an S3 so names() will retrieve the slots
+names(o2)
+# o3 is an S3 
+names(o3)
+# o4 is S3 
+names(o4)
+# o5 is a named vector, a base class, but has names as attribute so function 
+# names() is still valid.  
+names(o5)
+```
+
+3. Often class categories S3 and S4 have an slot called `call`. Find which objects have this attribute and report the value
+
+
+```{r}
+# The objects o2 and o3 have the slot 'call. 
+
+# o2 : data used is sleep, see ?lm and ?sleep for more details.
+o2$call
+
+# o3 : is a density object on mtcars$hp , see ?density and ?mtcars
+o3$call
+
+```
+
+4. Plot the objects. 
+
+```{r}
+plot(o1)
+plot(o2)
+plot(o3)
+plot(o4)
+plot(o5)
+```
+
+
+

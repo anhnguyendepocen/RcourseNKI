@@ -1,0 +1,111 @@
+---
+title: "R scripts and reports (Rmarkdown)"
+date: "09 juni 2020"
+output: html_document
+---
+
+
+
+# R Markdown : R code + Markdown text formating language
+
+- RMarkdown ([cheat sheet](http://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf)) is a simple language for creating professional reports
+- It includes your R code output
+- Use 
+  - to share your data analysis with colleagues
+  - to document your data analysis for future generations
+- Capable of exporting various formats: `html`, `pdf` and  `word`
+
+
+## Short session
+
+  - Opening a new R markdown file
+    - From RStudio  File -> New File -> R Markdown
+    - Choose title and output format, choose `html` (default) here and press OK.
+  - Knitting (compiling R Markdown) 
+    - New R Markdown file contains example text and code generated for you.
+    - To knit, press the `knit` button in Rstudio. It first asks you to save your file. Your file should have extension `.Rmd`
+  - Quick exercises : Review the markdown with the html produced. What did R markdown do?
+
+# Features of R Markdown
+
+## Markdown examples
+
+Use 
+
+  - two spaces at the end of a line for new paragraph (newline)
+  - hash (`#`) for section titles. 
+  - dash (`-`) for bullet lists.
+  - \*italic\*, \*\*bold\*\* and \~\~strike through\~\~ for  *italic*, **bold**, ~~strike through~~ respectively
+  - \> to highlight 
+  
+> to highlight
+
+## Including R code in markdown
+
+R code is included in a `chunk`:
+
+<pre><code>```{r}
+x <- 5
+x + 10
+```</code></pre>
+
+
+```r
+x <- 5
+x + 10
+```
+
+```
+[1] 15
+```
+
+## Chunk options
+
+There are many chunck options available, most common being `echo`, `eval`. For example the option results='hide' prevents the result of the `x + 10` being included in this page:  
+
+<pre><code>```{r results='hide'}
+x <- 5
+x + 10
+```</code></pre>
+
+
+```r
+x <- 5
+x + 10
+```
+
+And with plots
+
+<pre><code>```{r results='hide'}
+with(infert, hist(age))
+```</code></pre>
+
+![](02_rmarkdown_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+## R Studio and R Markdown
+
+- R Markdown is well integrated with RStudio.
+- By pressing `knit` a new R session is started and terminated after generating the report.
+- This stand-alone nature helps to make sure that your analysis is ***reproducible***.
+- The working directory of the markdown R session is the location of the markdown document.
+- The knitting R session is independent from the R session in the RStudio console, this means that:
+  - All data  needed for the generation of the report must be loaded/created by the scripts in the R Markdown document.
+  - and conversely no data from R session in the R Studio console is accessible by the R session started for knitting. 
+- It is possible to run a block of R code from R Markdown document inside the R Studio console.
+- etc.
+
+## Quick exercises
+
+- Add an extra chunk to the default document that calculates the square root of 100.
+- Give the new section a title and add a line of explanation in bold.
+
+# Exercises
+
+We'll make our first markdown.
+
+## Revisiting Simple regression
+
+- Go back to the exercise  1.1 Simple Regression part of  `Regression and formula objects` section. Format the questions and answers into a R markdown document.
+- Knit the document to produce an Html
+- `Optional` : Alternatively, produce a pdf. *Note, some platforms may need additional configuration steps to get PDF export working.*
+

@@ -1,0 +1,16 @@
+"id"	"is.t0"	"treatment"	"type"
+"1"	"At0RPE1_S1"	1	0	0
+"2"	"Bt0RPE1_S3"	1	0	0
+"3"	"Ct0RPE1_S5"	1	0	0
+"4"	"At4RPE1_S2"	0	0	0
+"5"	"Bt4RPE1_S4"	0	0	0
+"6"	"Ct4RPE1_S6"	0	0	0
+"7"	"Dt4RPE1_S7"	0	1	0
+"8"	"Et4RPE1_S9"	0	1	0
+"9"	"Ft4RPE1_S10"	0	1	0
+"10"	"Gt0RPE1_S12"	1	0	1
+"11"	"Ht0RPE1_S14"	1	0	1
+"12"	"It0RPE1_S16"	1	0	1
+"13"	"Gt4RPE1_S13"	0	0	1
+"14"	"Ht4RPE1_S15"	0	0	1
+"15"	"It4RPE1_S17"	0	0	1

@@ -1,0 +1,319 @@
+---
+title: "Survey exercise"
+author: "Jelle"
+date: "18 januari 2017"
+output: html_document
+---
+
+# Big survey data exercise
+
+Let's revisit the survey data. 
+
+```{r eval=1:3, echo=4:5}
+library( tidyverse )
+pulse <- read.delim("../data/pulse.txt")
+survey <- read.delim("../data/survey.txt") %>% rename( gender = gender )
+pulse <- read.delim("pulse.txt")
+survey <- read.delim("survey.txt")
+```
+
+For convenience, we display again the meaning of the covariates
+
+|Variable | Explanation |
+|---|-----------------------------------------------------|
+|name     | Name of student|
+|gender   	  |	male or female |
+|wr.hand  |	span (distance from tip of thumb to tip of little finger of spread hand) of writing hand, in cm |
+|nw.hand  |	span of non-writing hand |
+|w.hand	  |	writing hand of student |
+|fold 	  |	"Fold your arms! Which is on top" ("r on l", "l on r" or "neither".) |
+|pulse  	|	pulse rate of student (beats per minute) |
+|clap   	|	"Clap your hands! Which hand is on top?" (right, left er neither.)|
+|exercise	    |	how often the student exercises. ("freq" (frequently), "Some", "None".)|
+|smokes  	|	how much the student smokes. ("heavy", "regul" (regularly), "occas" (occasionally), "never".)|
+|height	  |	height of the student in cm. |
+|m.i  	  | whether the student expressed height in imperial (feet/inches) or metric (centimetres/metres) units.|
+|age      | age of the student in years. |
+
+We will now practice everything we've learned so far. When doing this exercise, try to
+
+1. Make an R markdown document that has the question, the answer and all your code in such a way that your neighbor could reproduce it
+2. Avoid all hard-coded numbers in your code: make sure that the same code still gives correct answers when the data change!
+
+- What is the name of the oldest student in the data?
+
+```{r}
+survey$name <- as.character(survey$name)
+with(survey, name[which.max(age)])
+```
+
+- What are the names of the oldest male and female students?
+
+```{r}
+library(dplyr)
+survey %>% group_by(gender) %>% top_n(1, age) %>% select(name, gender, age)
+```
+
+- How tall is the student with the longest name?
+
+```{r}
+with(survey, height[which.max(nchar(name))])
+```
+
+- Make a new factor variable `adult` that indicates whether a student is over 18 or not.
+
+```{r}
+survey$adult <- with(survey, factor(age > 18, labels = c('under 18', 'over 18')))
+```
+
+
+- Calculate the span of the left hand for each student. Hint: use `ifelse`
+
+```{r}
+survey$left <- with(survey, ifelse(hand == 'left', span1, span2))
+```
+
+- Calculate median age separately for the smoking categories
+
+```{r}
+with(survey, tapply(age, smokes, median))
+```
+
+- Is there a relationship between `fold` and `clap`? Make a table and perform a Fisher exact test.
+
+```{r}
+with(survey, table(fold, clap))
+with(survey, fisher.test(fold, clap))
+```
+
+- plot the relationship between the spans of writing and non-writing hands in a scatterplot. Color by gender. Include the line x=y.
+
+```{r}
+library(ggplot2)
+ggplot(survey) + aes(y=span1, x=span2, col=gender) + geom_point() + geom_abline()
+```
+
+- Perform a paired t-test to test the null hypothesis if the writing hand span is equal to the non-writing hand span.
+
+```{r}
+with(survey, t.test(span1, span2, paired=TRUE))
+```
+
+
+- Perfom the same t-test as above, but separately for the three categories in `clap`. Return the three p-values in a simple table.
+
+```{r}
+survey %>% group_by(clap) %>% 
+  summarize(p = t.test(span1, span2, paired=TRUE)$p.value)
+```
+
+
+# Using `apply`
+
+The Puromycin data has enzyme reaction velocities under different concentrations and different treatments. There are two measurements per concentration/treatment combination. We want to summarize the results in a table that gives the average of the two measurements for every combination of concentration and treatment.
+
+- Note that the second argument of tapply may be a list, so that we can summarize by two or more variables simultaneously. Make a list containing the two variables conc and state.
+
+```{r}
+PM <- Puromycin
+mylist <- list(PM$conc, PM$state)
+```
+
+- Use tapply() to make the summarizing table.
+
+```{r}
+tapply(PM$rate, mylist, mean)
+```
+
+#  Apply and functions
+
+The OrchardSprays dataset has a so-called Latin Square design. This means that a field is divided into regular subfields by rows and columns, and that every row and column position is used exactly once for each treatment (like in a Sudoku).
+
+- Find the row positions corresponding to treatment A.
+
+```{r}
+OS <- OrchardSprays
+OS$rowpos[OS$treatment=="A"]
+```
+
+- Does every measurement for treatment A have a different row position? Hint: use duplicated.
+
+```{r}
+any(duplicated(OS$rowpos[OS$treatment=="A"]))
+```
+
+- Turn your check for treatment A into a function, and use that function to repeat the same check for treatment B.
+
+```{r}
+check.dup <- function(tr) {
+  any(duplicated(OS$rowpos[OS$treatment==tr]))
+}
+```
+
+- Check the same for all other treatments. Hint: use sapply and LETTERS.
+
+```{r}
+sapply(LETTERS[1:8], check.dup)
+```
+
+- We will now visualize the Latin square design. Make a matrix of 8 rows and 8 columns, with entries of the matrix giving the treatment used in that row and column. Hint: make sure the data matrix is ordered first by column and then by row (use order), and use the command matrix.
+
+```{r}
+ordering <- order(OS$colpos, OS$rowpos)
+matrix(OS$treatment[ordering], 8, 8)
+```
+
+- Display the measured decrease values in their proper location in the Latin Square.
+
+```{r}
+matrix(OS$decrease[ordering], 8, 8)
+```
+
+# Read.table
+
+The file tweedekamer.txt contains historical data on numbers of parliament seats of parties in the Dutch parliament from 1956 to the present. Download the file to your computer.
+
+-	Use read.table or read.delim to read the file tweedekamer2012.txt. If something goes wrong, check the argument `quote`.
+
+```{r}
+tk <- read.table("tweedekamer2012.txt", sep="\t", quote="", header=T, row.names=1, check.names=F)
+```
+
+-	Check whether row and column names have been read correctly. Hint: use head. If necessary, adjust the arguments of read.table. Hint: look at the `check.names` argument.
+
+```{r}
+head(tk)
+```
+
+- How many parties and how many elections are in the data? Hint: use dim.
+
+```{r}
+dim(tk)
+```
+
+-	Convert the data.frame into a matrix.
+
+```{r}
+tk <- as.matrix(tk)
+```
+
+-	Create a numeric election year variable from the column names of your matrix. Hint: use as.numeric.
+
+```{r}
+year <- as.numeric(colnames(tk))
+```
+
+-	Calculate the number of parties represented in parliament after each election, and plot this number as a function of time as a line plot. Hint: Use colSums and logicals.
+
+```{r}
+plot(year, colSums(tk>0), type='l')
+```
+
+-	Make the same plot as a barplot. Make the labels perpendicular to the axis for readability. Hint: see las in ?par.
+
+```{r}
+barplot(colSums(tk>0), las=2)
+```
+
+-	Find the names of all parties that have (so far) only been present in a single parliament.
+
+```{r}
+rownames(tk)[rowSums(tk>0)==1]
+```
+
+-	Find the name of the largest party in each parliament.
+
+```{r}
+largest <- rownames(tk)[apply(tk, 2, which.max)]
+names(largest) <- colnames(tk)
+```
+
+-	Plot the number of seats of the largest party as a function of time in a barplot. Color the bars by the name of the largest party, and make a proper legend.
+
+```{r}
+lseats <- apply(tk, 2, max)
+barplot(lseats, las=2)
+```
+
+
+## Combining information from multiple tables
+
+Load the data set politics2012.RData, with information on parliament and cabinets in the Netherlands since 1956. Part of this data you have already seen. 
+
+- Check which objects this file contains by using the function show() with argument "load("politics2012.RData")". Then load the file.
+
+```{r}
+show(load("politics2012.RData"))
+load("politics2012.RData")
+```
+
+-  How many prime ministers have there been, and how many different parties have they come from? Hint: use unique.
+
+```{r}
+length(unique(cabinet$PM))
+```
+
+- Make a list of character vectors out of the coalition variable using strsplit(). Give this list the names of the cabinets.
+
+```{r}
+coal<- strsplit(cabinet$coalition, ", ")
+```
+
+- Make a barplot of the number of coalition partners as a function of time.
+
+```{r}
+ncoal <- sapply(coal, length)
+barplot(ncoal, names.arg=cabinet$year, las=2)
+```
+
+- The parliament variable in the cabinet data.frame gives the election year of the active parliament and the time of the cabinet and links the cabinet data.frame to the parliament data. Find the vector of distribution of parliament seats at the time of the Biesheuvel I cabinet.
+
+```{r}
+bies.par <- parliament[,cabinet["Biesheuvel I", "parliament"]]
+```
+
+- Find the largest party in parliament at the time of the Biesheuvel I cabinet.
+
+```{r}
+names(bies.par)[which.max(bies.par)]
+```
+
+- Turn your code for the previous exercise into a function, and calculate the largest party in parliament at the time of the cabinet for each cabinet.
+
+```{r}
+largest.party <- function(cab) {
+  cab.par <- parliament[,cabinet[cab, "parliament"]]
+  names(cab.par)[which.max(cab.par)]
+}
+lp <- sapply(rownames(cabinet), largest.party)
+```
+
+- How often was the prime minister a member of the largest party in parliament?
+
+```{r}
+sum(lp==cabinet$party)
+length(lp)
+```
+
+- How many seats in parliament did the parties in the Biesheuvel I cabinet have in total? Hint: use %in%.
+
+```{r}
+names(coal) <- rownames(cabinet)
+bies.coal <- coal[["Biesheuvel I"]]
+sum(bies.par[names(bies.par) %in% bies.coal])
+```
+
+- Turn your code for the previous question into a function, calculate the number of coalition seats for every cabinet, and display the result in a barplot.
+
+```{r}
+coal.seats <- function(cab) {
+  cab.coal <- coal[[cab]]
+  cab.par <- parliament[,cabinet[cab, "parliament"]]
+  sum(cab.par[names(cab.par) %in% cab.coal])
+}
+sapply(rownames(cabinet), coal.seats)
+```
+
+
+
+

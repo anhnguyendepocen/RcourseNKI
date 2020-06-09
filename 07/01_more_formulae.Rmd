@@ -1,0 +1,241 @@
+---
+title: "More formulae"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+# More formulae
+
+## Formula objects
+
+### Recap
+
+Formula objects are the way to tell R that one variable depends on another. Useful for
+
+- easier specification of statistical models
+```{r}
+with(sleep, t.test(extra[group == 1], extra[group == 2]))
+t.test(extra ~ group, data = sleep)
+```
+
+- easier plots
+```{r}
+plot(extra ~ group, data = sleep)
+```
+
+Many functions allow formula as input.
+
+
+### Multiple regression
+
+We can have multiple terms in a formula. Let's have a look at the quine data.
+
+```{r}
+library(MASS)
+head(quine)
+```
+
+Multiple regression with only main effects
+
+```{r}
+fit <- lm(Days ~ Eth + Sex + Age + Lrn, data=quine)
+fit
+summary(fit)
+```
+
+Note that R automatically creates dummy variables for factors. Here, `sexM` means the effect of `Sex='M'`. The reference class, apparently, is the females. In general, the first level of the factor is the reference class.
+
+```{r}
+levels(quine$Sex)
+```
+
+If you want to see the precise dummy variables that R creates from a formula, use `model.matrix`
+
+```{r}
+M <- model.matrix(Days ~ Eth + Sex + Age + Lrn, data=quine)
+head(M)
+```
+
+Logical variables are automatically turned into a dummy with FALSE as the reference class
+
+```{r}
+lm(Days ~ (Age == 'F2'), data=quine)
+```
+
+If you just want to put everything into the model, use `.`
+
+```{r}
+lm(Days ~ ., data=quine)
+```
+
+To exclude variables, use `-`
+
+```{r}
+lm(Days ~ . - Eth, data=quine)
+```
+
+
+### The intercept term
+
+We see that R automatically adds an intercept term to the model. You can suppress the intercept too, by adding either `+0` or `-1` to the formula. Suppressing the intercept has different effects if there are factor variables in your model or not. 
+
+```{r}
+lm(Postwt ~ 0 + Prewt, data=anorexia)
+lm(Postwt ~ 0 + Treat, data=anorexia)
+levels(anorexia$Treat)
+lm(Postwt ~ 0 + Prewt + Treat, data=anorexia)
+```
+
+### Interactions
+
+Specifying interactions: use `:` or `*`:
+
+- `:` interaction only
+- `*` interaction and lower order terms
+
+```{r}
+lm(Days ~ Eth + Sex + Eth:Sex, data=quine)
+lm(Days ~ Eth * Sex, data=quine)
+```
+
+Get all interactions between four variables up to fourth order terms
+
+```{r}
+lm(Days ~ Eth * Sex * Age * Lrn, data=quine)
+```
+
+To have only up to second order interaction terms
+
+```{r}
+lm(Days ~ (Eth + Sex + Age + Lrn)^2, data=quine)
+```
+
+Or again with dots
+
+```{r}
+lm(Days ~ .^2, data=quine)
+```
+
+
+### Transformations and the I() function
+
+Sometimes you don't want to use a variable directly, but a function of it. This is no problem in the response
+
+```{r}
+lm(Postwt - Prewt ~ Treat + Prewt, data=anorexia)
+```
+
+But it doesn't work on the right hand side of the formula
+
+```{r, error=TRUE}
+lm(Postwt - Prewt ~ Treat + (Prewt-50), data=anorexia)
+```
+
+Use `I` (Inhibit) to let R take a term literally in a formula, i.e. interpret it as a calculation.
+
+```{r}
+lm(Postwt - Prewt ~ Treat + I(Prewt-50), data=anorexia)
+```
+
+Standard transformations such as log and square root can be used directly without `I`
+
+```{r}
+lm(Postwt - Prewt ~ Treat + log10(Prewt), data=anorexia)
+```
+
+
+### Using anova
+
+The `summary` function gives useful statistical tests for single covariates or dummies.
+
+```{r}
+fit <- lm(Days ~ Eth + Sex + Age + Lrn, data=quine)
+summary(fit)
+```
+
+So, is there a significant effect of age? We can't tell, because `summary` does not take the dummies for `Age` together. To test this, explicitly fit the null model without age, and compare it to the complete model. The name `anova` for this function is awkward, unfortunatetely. This use is not restricted to anova models.
+
+```{r}
+fit0 <- lm(Days ~ Eth + Sex + Lrn, data=quine)
+anova(fit, fit0)
+```
+
+This comparison is also very useful if we want to evaluate the significance of a variable in the presence of interaction.
+```{r}
+fit <- lm(Days ~ (Eth + Sex + Age + Lrn)^2, data=quine)
+fit0 <- lm(Days ~ (Eth + Age + Lrn)^2, data=quine)
+anova(fit, fit0)
+```
+
+Always use anova to compare models. Don't use anova on a single model unless you really know what you're doing! Anova on a single model evaluates the significane of variable stepwise in the order in which variables appear in formula. Compare:
+
+```{r}
+anova(lm(Days ~ Age + Eth + Sex + Lrn, data=quine))
+anova(lm(Days ~ Eth + Sex + Lrn + Age, data=quine))
+summary(lm(Days ~ Eth + Sex + Lrn + Age, data=quine))
+```
+
+### Getting information from a regression model
+
+```{r}
+fit <- lm(Days ~ Eth + Sex + Age + Lrn, data=quine)
+fitted(fit)
+residuals(fit)
+coef(fit)
+confint(fit)
+coef(summary(fit))
+```
+
+
+## Generalized linear models
+
+### Logistic regression
+
+For logistic regression, use `glm` (generalized linear model), with `family=binomial`.
+
+```{r,eval=-1}
+?biopsy       # from the MASS library again
+fit <- glm(class ~ V1+V2+V3+V4+V5+V6+V7+V8+V9, family=binomial, data=biopsy)
+summary(fit)
+```
+
+The resulting object can be used in much the same way as the linear model output. Example
+
+```{r}
+with(na.omit(biopsy), plot(fitted(fit) ~ class))
+```
+
+Note that we have to use `na.omit(biopsy)` because `glm` like `lm` removes subjects with missing values in the covariates automatically. This feature may may also mess up your call to anova if values are missing for some covariates but not for all. It is better therefore to deal with missing values before you start fitting models.
+
+When using `anova` in `glm`, the default is not to give a p-value. If you want it, explicitly ask for the likelihood ratio test (LRT)
+
+```{r,eval=-1}
+fit0 <- glm(class ~ V1+V2+V3+V4+V5+V6, family=binomial, data=biopsy)
+anova(fit, fit0, test='LRT')
+```
+
+
+### Survival
+
+Survival analysis methods are available in the `survival` package. All works very similar to `lm` and `glm` except that the response has to be a `Surv` object, built from time and event status.
+
+```{r,eval=-2}
+library(survival)
+?aml
+with(aml, Surv(time, status))
+```
+
+To draw Kaplan-Meier curves, use `survfit`
+
+```{r}
+fit <- survfit(Surv(time, status) ~ x, data=aml)
+plot(fit, col=2:3)
+```
+
+A log-rank test and a fitted Cox model
+
+```{r}
+survdiff(Surv(time, status) ~ x, data=aml)
+coxph(Surv(time, status) ~ x, data=aml)
+```
+
+The result of coxph can be stored as an object and used in most ways like a `lm` or `glm` object.

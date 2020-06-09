@@ -1,0 +1,4 @@
+"0","wilcox.test(my.table$Ams,my.table$rio,paired=TRUE)"
+"2","Error in wilcox.test.default(my.table$Ams, my.table$rio, paired = TRUE) : 
+  'y' is missing for paired test
+"

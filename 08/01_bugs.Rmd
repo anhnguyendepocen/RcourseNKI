@@ -1,0 +1,21 @@
+---
+title: "bugs"
+author: "Jelle Goeman"
+date: "10 June 2016"
+output: html_document
+---
+
+## Bug reports
+
+Sometimes you find a problem (error or strange result) in some package you have been using. This may be a bug. What to do?
+
+1. (Re)read help files and documentation carefully
+2. Search the web for similar reports
+2. Check that you are using the latest version of the package
+3. Restart R and reproduce the error/strange result
+3. Make a bit of code that someone else can use to reproduce the error/strange result (use small anonymous data)
+3. Write an email to R-help or to the package maintainer with your question (be polite). Always include sessionInfo().
+
+Good bug reports are highly appreciated!
+
+

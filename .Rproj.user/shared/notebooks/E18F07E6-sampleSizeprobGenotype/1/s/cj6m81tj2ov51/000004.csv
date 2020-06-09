@@ -1,0 +1,2 @@
+"0","for(xc in 1:ncol(pmat))"
+"0","   lines(nvec, pmat[, xc], col = vcols[xc], lwd = 2)"

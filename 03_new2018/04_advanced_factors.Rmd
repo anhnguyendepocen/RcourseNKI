@@ -1,0 +1,221 @@
+---
+title: "Advanced factors"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+source( "../R_course_setup.R" );
+```
+```{r echo=FALSE}
+pulse <- read.delim("../data/pulse.txt")
+survey <- read.delim("../data/survey.txt")
+```
+
+
+# Factors revisited
+
+We have seen an introduction to factors in the section 'Basic data types'. Remember that they are variables that define categories. We can find out the category names involved using `levels` and tabulate factors:
+
+```{r}
+levels(pulse$exercise)
+table(pulse$exercise)
+```
+
+Note that the category names given by its levels come typically in alphabetical order. In the example above, this order does not correspond to the intrinsic order of the categories, in which the extremes are given by `high` and `low`, with `intermediate` in the middle, rather than the last one. This is not a big problem for a table, but it is not ideal for a graph. Indeed, a boxplot of `pulse2` according to the groups defined by `exercise`  looks like:
+
+```{r}
+boxplot(pulse$pulse2 ~ pulse$exercise)
+```
+
+So we would like to re-order the factor levels so that they correspond to the intrinsic order of the categories.
+
+## Reordering a factor
+
+To change the order of the category levels, we create the factor again by giving its levels in the correct order:
+
+```{r}
+pulse$exercise <- factor(pulse$exercise, levels=c('high', 'moderate', 'low'))
+```
+
+We can check that the re-ordering has worked:
+
+```{r}
+levels(pulse$exercise)
+table(pulse$exercise)
+boxplot(pulse$pulse2 ~ pulse$exercise)
+```
+
+
+## Changing factor labels
+
+If you want to change the category labels only, without re-ordering them, assign new values to the `levels` of a factor.
+
+```{r}
+pulse$exercise2 <- pulse$exercise
+levels(pulse$exercise2) <- c("H", "I", "L")
+table(pulse$exercise2)
+```
+
+We can use similar code to merge categories of a factor. For example, to merge the categories `H` and `I`, assign to them the same label:
+
+```{r}
+pulse$exercise3 <- pulse$exercise
+levels(pulse$exercise3) <- c("H.I", "H.I" , "L")
+```
+
+
+## Turning a continuous variable into categories
+
+Use `cut` to categorise a continuous variable and turn into a factor variable. Note that when calling `cut` the break points between categories need to be given, including the maximum and minimum values of the original variable.
+
+```{r}
+pulse$height4 <- cut(pulse$height, c(min(pulse$height)-1, 160, 170, 180, max(pulse$height)))
+class(pulse$height4)
+table(pulse$height4)
+```
+
+
+You may want to change the labels to something prettier.
+
+```{r}
+levels(pulse$height4) <- c('-160', '160-170', '170-180', '180+')
+table(pulse$height4)
+```
+
+
+## (*) Combining factors
+
+The `:` operator can be used to make a new factor with all combinations of two (or more) factors
+```{r}
+pulse$smokes:pulse$alcohol
+```
+
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "levels", "04_advanced_factors.Rmd" );
+```
+
+
+# ANOVA and regression with factors
+
+An ANOVA analysis can be run in R by using the results of a regression model fit, such as from `lm`.
+
+## Regression model fit
+
+Say you fit a regression model of `pulse2` on `exercise`, which already had its categories reordered:
+
+
+```{r}
+table(pulse$exercise)
+fit <- lm(pulse2 ~ exercise, data=pulse)
+summary(fit)
+```
+
+In the results, `exercisemoderate` represents the effect of `exercise='moderate'` versus the reference category `exercise='high'`. By default, the first level of the factor is taken as the reference category, and this is often the first level in alphabetical order. 
+
+The model fit above yields tests per category of `exercise`, compared with the reference category. However, a test for the effect of the entire variable `exercise` is not directly available. This can be obtained with ANOVA (Analysis of Variance).
+
+## The ANOVA table and F-test
+
+The ANOVA table can be obtained by using the function `anova` and the model fit `fit`:
+
+```{r}
+anova(fit)
+```
+
+We can also compare two model fits using ANOVA. Say that we want to check if the above model fit improves by including `gender` in the model. Then we fit a model with both `exercise` and `gender`, and compare this new fit with the above one:
+
+```{r}
+fit2 <- lm(pulse2 ~ exercise + gender, data=pulse)
+anova(fit, fit2)
+```
+
+
+Note that `lm` by default removes any subjects which have missing values in at least one of the covariates. This means that the number of subjects in `fit` and `fit0` may be different and error returned. In that case remove subjects with missing values manually (or do imputation or something more fancy).
+
+
+## (*) Model fit without a reference category
+
+When fitting a regression model, we can do without a reference category in a model fit by suppressing the intercept:
+
+```{r}
+lm(pulse2 ~ 0 + gender, data=pulse)
+```
+
+The coefficient now represents the mean in the group (male or female), instead of a comparison between males and females (such a comparison is called a contrast).
+
+Note that the reference category is only suppressed for the first factor in the formula:
+
+```{r}
+lm(pulse2 ~ 0 + gender + ran, data=pulse)
+```
+
+Note that suppressing the intercept has a different effect for explanatory factors and for continuous explanatory variables.
+
+
+
+# (*) Generalized linear models and survival
+
+Regression models can be run using the function `glm` (generalized linear model), which has very similar syntax to `lm`. Amongst useful models are logistic models.
+
+## (*) Logistic regression and ANOVA
+
+For logistic regression, use `glm`  with slot `family=binomial`.
+
+```{r,eval=-1}
+fit <- glm(alcohol ~ gender + smokes + exercise, family=binomial, data=pulse)
+summary(fit)
+```
+
+When using `anova` in `glm`, the default is not to give a p-value. If you want it, explicitly ask for one. In case of the logistic model, the adequate way to compute the ANOVA p-value is via the likelihood ratio test (LRT):
+
+```{r}
+anova(fit, test='LRT')
+```
+
+
+## (*) Survival analysis
+
+Survival analysis methods are available in the `survival` package, which is installed automatically with the base package. The syntax is similar to `lm` and `glm`, except that the response has to be a `Surv` object, built from two separate variables giving time and event.
+
+We do not have survival times in the `pulse` data, so we use the `aml` data from the `survival` package.
+
+```{r,eval=-2}
+library(survival)
+?aml
+with(aml, Surv(time, status))
+```
+
+To draw Kaplan-Meier curves, use `survfit`:
+
+```{r}
+fit <- survfit(Surv(time, status) ~ x, data=aml)
+plot(fit, col=2:3)
+```
+
+
+A log-rank test can be computed using:
+
+
+```{r}
+survdiff(Surv(time, status) ~ x, data=aml)
+```
+
+A Cox model can be fitted as follows:
+
+```{r}
+coxph(Surv(time, status) ~ x, data=aml)
+```
+
+
+As before, each object can be stored separately. In particular, the Surv object can be saved and the entire analysis run using it. 
+
+The result of coxph can be stored as an object and manipulated in most ways like a `lm` or `glm` object. In particular we can use `anova` to compare different model fits.
+
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "anova", "04_advanced_factors.Rmd" )
+```
+
+
+

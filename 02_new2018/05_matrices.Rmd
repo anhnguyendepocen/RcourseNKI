@@ -1,0 +1,154 @@
+---
+title: "Matrices"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+source( "../R_course_setup.R" );
+```
+
+# Matrices
+
+## What is a matrix
+
+<center>![Vectors](Data_types_mdfl.png)</center>
+
+Matrix is a two-dimensional array of elements of the same type.
+
+Rows and columns are addressed by numerical indices.
+
+Rows and columns might also get names. The names might be used for indexing.
+
+## Creation
+
+A matrix can be constructed from a vector. Depending on the arguments, elements are put to the matrix in a different order:
+
+```{r}
+m <- matrix( 1:6, nrow = 2 );
+m
+m <- matrix( 1:6, nrow = 2, byrow = TRUE );
+m
+m <- matrix( 1:6, ncol = 2 );
+m
+```
+
+The class of `m` is:
+```{r}
+class( m )
+```
+
+Function `str` gives a compact display of an object structure/content:
+```{r}
+str( m )
+```
+
+## Dimensions
+
+There are several functions to get dimensions of a matrix:
+
+- `ncol( m )` provides the number of columns:
+```{r}
+ncol( m )
+```
+
+- `nrow( m )` provides the number of rows:
+```{r}
+nrow( m )
+```
+
+- `dim( m )` returns a vector with two elements: number of rows and number of columns
+```{r}
+dim( m )
+```
+
+## Setting/getting names of the columns and rows
+
+`colnames( m )` and `rownames( m )` are used to set and get the names of matrix columns and rows:
+```{r}
+m
+colnames( m ) <- c( "A", "B" )
+m
+rownames( m ) <- c( "X", "Y", "Z" )
+m
+```
+
+To get names use:
+```{r}
+rownames( m )
+colnames( m )
+```
+
+## Getting matrix elements
+
+Single brackets notation with two arguments `[ row(s), col(s) ]` might be used to get specified row(s) and column(s). By default single rows/cols will get reduced to a vector.
+
+```{r}
+m[ 3, 1 ]
+m[ c( 2, 3 ), 1 ]
+m[ c( 2, 3 ), c( "B", "A" ) ]
+m[ c( F, T, T ), c( "B", "A" ) ]
+```
+
+Notice the difference in the output class when only a single element is requested:
+```{r}
+class( m[ 3, 1 ] )
+class( m[ c( 2, 3 ), c( "B", "A" ) ] )
+```
+
+Dropping of `matrix` dimensionality might be prevented:
+```{r}
+m[ 3, 1 ]
+m[ 3, 1, drop = FALSE ]
+class( m[ 3, 1, drop = FALSE ] )
+```
+
+Empty index field means "all" rows or columns:
+```{r}
+m[ , c( "B", "A" ) ]
+m[ c( "Z", "X", "Y" ), ]
+m[ , ]
+```
+
+## Useful matrix functions
+
+Short summary of matrix operations: http://www.statmethods.net/advstats/matrix.html
+
+### Transposition
+
+```{r}
+m <- matrix( 1:6, nrow = 3 );
+colnames( m ) <- c( "A", "B" )
+rownames( m ) <- c( "X", "Y", "Z" )
+m
+t(m)
+```
+
+### Matrix multiplication
+
+```{r}
+m
+t( m )
+m %*% t( m )
+```
+
+### Element-wise multiplication
+
+```{r}
+m
+m+1
+m * (m+1)
+```
+
+### Row/columns means/sums
+
+```{r}
+m
+rowMeans( m )
+rowSums( m )
+colMeans( m )
+colSums( m )
+```
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "corMatrix", "05_matrices.Rmd" );
+```

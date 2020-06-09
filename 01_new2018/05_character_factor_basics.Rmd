@@ -1,0 +1,194 @@
+---
+title: "Basic data types"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup,include=FALSE,eval=TRUE}
+source( "../R_course_setup.R" );
+```
+
+# Basic data types
+
+We will use the `pulse` and `survey` data again for illustration and exercises:
+
+```{r result="asis", echo=FALSE, comment="", eval=TRUE}
+pulse <- catReadTable( "pulse.txt", "pulse" )
+```
+```{r eval=FALSE}
+pulse <- read.delim( "data/pulse.txt" )
+```
+
+```{r result="asis", echo=FALSE, comment="", eval=TRUE}
+survey <- catReadTable( "survey.txt", "survey" )
+```
+```{r eval=FALSE}
+survey <- read.delim( "data/survey.txt" )
+```
+
+## Types
+
+Columns in a data.frame can be of different types. Typically:
+
+- numeric (we've seen already)
+- character (for text)
+- factor (for categorical variables)
+
+## `str` and `class`
+
+To get a quick overview (structure) of the types of data in your data.frame:
+```{r}
+str(pulse)
+```
+
+To learn about the type of a specific column:
+```{r}
+class(pulse$name)
+```
+
+# Vector classes
+
+## Numeric data
+
+Numeric data can be `integer` (whole numbers) or `numeric` (continuous data) but you can ignore that distinction if you are not a programmer.
+
+We've seen how to make numeric data with `c` or `:`
+
+### Useful functions for numeric data
+
+Summarizing a single variable:
+
+- `mean`
+- `median`
+- `min`
+- `max`
+- `range` (two values: min, max)
+- `sd` (standard deviation)
+- `var` (variance)
+- `hist` (histogram)
+
+A six-number summary: range, three quartiles and the mean:
+```{r}
+summary(pulse$age)
+```
+
+### Relationships between two variables
+
+- `cor` (correlation)
+- `plot` (scatterplot)
+
+```{r}
+cor(pulse$height, pulse$weight)
+plot(pulse$height, pulse$weight)
+```
+
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "numeric", "05_character_factor_basics.Rmd" );
+```
+
+## Character data
+
+Texts in R is called `character`. You recognize is by the quotes around the values.
+
+### Creating character data
+
+Use either single or double quotes
+
+```{r}
+text <- c('alpha', 'beta', 'gamma')
+TEXT <- c("ALPHA", "BETA", "GAMMA")
+```
+
+### Names
+
+Row and column names in a data.frame are always `character`:
+```{r}
+rownames(pulse)[1:10]
+```
+
+### (*) Useful premade character vectors
+
+- `LETTERS` (capitals)
+- `letters` (lower case)
+- `month.name` (months)
+
+### (*) Calculating with character vectors
+
+Arithmetics of text
+
+```{r}
+toupper("me")
+paste(LETTERS, letters, sep='_')
+```
+
+
+## Factor - categorical data
+
+A categorical variable in R is called `factor`:
+
+- They are internally coded as numbers 1,2,3,...
+- The numbers have value labels attached to them (called levels)
+
+### Making a factor
+
+To make a factor variable, start with a character vector and use `factor`:
+
+```{r}
+fac <- factor(c('A', 'B', 'A', 'B', 'B'))
+```
+
+### Factor basics
+
+You recognize a factor by the `Levels:` line when printing:
+```{r}
+fac
+```
+
+To get the numeric coding:
+```{r}
+as.numeric(fac)
+```
+
+To get the value labels:
+```{r}
+levels(fac)
+nlevels(fac)
+```
+
+### Turning factor (back) into character
+
+```{r}
+as.character(fac)
+```
+
+### Table
+
+Factors are best summarized with `table`:
+```{r}
+table(pulse$exercise)
+```
+
+`table` can also crosstabulate two (or even more) variables:
+```{r}
+table(pulse$gender, pulse$exercise)
+```
+
+### (*) Table of table
+
+It is suprisingly useful to use table twice.
+
+```{r}
+table(table(pulse$name))
+```
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "factors", "05_character_factor_basics.Rmd" );
+```
+
+
+
+
+
+
+
+

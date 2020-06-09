@@ -1,0 +1,3 @@
+"0","vcols <- c(""red"", ""purple"", ""blue"", ""darkgreen"", ""black"")"
+"0","plot(1, 1, col = ""white"", xlim = range(nvec), ylim = c(0, 1), xlab = ""sample size"","
+"0","     ylab = ""probability"")"

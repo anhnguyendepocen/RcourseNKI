@@ -1,0 +1,64 @@
+---
+title: 'Final remarks and exercise'
+author:
+- affiliation: "Bioinformatics Center of Expertise, Medical Statistics & Bioinformatics, LUMC"
+  company: "LUMC"
+  name: "Ramin Monajemi"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+source( "../R_course_setup.R" )
+```
+
+## Reproducibility in R 
+
+  - [R Markdown](http://rmarkdown.rstudio.com/) : code and documentation are tied together.
+  - Git : version control system ; [LUMC git course](https://git.lumc.nl/courses/gitcourse) 
+  - Tracking code and data versions : `sessionInfo()` 
+  
+## General coding conventions 
+
+  - Coding conventions: to improve *readability* and *maintenance*
+    - File Names: end in .R
+    - Identifiers: FunctionName, variableName, kConstantName
+    - Line Length: maximum 70-80 characters
+    - Indentation
+    - Curly Braces: first on same line, last on own line
+    - else: Surround else with braces
+    - Assignment: use <-, not =
+    - Semicolons: don't use them
+    - General layout and ordering  (library, functions, main)
+  - Use existing R functions if possible.
+  - Write generic parts as functions to reuse
+  - Inline documentation
+  - Record sessionInfo() into project results. 
+
+## Finding, installing and loading packages
+
+Package
+
+  - Is a bundle of function(s), possibly with data and binary code.
+  - R comes with packages already installed, e.g. **base**, **utils**, **stats**, **methods**, etc.
+  - External packages can be installed and loaded into the workspace 
+
+Main sources
+
+  - Comprehensive R Archive Network (CRAN)
+  - Bioconductor (genomic data) 
+
+Links
+
+  - http://cran.r-project.org
+  - http://www.bioconductor.org
+  - http://www.rdocumentation.org
+
+
+## Final Exercise
+
+Put your R code solutions to the [final exercises](final.tasks.nocode.html) into a R Markdown file which can be compiled by `knit` and produce a report. Record the `sessionInfo()` as text inside the R markdown file. 
+
+Good Luck!  
+
+

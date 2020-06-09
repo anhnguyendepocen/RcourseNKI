@@ -1,0 +1,85 @@
+---
+title: "Vectors (tasks)"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+# Formulae and regression (tasks)
+
+## Tasks
+
+### Linear regression
+
+We look at the `swiss` data. In this data set we explain fertility of Swiss regions using various indicators.
+
+- Perform a linear regression with `Agriculture` as the explanatory variable. 
+
+```{r}
+res <- lm(Fertility ~ Agriculture, data=swiss)
+summary(res)
+```
+
+- What is the confidence interval of the regression coefficient?
+
+```{r}
+confint(res, 'Agriculture')
+```
+
+- Perform another linear regession, but use a log-transformed `Agriculture`
+
+```{r}
+summary(lm(Fertility ~ log(Agriculture), data=swiss))
+```
+
+- Again, but use a `Agriculture` and `Agriculture` squared
+
+```{r}
+summary(lm(Fertility ~ Agriculture + I(Agriculture^2), data=swiss))
+```
+
+- Again, but use Agriculture, Catholic, and their interaction
+
+```{r}
+summary(lm(Fertility ~ Agriculture * Catholic, data=swiss))
+```
+
+- Make a variable `P` that has the p-value of the interaction in the last model. Hint: use coef of the summary of your object.
+
+```{r}
+fit <- lm(Fertility ~ Agriculture * Catholic, data=swiss)
+coef(summary(fit))['Agriculture:Catholic', 'Pr(>|t|)']
+```
+
+- Is this model significantly better than the model with Agriculture alone? Hint: use anova.
+
+```{r}
+fit0 <- lm(Fertility ~ Agriculture, data=swiss)
+anova(fit, fit0)
+```
+
+- Fit the model again in a data set that leaves out the canton `Courtelary`. Use the model to predict `Fertility` in `Courtelary`
+
+```{r}
+fit <- lm(Fertility ~ Agriculture * Catholic, data=swiss[-1,])
+predict(fit, swiss[1,])
+```
+
+### Logistic regression
+
+In the quine data, we can try to predict learning speed.
+
+- Make a logistic regression model to predict `Lrn` based on `Eth`, `Age` and `Sex`.
+
+```{r}
+library(MASS)
+fit <- glm(Lrn ~ Eth + Age + Sex, data=quine, family=binomial)
+```
+
+- Is there a significant relationship between Age and Learning speed?
+ 
+```{r}
+fit0 <- glm(Lrn ~ Eth + Sex, data=quine, family=binomial)
+anova(fit, fit0, test='LRT')
+```
+
+
+

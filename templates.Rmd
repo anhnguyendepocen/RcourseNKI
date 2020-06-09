@@ -1,0 +1,55 @@
+# ------------------------------------------------------------------------------
+# Header and title line
+# ------------------------------------------------------------------------------
+
+---
+title: "The title"
+author:
+- affiliation: "Biomedical Data Sciences, LUMC"
+  company: "LUMC"
+  name: "Jelle Goeman"
+- affiliation: "Biomedical Data Sciences, LUMC"
+  company: "LUMC"
+  name: "Ramin Monajemi"
+- affiliation: "Biomedical Data Sciences, LUMC"
+  company: "LUMC"
+  name: "Szymon M. Kie&#322;basa"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+always_allow_html: yes
+---
+
+```{r setup,include=FALSE,eval=TRUE}
+source( "../R_course_setup.R" );
+```
+
+# The title (again)
+
+# ------------------------------------------------------------------------------
+# Using git diff for cooperating Windows, Mac and Linux users
+# ------------------------------------------------------------------------------
+
+# git diff --ignore-space-at-eol
+
+# ------------------------------------------------------------------------------
+# Loading pulse and survey
+# ------------------------------------------------------------------------------
+
+```{r setup,include=FALSE,eval=TRUE}
+source( "../R_course_setup.R" );
+```
+
+```{r result="asis", echo=FALSE, comment="", eval=TRUE}
+pulse <- catReadTable( "pulse.txt", "pulse" )
+```
+```{r eval=FALSE}
+pulse <- read.delim( "data/pulse.txt" )
+```
+
+```{r result="asis", echo=FALSE, comment="", eval=TRUE}
+survey <- catReadTable( "survey.txt", "survey" )
+```
+```{r eval=FALSE}
+survey <- read.delim( "data/survey.txt" )
+```
+
+# ------------------------------------------------------------------------------

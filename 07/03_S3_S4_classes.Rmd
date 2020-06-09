@@ -1,0 +1,95 @@
+---
+title: "S3 and S4 classes"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+# S3 and S4 objects
+
+S3 and S4 classes are used to store and return miscellaneous results coming from a function. They come in two types: S3 and S4 classes. S1 and S2 do not exist. 
+
+## S3 objects
+
+S3 classes occur more frequently. We have already encountered many of them
+
+```{r}
+res <- lm(extra ~ group, data=sleep)
+class(res)
+```
+
+An S3 object is essentially a list with some extra attributes. What works on list, works on an S3 object.
+
+```{r}
+names(res)
+length(res)
+res$fitted.values
+res[1:2]
+```
+
+For most types of S3 objects, special methods have been defined. Functions work in different ways on objects of this type.
+
+```{r}
+summary(res)
+coef(res)
+```
+
+Problem of S3 objects is that it can be difficult to find out what kind of functions are available for your object.
+
+# S4 objects
+
+S4 objects are more structured and more strict than S3 objects. They are not so popular with packages on CRAN, but very popular for packages on bioconductor. Let's look at an example from Bioconductor
+
+```{r, eval=FALSE}
+source("https://bioconductor.org/biocLite.R")
+biocLite(c("graph", "Rgraphviz"))
+```
+
+The packages `graph` and `Rgraphviz` are for working with graphs and visualizing them.
+
+```{r}
+library( graph )
+library( Rgraphviz )
+g1 <- randomEGraph(LETTERS[1:5], edges=6)
+g1
+class(g1)
+plot(g1)
+```
+
+Note the `attr(,"package")` at the bottom. This shows that it is an S4, not an S3 object. To check explicitly
+
+```{r}
+isS4(g1)
+```
+
+There is no `isS3`. Things you may expect to work for these objects from S3 don't
+
+```{r}
+names(g1)
+```
+
+With S4 object you could directly access the content with `@`, but you are not meant to.
+
+```{r}
+getSlots('graphNEL')
+g1@nodes
+```
+
+There is always a help file for an S4 object which lists all the methods you can use
+
+```{r, eval=FALSE}
+class?graphNEL
+?graphNEL
+```
+
+For example
+
+```{r}
+nodes(g1)
+nodes(g1) <- c('first', 'second', 'third', 'fourth', 'fifth')
+plot(g1)
+```
+
+
+
+
+
+

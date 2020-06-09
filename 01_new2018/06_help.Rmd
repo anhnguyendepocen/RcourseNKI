@@ -1,0 +1,94 @@
+---
+title: "Functions and help files"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+source( "../R_course_setup.R" );
+```
+
+```{r echo=FALSE}
+pulse <- read.delim("../data/pulse.txt")
+survey <- read.delim("../data/survey.txt")
+```
+
+# Functions and help files
+
+## Function arguments
+
+### Functions may have multiple arguments
+
+Example `round`:
+```{r}
+round(pi,3)
+round(pi,5)
+```
+
+Optional arguments may be left out:
+```{r}
+round(pi)
+```
+
+### Getting help for a function
+
+Functions do calculations for you based on one or more arguments. To find out what arguments a function has and how they work, check the help file of the function. Two ways of getting help for a function
+```{r eval=FALSE}
+help(round)
+?round
+```
+
+We see that `round` has two arguments and that the default of the second argument is 0.
+
+
+### Specifying arguments by name
+
+Function arguments may be either given in the right order or specified explicitly by name.
+
+```{r}
+round(pi, digits = 3)
+```
+
+The latter option is especially useful for functions with many arguments.
+
+### Default arguments
+
+Look at the help file of `cor`. We see that the argument `method` has a vector of three options as a default. This means that the first mentioned value (`pearson`) is the default and the others (`kendall`, `spearman`) are alternative options.
+
+### (*) the `...` argument
+
+The argment `...` means that a variable number of arguments may be given. See e.g. `sum` has a `...` argument since it sums all arguments together
+```{r}
+sum(1,4,5:7,1)
+```
+Arguments appearing after `...` must always be specified by name.
+
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "signif", "06_help.Rmd" );
+```
+
+
+## Other help file aspects
+
+Help files typically explain the type of object that is returned by the function.
+
+Help files also contain examples that can be run.
+
+### Help search
+
+Finding help if you don't know the function name
+```{r eval=FALSE}
+help.search("mean")
+??mean
+```
+
+Usually better: use the r help mailing list: <http://www.r-project.org/mail.html>. Someone has usually asked the same question you want to ask. The r mailing list is well indexed in google.
+
+Or ask some local expert. 
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "help", "06_help.Rmd" );
+```
+
+
+

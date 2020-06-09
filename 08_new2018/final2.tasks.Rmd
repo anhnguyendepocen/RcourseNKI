@@ -1,0 +1,225 @@
+---
+title: 'Domestic flights from New York in 2013'
+author:
+- affiliation: "Biomedical Data Sciences, LUMC"
+  company: "LUMC"
+  name: "Ramin Monajemi"
+- affiliation: "Biomedical Data Sciences, LUMC"
+  company: "LUMC"
+  name: "Szymon M. Kiełbasa"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+library( tidyverse )
+# install.packages( "nycflights13" )
+library( nycflights13 )
+# install.packages( "mapdata" )
+library( mapdata )
+source( "../R_course_setup.R" )
+```
+
+# Domestic flights from New York in 2013 {#final}
+
+Use the following setting. You'll need to install `nycflights13` data package from `cran`. For the last extra task you need also `mapdata` package.
+
+```{r, echo=TRUE}
+library( tidyverse )
+# install.packages( "nycflights13" )
+library( nycflights13 )
+# install.packages( "mapdata" )
+library( mapdata )
+```
+
+## Flights data frames
+
+`nycflights13` library provides several tables: `flights`, `airlines`, `airports`.
+Have a quick look in the documentation (`?flights`, etc.) to get familiar with the variables of these tables. Use functions such as `str` and/or `glimpse` to display samples of the data.  
+
+## What are the airports of origin?
+
+Find all different airport identifiers (Federal Aviation Administration (FAA)) given in the `origin` variable of the `flights` table.
+
+```{r}
+flights %>%  distinct( origin )
+```
+
+```{r}
+unique( flights$origin )
+```
+
+## Map airport information to flights.
+
+Use the result from the previous task and join it with the airport information in `airports` table.
+
+```{r}
+flights %>% distinct( origin ) %>% rename( faa = origin ) %>% 
+    left_join( airports, by = "faa" )
+```
+
+## Flights summary per destintion.
+
+- Produce the following table:
+    - columns:
+        - `dest` - destination airport identification code
+        - `numOfFlights` - total number of flights to the destination in 2013
+        - `meanFlightsPerDay` - mean number of flights per day (round to 1 decimal).
+- order with decreasing number of flights
+- Select 5 most frequent destinations as a vector into `freqDest` object.
+
+```{r}
+flightSummary <- flights %>% 
+  count( dest ) %>% 
+  arrange( desc( n ) ) %>% 
+  rename( numOfFlights = n ) %>% 
+  mutate( meanFlightsPerDay = round( numOfFlights / 365, 1 ) )
+
+flightSummary
+```
+
+```{r}
+freqDest <- flightSummary %>% 
+  head( 5 ) %>% 
+  pull( dest )     # pull retrieves the given variable as a vector
+freqDest
+```
+
+- What are the names and time zones of the top 5 destinations?
+
+```{r}
+airports %>% filter(faa %in% freqDest) %>% select(faa,name,tzone)
+```
+
+
+## Top 5 destinations flights frequency from NY
+
+- Produce the following table:
+    - variables: 
+        - `dest` : name of a destination (see `freqDest` from previous exercise)
+        - `EWR`, `JFK`, `LGA` (`faa` codes NY airports) with number of flights as values
+    - Hint: i) create first a flight frequency table NY to top 5 destination (long table), ii) convert to wide table (see `spread` function tidyr package). 
+    - set `NA` to zero (see ?spread )
+    
+    
+```{r}
+flights %>% 
+  filter( dest %in% freqDest ) %>% 
+  count( origin, dest ) %>% 
+  spread( origin, n, fill = 0 )
+```
+
+## Airplanes and carriers
+
+The column `tailnum` in `flights` table can be used to identify an airplane. How many different airplanes took off from New York in 2013?
+
+```{r}
+flights %>% 
+  distinct( tailnum ) %>% 
+  nrow()
+```
+
+Was there any airplane operated by more than one carrier? 
+
+```{r}
+flights %>% 
+  distinct( tailnum, carrier ) %>% 
+  count( tailnum ) %>% 
+  filter( n > 1 )
+```
+
+Give an overview of the carriers and the number of airplanes they operated on in descending order. Use `airlines` table to add the carrier name.
+
+```{r}
+
+carriersAirplanes <- flights %>% 
+  distinct( carrier, tailnum ) %>%
+  count( carrier ) %>% 
+  arrange( desc( n ) ) %>% 
+  left_join( airlines, by = "carrier" )
+
+carriersAirplanes
+```
+
+- Summarize the previous result in a barplot. Use `geom_bar( stat = "identity" )`.  (*)
+
+```{r}
+ggplot(carriersAirplanes, aes( x = carrier, y = n ))    + 
+  geom_bar( stat = "identity" ) +
+  theme_bw() + ylab( "Number of operated airplanes (in NY)")
+```
+
+## Flight speed
+
+The goal is to find mean flight speed for each route.
+
+- Create variable `flightSpeed` as a copy of `flights`:
+    - add `distanceKM` column expressing `distance` in km (one mile is 1.609km)
+    - add `airTimeHours` column expressing `air_time` in hours
+    - add `speedKMH` column expressing speed in km/h
+    
+```{r}
+flightSpeed <- flights %>% 
+  mutate( distanceKm = distance * 1.609 ) %>% 
+  mutate( airTimeHours = air_time / 60 ) %>% 
+  mutate( speedKmh = distanceKm / airTimeHours ) %>% 
+  select( origin, dest, speedKmh, everything() ) 
+```
+
+- How many flights have missing `speedKmh`? 
+
+```{r}
+flightSpeed %>% filter(is.na(speedKmh)) %>% nrow
+```
+
+- Group `flightSpeed` into routes (origin,destination). Add the columns `meanSpeedKmh` and `meanDistanceKm` for mean speed and distance respectively. Remember to `ungroup` the table. Put the result into variable `routeSpeeds`. Be careful to properly treat `NA` speeds.
+
+```{r}
+routeSpeeds <- flightSpeed %>% 
+  group_by( origin, dest ) %>% 
+  summarize( 
+    meanSpeedKmh = mean( speedKmh, na.rm = TRUE ),
+    meanDistanceKm = mean( distanceKm, na.rm = TRUE )
+  ) %>% 
+  ungroup()
+routeSpeeds
+```
+
+- Produce a histogram of the mean speeds along different routes.  (*)
+
+```{r}
+ggplot( 
+  routeSpeeds %>% filter(!is.nan( meanSpeedKmh) ), # summarise in 0 size group results into NaN
+  aes( x = meanSpeedKmh ) ) +
+  geom_histogram(bins=30) +
+  theme_bw()
+```
+
+- Maybe there is a relation of mean speed and distance? Produce a scatter plot of `routeSpeedKmh` vs. `meanDistanceKm`. (*)
+
+```{r}
+ggplot( 
+  routeSpeeds %>% filter(!is.nan( meanSpeedKmh) ),
+  aes( x = meanDistanceKm, y = meanSpeedKmh, color = origin ) ) +
+  geom_point( alpha = 0.5 ) +
+  theme_bw()
+```
+
+## Fun: Where are the destinations
+
+Understand and try the following code: (*)
+
+```{r fig.width=12,fig.height=12,echo=TRUE }
+world <- map_data( "world" )
+usa <- map_data( "usa" )
+dests <- airports %>% 
+  semi_join( flights %>% rename( faa = dest ), by = "faa" )
+ggplot() + 
+  geom_polygon( data = world, aes( x = long, y = lat, group = group ) ) + 
+  geom_polygon( data = usa, aes( x = long, y = lat, group = group ), color = "red" ) + 
+  geom_point( data = dests, aes( x = lon, y = lat ), color = "orange" ) +
+  coord_fixed(1.3)
+```
+
+

@@ -1,0 +1,462 @@
+---
+title: "Regression"
+author:
+- affiliation: "Bioinformatics Center of Expertise, Medical Statistics & Bioinformatics, LUMC"
+  company: "LUMC"
+  name: "Jelle Goeman"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+# Simple linear regression
+
+We will use the `pulse` and `survey` data again for illustration and exercises:
+
+```{r eval=1:2, echo=3:4}
+pulse <- read.delim("../data/pulse.txt")
+survey <- read.delim("../data/survey.txt")
+pulse <- read.delim("pulse.txt")
+survey <- read.delim("survey.txt")
+```
+
+## Recall: formula objects
+
+Formula objects are the way to tell R that one variable depends on another. Useful for
+
+- easier specification of statistical models
+```{r}
+with(pulse, t.test(pulse1[gender == "female"], pulse1[gender == "male"]))
+t.test(pulse1 ~ gender, data = pulse)
+```
+
+- easier plots
+```{r}
+plot(pulse1 ~ gender, data = pulse)
+```
+
+Many functions allow formula as input.
+
+
+## The `lm` function
+
+The command for linear regression is `lm` (for *linear model*). The linear model returns an object of class `lm`.
+
+```{r}
+fit <- lm(weight ~ height, data = pulse)
+```
+
+The first two arguments: `formula` and `data` are the most important ones.
+
+Note that `formula` is a single R object consisting of a tilde `\~` with variable names to the left and right. It says that `weight` (response) depends on height (covariate). 
+
+```{r}
+class(height ~ weight)
+```
+
+## `lm` objects
+
+The output of `lm` is an object of class `lm`. 
+
+```{r}
+fit
+names(fit)
+```
+
+Several functions extract useful information from the object.
+
+```{r}
+summary(fit)
+coef(fit)
+residuals(fit)
+fitted.values(fit)
+```
+
+Note that `summary(fit)` returns itself an object in which some additional things are calculated.
+
+```{r}
+summa <- summary(fit)
+class(summa)
+names(summa)
+```
+
+Most useful is the regression table
+
+```{r}
+coef(summa)
+```
+
+## Confidence intervals
+
+We can calculate confidence intervals for all or some regression coefficients
+
+```{r}
+confint(fit)
+confint(fit, "height")
+```
+
+## Visualizing a regression
+
+We can easily visualize the regression using the same formula and fit object
+
+```{r}
+plot(weight ~ height, data=pulse)
+abline(coef(fit))
+```
+
+Slightly more difficult with `ggplot`
+
+```{r}
+library(ggplot2)
+gg <- ggplot(pulse) + aes(x=height, y=weight) + geom_point()
+a <- coef(fit)[1]
+b <- coef(fit)[2]
+gg <- gg + geom_abline(intercept=a, slope=b)
+```
+
+Or with confidence intervals
+
+```{r}
+gg <- ggplot(pulse) + aes(x=height, y=weight) + geom_point() + stat_smooth(method='lm')
+plot(gg)
+```
+
+## Quick exercises
+
+In the `survey` data
+
+- Perform a linear regression of `wr.hand` against `nw.hand`
+- What is the confidence interval for the slope in the regression?
+- Visualize the result of this regression in a plot
+
+
+# Multiple regression
+
+## Multiple terms in a formula
+
+We can have multiple terms in a formula. This way we can do multiple regression
+
+```{r}
+fit <- lm(pulse2 ~ pulse1 + ran, data=pulse)
+fit
+summary(fit)
+```
+
+Note that R automatically creates dummy variables for factors. Here, `ransat` means the effect of `ran='sat'`. The reference class, apparently, is the `ran` group. In general, the first level of the factor is the reference class.
+
+```{r}
+levels(pulse$ran)
+```
+
+
+## The intercept term
+
+We see that R automatically adds an intercept term to the model. You can suppress the intercept too, by adding either `+0` or `-1` to the formula. Suppressing the intercept has different effects if there are factor variables in your model or not. 
+
+Only numeric variables: regression through the origin
+
+```{r}
+lm(weight ~ 0 + height, data=pulse)
+```
+
+If you have factors, it does not have a reference category anymore
+
+```{r}
+lm(weight ~ 0 + gender, data=pulse)
+```
+
+## Interactions
+
+Specifying interactions: use `:` or `*`:
+
+- `:` interaction only
+- `*` interaction and main effects
+
+Two alternative ways of specifying the same model
+
+```{r}
+lm(pulse2 ~ pulse1 + exercise + pulse1:exercise, data=pulse)
+lm(pulse2 ~ pulse1 * exercise, data=pulse)
+```
+
+
+## Transformations and the I() function
+
+Sometimes you don't want to use a variable directly, but a function of it. This is never a problem in the response
+
+```{r}
+lm(pulse1 - pulse2 ~ exercise * gender, data=pulse)
+```
+
+It also works in the covariates in case of simple transformations
+
+```{r}
+lm(weight ~ log(height), data=pulse) 
+```
+
+But in other cases the transformation needs to be protected by `I` (Inhibit)
+
+```{r}
+lm(weight ~ height + height^2, data=pulse) 
+lm(weight ~ height + I(height^2), data=pulse) 
+```
+
+But it is often more clear to first create more variables in your data frame
+
+```{r}
+pulse$height2 <- pulse$height^2
+lm(weight ~ height + height2, data=pulse) 
+```
+
+
+## Comparing models using anova
+
+The `summary` function gives useful statistical tests for single covariates or dummies.
+
+```{r}
+fit <- lm(pulse2 ~ pulse1 + gender + exercise, data=pulse)
+summary(fit)
+```
+
+So, is there a significant effect of exercise? We can't tell, because `summary` does not take the dummies for `exercise` together. To test this, explicitly fit the null model without exercise, and compare it to the complete model. The name `anova` for this function is awkward, unfortunatetely. This use is not restricted to anova models.
+
+```{r}
+fit0 <- lm(pulse2 ~ pulse1 + gender, data=pulse)
+anova(fit, fit0)
+```
+
+This comparison is especially useful if we want to evaluate the significance of a variable in the presence of interaction.
+```{r}
+fit <- lm(pulse2 ~ pulse1 * gender, data=pulse)
+fit0 <- lm(pulse2 ~ pulse1, data=pulse)
+anova(fit, fit0)
+```
+
+Note that `lm` by default removes any subjects which have missing values in at least one of the covariates. This means that the number of subjects in `fit` and `fit0` may be different. In that case remove subjects with missing values manually (or do imputation or something more fancy).
+
+## Quick exercises
+
+In the `survey` data
+
+- Perform a linear regression of `pulse` against `smokes` and `exercise`. Include the interaction in the model.
+- Compare the model obtained in the previous exercise against a null model that does not include exercise. Is there a significant effect of exercise on pulse?
+
+
+# Predicting
+
+We can use regression for prediction using the predict function. To predict we need two things. First, a fitted model object.
+
+```{r}
+fit <- lm(pulse2 ~ pulse1 * gender, data=pulse)
+```
+
+Second, a data.frame with new data for our covariates
+
+```{r}
+new.data <- data.frame(pulse1=c(90, 80), gender=c("female", "male"))
+```
+
+Now we can predict a value for a person with these covariates
+
+```{r}
+predict(fit, new.data)
+```
+
+
+# Exercises
+
+## Linear regression
+
+We look at the `swiss` data. In this data set we explain fertility of Swiss regions using various indicators.
+
+- Perform a linear regression with `Agriculture` as the explanatory variable. 
+
+```{r echo=FALSE, eval=FALSE}
+res <- lm(Fertility ~ Agriculture, data=swiss)
+summary(res)
+```
+
+- What is the confidence interval of the regression coefficient?
+
+```{r echo=FALSE, eval=FALSE}
+confint(res, 'Agriculture')
+```
+
+- Perform another linear regession, but use a log-transformed `Agriculture`
+
+```{r echo=FALSE, eval=FALSE}
+summary(lm(Fertility ~ log(Agriculture), data=swiss))
+```
+
+- Again, but use both `Agriculture` and `Agriculture` squared
+
+```{r echo=FALSE, eval=FALSE}
+summary(lm(Fertility ~ Agriculture + I(Agriculture^2), data=swiss))
+```
+
+- Again, but use Agriculture, Catholic, and their interaction
+
+```{r echo=FALSE, eval=FALSE}
+summary(lm(Fertility ~ Agriculture * Catholic, data=swiss))
+```
+
+- Make a variable `P` that has the p-value of the interaction in the last model. Hint: use coef of the summary of your object.
+
+```{r echo=FALSE, eval=FALSE}
+fit <- lm(Fertility ~ Agriculture * Catholic, data=swiss)
+coef(summary(fit))['Agriculture:Catholic', 'Pr(>|t|)']
+```
+
+- Is this model significantly better than the model with Agriculture alone? Hint: use anova.
+
+```{r echo=FALSE, eval=FALSE}
+fit0 <- lm(Fertility ~ Agriculture, data=swiss)
+anova(fit, fit0)
+```
+
+- Fit the model again in a data set that leaves out the canton `Courtelary`. Use the model to predict `Fertility` in `Courtelary`
+
+```{r echo=FALSE, eval=FALSE}
+fit <- lm(Fertility ~ Agriculture * Catholic, data=swiss[-1,])
+predict(fit, swiss[1,])
+```
+
+## Logistic regression
+
+In the quine data (from MASS), we can try to predict learning speed.
+
+- Make a logistic regression model to predict `Lrn` based on `Eth`, `Age` and `Sex`.
+
+```{r echo=FALSE, eval=FALSE}
+library(MASS)
+fit <- glm(Lrn ~ Eth + Age + Sex, data=quine, family=binomial)
+```
+
+- Is there a significant relationship between Age and Learning speed?
+ 
+```{r echo=FALSE, eval=FALSE}
+fit0 <- glm(Lrn ~ Eth + Sex, data=quine, family=binomial)
+anova(fit, fit0, test='LRT')
+```
+
+
+
+
+# Generalized linear models and survival
+
+## Logistic regression
+
+For logistic regression, use `glm` (generalized linear model), with `family=binomial`.
+
+```{r,eval=-1}
+fit <- glm(alcohol ~ gender+smokes+exercise, family=binomial, data=pulse)
+summary(fit)
+```
+
+When using `anova` in `glm`, the default is not to give a p-value. If you want it, explicitly ask for the likelihood ratio test (LRT)
+
+```{r}
+fit0 <- glm(alcohol ~ gender+smokes, family=binomial, data=pulse)
+anova(fit, fit0, test='LRT')
+```
+
+
+## Survival
+
+Survival analysis methods are available in the `survival` package. All works very similar to `lm` and `glm` except that the response has to be a `Surv` object, built from time and event status.
+
+We do not have survival times in the `pulse` data, so we use the `aml` data from the `survival` package.
+
+```{r,eval=-2}
+library(survival)
+?aml
+with(aml, Surv(time, status))
+```
+
+To draw Kaplan-Meier curves, use `survfit`
+
+```{r}
+fit <- survfit(Surv(time, status) ~ x, data=aml)
+plot(fit, col=2:3)
+```
+
+A log-rank test and a fitted Cox model
+
+```{r}
+survdiff(Surv(time, status) ~ x, data=aml)
+coxph(Surv(time, status) ~ x, data=aml)
+```
+
+The result of coxph can be stored as an object and used in most ways like a `lm` or `glm` object. In particular we can use `anova` to compare models.
+
+
+## Quick exercises
+
+In the `survey` data
+
+- Perform a logistic regression with `fold` as response and `w.hand` and `clap` as covariates. 
+
+# Extra's
+
+## Model matrix
+
+If you want to see the precise dummy variables that R creates from a formula, use `model.matrix`
+
+```{r}
+M <- model.matrix(pulse2 ~ pulse1 * ran, data=pulse)
+head(M)
+```
+
+Logical variables are automatically turned into a dummy with FALSE as the reference class
+
+```{r}
+lm(pulse2 ~ (exercise == 'low'), data=pulse)
+```
+
+## The dot in a formula
+
+If you just want to put all variables from a data.frame into the model, use `.`
+
+```{r}
+fit <- lm(pulse2 ~ ., data=pulse)
+```
+
+Note that character variables are automatically turned into factor.
+
+To exclude variables, use `-`
+
+```{r}
+lm(pulse2 ~ . - name, data = pulse)
+```
+
+## Higher order interactions
+
+Get all interactions between a number of variables including higher order terms
+
+```{r}
+lm(pulse2 ~ ran * alcohol * smokes, data=pulse)
+```
+
+We get some `NA`'s because not all combinations exist.
+
+To have only up to second order interaction terms
+
+```{r}
+lm(pulse2 ~ (ran + alcohol + smokes)^2, data=pulse)
+```
+
+Or again we can use dots
+
+```{r}
+fit <- lm(pulse2 ~ (. - name)^2, data=pulse)
+```
+
+
+## anova versus summary
+
+Always use anova to compare models. Don't use anova on a single model unless you really know what you're doing! Anova on a single model evaluates the significane of variable stepwise in the order in which variables appear in formula. Compare:
+
+```{r}
+anova(lm(pulse2 ~ pulse1 + gender, data=pulse))
+anova(lm(pulse2 ~ gender + pulse1, data=pulse))
+summary(lm(pulse2 ~ pulse1 + gender, data=pulse))
+```
+

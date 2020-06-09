@@ -1,0 +1,117 @@
+---
+title: 'S3 and S4 classes'
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+
+source( "../R_course_setup.R" )
+
+#pulse <- read.delim("pulse.txt")
+#survey <- read.delim("survey.txt")
+
+```
+
+# S3 and S4 classes
+
+## Learning goals
+
+- General understanding of data objects, in particular objects from S3 and S4 classes.    
+- How to recognize and access S3 and S4 classes
+<!-- - Introducing functions `attributes`, `methods` and `isS4` and `pryr` package.  -->
+
+## Objects
+
+- Object is a piece of data with a type (class)
+- Basic types and precedence
+  - NULL < raw < <span style="color:blue">`logical < integer < double < character`</span> < list < expression
+  - `is.<basic type>`, `as.<basic type>` functions  for type test and conversion respectively.
+  - `typeof` function
+- Object may be associated to methods/functions (Object Orientation : S3/S4)
+  - S3 : ad hoc 
+    - most objects in `base` and `stats` and R core
+  - S4 : formal/strict
+    - e.g. `Bioconductor`
+
+
+## S3
+
+Most objects in `base` and `stats` are of S3 class and are almost always based on `list`, but not necessarily. 
+
+```{r}
+res <- lm(extra ~ group, data=sleep)
+res
+class(res)
+```
+
+You will recognize a S3 class via an explicit attribute `class`:
+
+```{r}
+attributes(res)
+```
+
+There are many generic functions in R such as `print`, `plot`, `summary` etc. that behave differently based on the class of an object:
+
+```{r}
+methods(plot)
+```
+
+<!-- Problem of S3 objects is that it can be difficult to find out what kind of functions are available for your object.  -->
+
+## S4
+
+S4 objects are more structured and more strict than S3 objects. They are not so popular with packages on CRAN, but very popular for packages on Bioconductor. Let’s look at an example from Bioconductor
+
+
+```{r, eval=FALSE}
+source("https://bioconductor.org/biocLite.R")
+biocLite(c("graph", "Rgraphviz"))
+```
+
+The packages graph and Rgraphviz are for working with graphs and visualizing them.
+
+```{r, message=FALSE}
+library(graph) ; library(Rgraphviz)
+```
+
+```{r}
+g1 <- randomEGraph(LETTERS[1:5], edges=6)
+g1
+class(g1)
+plot(g1)
+```
+
+Note the attr(,"package") at the bottom. This shows that it is an S4, not an S3 object. To check explicitly
+
+```{r}
+isS4(g1)
+```
+
+There is no isS3. Things you may expect to work for these objects from S3 don’t:
+
+```{r}
+names(g1)
+getSlots('graphNEL') # class name
+```
+
+
+With S4 object you can directly access the contents with `@` but you are not meant to:
+
+```{r}
+g1@nodes
+```
+
+There is always a help file for an S4 object which lists all the methods you can use:
+
+```{r, eval=FALSE}
+class?graphNEL
+?graphNEL
+```
+
+
+
+```{r results="asis", echo=FALSE, comment=""}
+# ***************  QUIZ  ********************
+catLinkTaskSection( "s3s4", "s3s4.Rmd" )
+```

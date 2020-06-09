@@ -1,0 +1,288 @@
+---
+title: "Exercises functions and apply"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+
+```{r setup, include=FALSE}
+source( "../R_course_setup.R" );
+```
+
+4. The data set USJudgeRatings has ratings for US superior court judges.
+
+4.1 All variables except the first (CONT) are ratings between 1 and 10. Make a new data set by removing this first variable from the data set.
+
+```{r}
+USJ <- USJudgeRatings[,-1]
+```
+
+4.2 Make the correlation matrix of the different subratings. Hint: use cor().
+
+```{r}
+cor(USJ)
+```
+
+4.3 Two different ways of calculation of correlation are frequently used: the methods of Pearson and Spearman. Which correlation is calculated by default? Calculate the other type as well.
+
+```{r,eval=FALSE}
+?cor
+```
+
+```{r}
+cor(USJ, method="spearman")
+```
+
+4.4 Calculate the average rating per judge. Hint: use rowMeans().
+
+```{r}
+rowMeans(USJ)
+```
+
+4.5 Calulate the number of unsatisfactory ratings (below 5.5) for each judge. Hint: first make a logical matrix of unsatisfactory TRUE/FALSE, and use rowSums().
+
+```{r}
+unsatisfactory <- USJ < 5.5
+rowSums(unsatisfactory)
+```
+
+4.6 Calculate the median rating per judge. Hint: use median() and apply(). 
+
+```{r}
+apply(USJ, 1, median)
+```
+
+4.7 Calculate the standard deviation of the different subratings over the judges. 
+
+```{r}
+apply(USJ, 2, sd)
+```
+
+
+5. Let us reconsider the ChickWeight data, seen in exercise 2.
+
+5.1 Calculate the mean weight for each diet type. Hint: use tapply().
+
+```{r}
+CW <- ChickWeight
+tapply(CW$weight, CW$Diet, mean)
+```
+
+
+5.2 Calculate the number of chicks with weight over 300 grams for each diet type. Hint: use the function you wrote in exercise 2, together with tapply().
+
+```{r echo=FALSE}
+over300 <- function(x) {
+  sum(x > 300)
+}
+```
+
+```{r}
+tapply(CW$weight, CW$Diet, over300)
+```
+
+
+6. The dataset Theoph has the results of an experiment on the pharmacokinetics of theophylline.
+
+6.1 Make a line plot of time versus concentration for subject 1. Then add a line to the plot for time versus concentration of subject 2 (use the function lines()).
+
+```{r}
+plot(Theoph$Time[Theoph$Subject==1], Theoph$conc[Theoph$Subject==1], type="l")
+lines(Theoph$Time[Theoph$Subject==2], Theoph$conc[Theoph$Subject==2])
+```
+
+6.2 Make a function that plots time versus concentration for subject i. This function takes the number i as input, and does not return anything.
+
+```{r}
+lines.i <- function(i) {
+  lines(Theoph$Time[Theoph$Subject==i], Theoph$conc[Theoph$Subject==i])
+}
+```
+
+6.3 Plot the data for subject 1 again, making sure the x and y-axis limits (xlim and ylim) are set to the full range of time and concentration for all subjects. Then use the function you created to add the lines for subject 2 up to 12 to the plot. Hint: use sapply().
+
+```{r}
+plot(Theoph$Time[Theoph$Subject==1], Theoph$conc[Theoph$Subject==1], type="l", xlim=range(Theoph$Time), ylim=range(Theoph$conc))
+invisible(sapply(2:12, lines.i))
+```
+
+6.4 Make a color palette with 12 colors, e.g. using rainbow().
+
+```{r}
+palet <- rainbow(12)
+```
+
+6.5 Change your plotting function to let each line be drawn in its own color and plot again.
+
+```{r}
+lines.i <- function(i) {
+  lines(Theoph$Time[Theoph$Subject==i], Theoph$conc[Theoph$Subject==i], col=palet[i])
+}
+plot(Theoph$Time[Theoph$Subject==1], Theoph$conc[Theoph$Subject==1], type="l", xlim=range(Theoph$Time), ylim=range(Theoph$conc), col=palet[1])
+invisible(sapply(2:12, lines.i))
+```
+
+6.6 Optional: Make the same plot with a for-loop instead of an sapply.
+
+```{r}
+plot(Theoph$Time[Theoph$Subject==1], Theoph$conc[Theoph$Subject==1], type="l", xlim=range(Theoph$Time), ylim=range(Theoph$conc), col=palet[1])
+for (i in 2:12) {
+  lines.i(i)
+}
+```
+
+
+7. The file tweedekamer2012.txt contains historical data on numbers of parliament seats of parties in the Dutch parliament from 1956 to date. Download the file to your computer.
+
+7.1 Set the current working directory to the location where you downloaded the file tweedekamer2012.txt. Hint: use setwd().
+
+7.2 Use read.table to read the file tweedekamer.txt. Make sure you set the argument quote="". Use tab as delimiter (check the help file of read.table() to see how to declare this.)
+
+```{r}
+tk <- read.table("tweedekamer2012.txt",quote="", sep="\t",header=T, row.names=1, check.names=F)
+```
+
+7.3 Check whether row and column names have been read correctly. Hint: use head. If necessary, adjust the arguments of read.table. Hint: look at check.names.
+
+```{r}
+head(tk)
+```
+
+7.4 How many parties and how many elections are in the data? Hint: use dim.
+
+```{r}
+dim(tk)
+```
+
+7.5 Try reading the file without using quote="". Find out what goes wrong by using read.table with the argument fill=TRUE.
+
+```{r,eval=FALSE}
+tk2 <- read.table("tweedekamer2012.txt", sep="\t", header=T, row.names=1, check.names=F, fill=TRUE)
+```
+
+7.6 Write the result to an R-readable .RData file using save.
+
+```{r eval=FALSE}
+save(tk, file="tweedekamer.RData")
+```
+
+7.7 Convert the data.frame read into a matrix.
+
+```{r}
+tk <- as.matrix(tk)
+```
+
+7.8 Create a numeric election year variable from the column names of your matrix. Hint: use as.numeric().
+
+```{r}
+year <- as.numeric(colnames(tk))
+```
+
+7.9 Calculate the number of parties represented in parliament after each election, and plot this number as a function of time as a line plot.
+
+```{r}
+# The number of parties represented in parliament after each election is the sum of entries in each column (year) that are larger than zero:
+colSums(tk>0)
+plot(year, colSums(tk>0), type="l")
+```
+
+7.10 Make the same plot as a barplot. Make the labels perpendicular to the axis for readability. Hint: see las in ?par.
+
+```{r}
+barplot(colSums(tk>0), las=2)
+```
+
+7.11 Find the names of all parties that have (so far) only been present in a single parliament.
+
+```{r}
+rownames(tk)[rowSums(tk>0)==1]
+```
+
+7.12 Find the name of the largest party in each parliament. Assign names to this object representing the year in which the parliament was elected.
+
+```{r}
+largest <- rownames(tk)[apply(tk, 2, which.max)]
+names(largest) <- colnames(tk)
+```
+
+7.13 Plot the number of seats of the largest party as a function of time in a barplot. Color the bars by the name of the largest party, and make a proper legend.
+
+```{r}
+lseats <- apply(tk, 2, max)
+barplot(lseats, las=2)
+```
+
+
+
+8.  Install the org.Hs.eg.db package from bioconductor.org. Use the BiocLite script. Hint: This is a large package: installing may take some time. If you start a second R session and do the installation there, you can continue working in R (on another exercise).
+
+```{r,eval=FALSE,echo=TRUE}
+source("http://bioconductor.org/biocLite.R")
+biocLite("org.Hs.eg.db")
+```
+
+8.1 The org.Hs.eg.db package collects mappings from entrez gene to all kinds of genetic information. Use html help to view the mappings available.
+
+8.2 Load the package using library.
+
+```{r}
+library(org.Hs.eg.db)
+```
+
+8.3 The mapping org.Hs.egCHR maps Entrez gene identifiers to chromosomes. What is the class of this object? In which package was this class defined? Find the vignette of this package.
+
+```{r}
+class(org.Hs.egCHR)
+```
+
+8.4 We can change the org.Hs.egCHR object to a familiar list object with as.list(). How many Entrez identifiers were mapped to chromosomes?
+
+```{r}
+chrom <- as.list(org.Hs.egCHR)
+length(chrom)
+```
+
+8.5 On which chromosome is Entrez gene 57507 located?
+
+```{r}
+chrom["57507"]
+```
+
+8.6 Find the Gene symbol of Entrez gene 57507 using the org.Hs.egSYMBOL mapping.
+
+```{r}
+as.list(org.Hs.egSYMBOL)["57507"]
+```
+
+8.7 Check that org.Hs.egSYMBOL maps every Entrez identifier to at most one symbol. Hint use sapply, length, and all.
+
+```{r}
+# We first want to compute the length of each entry in the list as.list(org.Hs.egSYMBOL) - for this, we use sapply as in
+sym.len <- sapply(as.list(org.Hs.egSYMBOL), length)
+# The next step is to check which ones are equal to 1 - those correspond to genes (as defined by entrez identifiers) with a single symbol
+sym.len1 <- sapply(as.list(org.Hs.egSYMBOL), length) == 1
+# Finally, to check if all of them are equal to 1, we can use all() around this vector:
+all(sapply(as.list(org.Hs.egSYMBOL), length) == 1)
+```
+
+8.8 Turn org.Hs.egSYMBOL into a character vector and remove all missing values. Hint: use unlist(), then na.omit().
+
+```{r}
+sym <- unlist(as.list(org.Hs.egSYMBOL))
+sym <- na.omit(sym)
+```
+
+8.9 Find all gene symbols with "ESR"" in the name. Hint: use grep().
+
+```{r}
+ESRs <- grep("ESR", sym)
+sym[ESRs]
+```
+
+8.10 On which chromosomes are these genes located?
+
+```{r}
+chrom[ESRs]
+```
+
+
+

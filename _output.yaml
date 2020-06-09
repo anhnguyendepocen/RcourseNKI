@@ -1,0 +1,19 @@
+html_document:
+  toc: true
+  toc_float: true
+  theme: readable
+  highlight: tango
+  logo: bce_logo.png
+  number_sections: true
+md_document:
+  toc: true
+  toc_depth: 3
+  variant: markdown_github
+ioslides_presentation:
+  widescreen: true
+  keep_md: yes
+  logo: bce_logo.png
+params:
+  RCourseURL: https://barmsijs.lumc.nl/R_course/index.html
+  RCourseGitURL: https://git.lumc.nl/bce_core/R_course_2016.git
+

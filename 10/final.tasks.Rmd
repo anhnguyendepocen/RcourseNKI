@@ -1,0 +1,153 @@
+---
+title: 'Assignment'
+author:
+- affiliation: "Bioinformatics Center of Expertise, Medical Statistics & Bioinformatics, LUMC"
+  company: "LUMC"
+  name: "Szymon M. Kielbasa, R. Monajemi"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+```
+
+
+# Analyse `flights` data set {#final}
+
+Use the following setting. You'll need to install `nycflights13` data package from `cran`. 
+
+```{r warning=FALSE,message=FALSE,eval=TRUE, echo=TRUE}
+library( dplyr )
+library( tidyr )
+library( ggplot2 )
+# install.packages( "nycflights13" )
+library( nycflights13 ) 
+f <- flights
+```
+
+### Airplanes
+
+The column `tailnum` (of `flights` table from `nycflights` library) can be used to identify an airplane. 
+- How many different airplanes took of from New York in 2013?
+```{r}
+# Some tailnum's are missing, therefore we first filter out entries 
+# with missing tailnum:
+f <- f %>% filter( ! is.na(tailnum)  )
+# (1) When distinct is used with no variables as argument then it 
+# will take all variables in the dataframe, in this case the only 
+# variable selected in the dataframe is tailnum: 
+f %>% select( tailnum ) %>% distinct() %>% nrow()
+# (2) Or use disctinct directly:
+f %>% distinct( tailnum ) %>% nrow()
+```
+
+- Was there any airplane operated by more than one carrier?
+```{r}
+# (1) Find first the distinct combinations of airplanes and carriers 
+# and then count the number of airplanes (tailnum) and finally select 
+# counts >1. 
+f %>% select( tailnum, carrier ) %>% distinct() %>% count( tailnum ) %>% 
+  filter( n > 1 )
+# (2) Or count the nr. of unique airplane and carrier combinations and 
+# then count the number of unqiue airplanes. The first count will 
+# introduce a new column 'n' in the dataframe therefore we need to 
+# rename it to avoid conflict with the second count. 
+f %>% count( tailnum, carrier ) %>% rename( airplaneCarrierPairs = n ) %>% 
+  count( tailnum ) %>% filter( n > 1 )
+```
+
+- How many different airplanes were operated by each carrier? Which carrier operates the largest number of airplanes?
+```{r}
+# Similar as the previous but now we are interested in the frequency of carrier 
+# occurencesin the unique combinations of airplane-carriers.  
+f %>% count( carrier, tailnum ) %>% rename( airplaneCarrierPairs = n ) %>% 
+  count( carrier ) %>% arrange( desc( n ) )
+```
+
+- Summarize the previous result in a barplot. Use `geom_bar( stat = "identity" )`. Reproduce: (*)
+```{r eval=TRUE}
+ggplot( 
+  f %>% count( carrier, tailnum ) %>% rename( airplaneCarrierPairs = n ) %>% 
+    count( carrier ) %>% arrange( desc( n ) ),
+  aes( x = carrier, y = n ))    + 
+  geom_bar( stat = "identity" ) +
+  theme_bw() + ylab( "Number of operated airplanes (in NY)")
+```
+
+### Flight speeds?
+
+The goal is to find mean flight speeds for each route.
+
+- Add a `speed` column (calculated from `distance` and `air_time`)
+```{r}
+# Use the original flight data (including missing tailnum's)
+f <- flights
+f %>% mutate( speed = distance / air_time ) %>% select( origin, dest, speed, everything() ) 
+
+```
+
+- For each route calculate the mean speed (put it to column `meanSpeed`)
+
+```{r}
+# Some of the (origin,dest) pairs will result in speeds with NA as value. 
+# This is due to missing air_time. You need to account for this with na.rm 
+# argument to mean when calculating the means over the multiple speeds per 
+# route with possible NA's 
+f %>% mutate( speed = distance / air_time ) %>% group_by( origin, dest ) %>% 
+  summarize( meanSpeed = mean( speed, na.rm = TRUE ) )
+```
+
+- Produce a histogram of the mean speeds. Question: what is the unit of speed? Reproduce: (*)
+```{r eval=TRUE, warning=FALSE, message=FALSE}
+ggplot( 
+  f %>% mutate( speed = distance / air_time ) %>% group_by( origin, dest ) %>% 
+    summarize( meanSpeed = mean( speed, na.rm = TRUE ) ),
+  aes( x = meanSpeed ) ) +
+  geom_histogram() +
+  theme_bw()
+```
+
+- Maybe there is a relation of mean speed and distance? Produce a scatter plot of `meanSpeed` vs. `meanDistance`. Reproduce: (*)
+```{r eval=TRUE, message=FALSE, warning=FALSE}
+ggplot( 
+  f %>% mutate( speed = distance / air_time ) %>% group_by( origin, dest ) %>% 
+    summarize( meanSpeed = mean( speed, na.rm = TRUE ), meanDistance = mean( distance ) ),
+  aes( x = meanDistance, y = meanSpeed )) +
+  geom_point() +
+  theme_bw()
+```
+
+<!-- - Try `ggplotly` version of the above plot. Add to `aes( ..., origin = origin, dest = dest )`. Hoover above points to see where the longest flights go (*) -->
+```{r eval=FALSE, echo=FALSE}
+p <- ggplot( 
+  f %>% mutate( speed = distance / air_time ) %>% group_by( origin, dest ) %>% summarize( meanSpeed = mean( speed, na.rm = TRUE ), meanDistance = mean( distance ) ),
+  aes( x = meanDistance, y = meanSpeed, origin = origin, dest = dest )
+) +
+  geom_point() +
+  theme_bw()
+# ggplotly( p )
+```
+
+### Names of airports of origin
+
+- Study table `airports`, in particular, the columns `faa` and `name`. 
+
+```{r}
+# Inspect the dataframe airports:
+glimpse(airports)
+# We are interested in the airport codes (faa) and their names:  
+( ap <- airports %>% select( faa, name ) ) 
+```
+
+- Identify all `faa` codes of airports of `origin`, note that the `origin` and `dest` variables in flights tables are FAA codes.  
+
+```{r}
+origin <- flights %>% select( origin ) %>% distinct()
+origin
+```
+
+- Merge the above tables: to each airport of origin add its name, based on a match between `origin` and `faa` variables
+```{r}
+origin %>% rename( faa = origin ) %>% left_join( ap , by = "faa")
+```
