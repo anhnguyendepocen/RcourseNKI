@@ -4,8 +4,8 @@
     -   [Prerequisites](#prerequisites)
     -   [Materials](#materials)
     -   [Programme](#programme)
-        -   [First NKI edition, June 15th, 16th,
-            18th](#first-nki-edition-june-15th-16th-18th)
+        -   [First NKI edition, June 15th, 16th, 18th
+            2020](#first-nki-edition-june-15th-16th-18th-2020)
     -   [Slots](#slots)
     -   [Useful links](#useful-links)
 
@@ -63,37 +63,62 @@ Participants must **bring own laptops** capable of running
 
 Before the course **please prepare your laptop**:
 
--   go to [the RStudio download
+1.  install [R](https://www.r-project.org/), an open-source, free
+    environment for statistical computing and graphics. You can find
+    instructions for downloading and installing it from one of the CRAN
+    mirrors, for example from the [Univ. of
+    Gent](https://lib.ugent.be/CRAN/) or from the [Imperial
+    College](https://cran.ma.imperial.ac.uk/). A full list of mirrors
+    can be found [here](https://cran.r-project.org/mirrors.html).
+
+2.  install RStudio. Go to [the RStudio download
     page](https://www.rstudio.com/products/rstudio/download/#download),
     select a version of RStudio appropriate for your laptop, download it
     and then install. Please check whether you can start RStudio.
--   download the course materials [.zip
-    file](https://barmsijs.lumc.nl/R_course/R_course.zip) (see below) to
-    your laptop. Unpack the zip file to a directory, and please check
-    whether you can open `index.html` file from the directory.
+
+3.  install [RMarkdown](https://rmarkdown.rstudio.com/), a very nice and
+    easy tool to produce reports using RStudio. It is made available as
+    an R package for Rstudio. One easy way to install it is as follows:
+
+<!-- -->
+
+1.  open RStudio
+
+2.  click on the “File” menu on the top left, and choose “New
+    file”&gt;“R Markdown”. If RMarkdown is not yet installed on your
+    machine, this will prompt you to install it and any packages
+    required. Just follow the instructions that appear on the screen.
+
+<!-- -->
+
+1.  download the course materials [.zip
+    file](https://github.com/rxmenezes/RcourseNKI/R_course.zip) (see
+    below) to your laptop. Unpack the zip file to a directory, and
+    please check whether you can open `index.html` file from the
+    directory.
 
 Materials
 ---------
 
-The course materials are served:
+After the course material .zip file is downloaded, the course material
+can be assessed:
 
--   as [HTML pages](https://barmsijs.lumc.nl/R_course/index.html) at
-    <a href="https://barmsijs.lumc.nl/R_course/index.html" class="uri">https://barmsijs.lumc.nl/R_course/index.html</a>
--   as a [.zip file](https://barmsijs.lumc.nl/R_course/R_course.zip)
--   as a [.tar.gz file](https://barmsijs.lumc.nl/R_course/R_course.tgz)
--   in [the course source git
-    repository](https://git.lumc.nl/bce_core/R_course_2016)
+-   as HTML pages by opening `index.html` in any browser
+-   by clicking on the `RcourseNKI.Rproj` file, which will open the
+    entire course as an R project
+-   via [the course source git
+    repository](https://github.com/rxmenezes/RcourseNKI)
 
 The materials contain a [`data`
-directory](https://barmsijs.lumc.nl/R_course/data) with the **data**
-**files** used in the presentations/tasks. The directory can be also
-accessed at
-<a href="https://barmsijs.lumc.nl/R_course/data" class="uri">https://barmsijs.lumc.nl/R_course/data</a>
+directory](https://github.com/rxmenezes/RcourseNKI/tree/master/data)
+with the **data** **files** used in the presentations/tasks. The
+directory can be also accessed at
+<a href="https://github.com/rxmenezes/RcourseNKI/tree/master/data" class="uri">https://github.com/rxmenezes/RcourseNKI/tree/master/data</a>
 
 Programme
 ---------
 
-### First NKI edition, June 15th, 16th, 18th
+### First NKI edition, June 15th, 16th, 18th 2020
 
 This course will be given online via Zoom. All course days are in the
 period 9:00-16:00, with the last hour reserved for general Q&A.
@@ -134,6 +159,8 @@ Slots
         \[[tasks](02_new2018/05_matrices.tasks.nocode.html)\]
         \[[solutions](02_new2018/05_matrices.tasks.code.html)\]
 -   Slot 3, Data types, part 2:
+    -   [Combining text, scripts and output:
+        RMarkdown](03_new2018/02_rmarkdown.html)
     -   [Lists](03_new2018/01_lists.html)
         \[[tasks](03_new2018/01_lists.tasks.nocode.html)\]
         \[[solutions](03_new2018/01_lists.tasks.code.html)\]
@@ -148,30 +175,30 @@ Slots
         \[[solutions](03_new2018/04_advanced_factors.tasks.code.html)\]
 -   slot 4:
     -   [R scripts and reports
-        (https://barmsijs.lumc.nl/R\_course/Rmarkdown)](04_new2018/02_rmarkdown.html)
+        (https://github.com/rxmenezes/RcourseNKI/Rmarkdown)](04_new2018/02_rmarkdown.html)
     -   [Control flow and user-defined
-        functions](https://barmsijs.lumc.nl/R_course/04_new2018/01_userDefinedFunctions.html)
-        \[[tasks](https://barmsijs.lumc.nl/R_course/04_new2018/01_userDefinedFunctions.tasks.nocode.html)\]
-        \[[solutions](https://barmsijs.lumc.nl/R_course/04_new2018/01_userDefinedFunctions.tasks.code.html)\]
+        functions](https://github.com/rxmenezes/RcourseNKI/04_new2018/01_userDefinedFunctions.html)
+        \[[tasks](https://github.com/rxmenezes/RcourseNKI/04_new2018/01_userDefinedFunctions.tasks.nocode.html)\]
+        \[[solutions](https://github.com/rxmenezes/RcourseNKI/04_new2018/01_userDefinedFunctions.tasks.code.html)\]
 -   slot 5:
     -   [Character string processing & Pattern
-        matching](https://barmsijs.lumc.nl/R_course/06/character_strings.html)
-        \[[tasks](https://barmsijs.lumc.nl/R_course/06/character_strings.tasks.nocode.html)\]
-        \[[solutions](https://barmsijs.lumc.nl/R_course/06/character_strings.tasks.code.html)\]
+        matching](https://github.com/rxmenezes/RcourseNKI/06/character_strings.html)
+        \[[tasks](https://github.com/rxmenezes/RcourseNKI/06/character_strings.tasks.nocode.html)\]
+        \[[solutions](https://github.com/rxmenezes/RcourseNKI/06/character_strings.tasks.code.html)\]
     -   [S3 and S4
-        classes](https://barmsijs.lumc.nl/R_course/08/s3s4.html)
-        \[[tasks](https://barmsijs.lumc.nl/R_course/08/s3s4.tasks.nocode.html)\]
-        \[[solutions](https://barmsijs.lumc.nl/R_course/08/s3s4.tasks.code.html)\]
+        classes](https://github.com/rxmenezes/RcourseNKI/08/s3s4.html)
+        \[[tasks](https://github.com/rxmenezes/RcourseNKI/08/s3s4.tasks.nocode.html)\]
+        \[[solutions](https://github.com/rxmenezes/RcourseNKI/08/s3s4.tasks.code.html)\]
 -   slot 6:
     -   [Making errors the right
-        way](https://barmsijs.lumc.nl/R_course/05.renee/03_makingErrors.html)
+        way](https://github.com/rxmenezes/RcourseNKI/05.renee/03_makingErrors.html)
     -   Reproducible research
 
-<!-- - [Regression](https://barmsijs.lumc.nl/R_course/07.2017/01_regression.html)
-        [[tasks](https://barmsijs.lumc.nl/R_course/07.2017/01_regression.tasks.nocode.html)]
-        [[solutions](https://barmsijs.lumc.nl/R_course/07.2017/01_regression.tasks.code.html)] 
-    - [[Extra exercises](https://barmsijs.lumc.nl/R_course/07.2017/02_plenty.tasks.nocode.html)]
-        [[solutions](https://barmsijs.lumc.nl/R_course/07.2017/02_plenty.tasks.code.html)] -->
+<!-- - [Regression](https://github.com/rxmenezes/RcourseNKI/07.2017/01_regression.html)
+        [[tasks](https://github.com/rxmenezes/RcourseNKI/07.2017/01_regression.tasks.nocode.html)]
+        [[solutions](https://github.com/rxmenezes/RcourseNKI/07.2017/01_regression.tasks.code.html)] 
+    - [[Extra exercises](https://github.com/rxmenezes/RcourseNKI/07.2017/02_plenty.tasks.nocode.html)]
+        [[solutions](https://github.com/rxmenezes/RcourseNKI/07.2017/02_plenty.tasks.code.html)] -->
 Useful links
 ------------
 

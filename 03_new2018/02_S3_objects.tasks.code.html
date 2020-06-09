@@ -1882,7 +1882,7 @@ X-squared = 6.3185, df = 2, p-value = 0.04246</code></pre>
     replicates)
 
 data:  t.ge
-X-squared = 6.3185, df = NA, p-value = 0.04848</code></pre>
+X-squared = 6.3185, df = NA, p-value = 0.04048</code></pre>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1">p.sim &lt;-<span class="st"> </span><span class="kw">chisq.test</span>(t.ge, <span class="dt">simulate.p.value=</span><span class="ot">TRUE</span>)<span class="op">$</span>p.value</a></code></pre></div>
 <ul>
 <li>Print both computed p-values on the console with 2 decimal places.</li>
@@ -1890,7 +1890,7 @@ X-squared = 6.3185, df = NA, p-value = 0.04848</code></pre>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1"><span class="kw">round</span>(p.ge, <span class="dv">2</span>)</a></code></pre></div>
 <pre><code>[1] 0.04</code></pre>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="kw">round</span>(p.sim, <span class="dv">2</span>)</a></code></pre></div>
-<pre><code>[1] 0.05</code></pre>
+<pre><code>[1] 0.03</code></pre>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1"><span class="co"># Note that the simulated p-value may vary every time it is run</span></a></code></pre></div>
 </div>
 

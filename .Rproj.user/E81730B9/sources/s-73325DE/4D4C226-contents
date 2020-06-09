@@ -1,0 +1,32 @@
+---
+title: "Prepare your laptop"
+author: "Renee Menezes and Renaud Tissier"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Please follow the instructions below to prepare your laptop, prior to following either the Introduction to R course, or any of our courses that uses R. This overview gives general instructions that can be used for any operational systen (Microsoft Windows, iOS or linux). By following the links, instructions specific to each OS can be found. All tools used are free.
+
+### Install R
+
+[R](https://www.r-project.org/) is an open-source, free environment for statistical computing and graphics. You can find instructions for downloading and installing it from one of the CRAN mirrors, for example from the [Univ. of Gent](https://lib.ugent.be/CRAN/) or from the [Imperial College](https://cran.ma.imperial.ac.uk/). A full list of mirrors can be found [here](https://cran.r-project.org/mirrors.html).
+
+
+### Install RStudio
+
+
+Go to [the RStudio download page](https://www.rstudio.com/products/rstudio/download/#download), select a version of RStudio appropriate for your laptop, download it and then install. Please check whether you can start RStudio. 
+
+### Install RMarkdown
+
+[RMarkdown](https://rmarkdown.rstudio.com/) is a very nice and easy tool to produce reports using RStudio. It is made available as an R package. One easy way to install it is as follows:
+
+- open RStudio
+- click on the "File" menu on the top left, and choose "New file">"R Markdown"
+- if RMarkdown is not yet installed on your machine, this will prompt you to install it and any packages required. Just follow the instructions that appear on the screen.
+
+
+

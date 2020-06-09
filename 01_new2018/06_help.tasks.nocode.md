@@ -44,7 +44,7 @@ In the `survey` data:
 
 ```
 # To get 'survey.txt' directly from the server, use:
-# survey <- read.table( url( "https://barmsijs.lumc.nl/R_course/data/survey.txt" ), header = TRUE, sep = "\t" )
+# survey <- read.table( url( "https://github.com/rxmenezes/RcourseNKI/tree/master/data/survey.txt" ), header = TRUE, sep = "\t" )
 ```
 
 

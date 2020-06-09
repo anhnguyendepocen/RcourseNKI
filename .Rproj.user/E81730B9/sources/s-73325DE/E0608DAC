@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3185921253",
+    "hash" : "2375255263",
     "id" : "E0608DAC",
-    "lastKnownWriteTime" : 1591694330,
-    "last_content_update" : 1591694330108,
+    "lastKnownWriteTime" : 1591712181,
+    "last_content_update" : 1591712181743,
     "path" : "~/Documents/NKI/courses/R course NKI/materials/README.Rmd",
     "project_path" : "README.Rmd",
     "properties" : {
-        "cursorPosition" : "135,61",
-        "scrollLine" : "125"
+        "cursorPosition" : "121,90",
+        "scrollLine" : "114"
     },
     "read_only" : false,
     "read_only_alternatives" : [

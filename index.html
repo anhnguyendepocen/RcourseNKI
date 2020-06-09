@@ -1526,26 +1526,33 @@ div.tocify {
 <p>The course assumes no prior programming knowledge. Elementary statistics knowledge is necessary.</p>
 <p>Participants must <strong>bring own laptops</strong> capable of running <a href="https://www.rstudio.com/products/rstudio/">RStudio</a>.</p>
 <p>Before the course <strong>please prepare your laptop</strong>:</p>
-<ul>
-<li>go to <a href="https://www.rstudio.com/products/rstudio/download/#download">the RStudio download page</a>, select a version of RStudio appropriate for your laptop, download it and then install. Please check whether you can start RStudio.</li>
-<li>download the course materials <a href="https://barmsijs.lumc.nl/R_course/R_course.zip">.zip file</a> (see below) to your laptop. Unpack the zip file to a directory, and please check whether you can open <code>index.html</code> file from the directory.</li>
-</ul>
+<ol style="list-style-type: decimal">
+<li><p>install <a href="https://www.r-project.org/">R</a>, an open-source, free environment for statistical computing and graphics. You can find instructions for downloading and installing it from one of the CRAN mirrors, for example from the <a href="https://lib.ugent.be/CRAN/">Univ. of Gent</a> or from the <a href="https://cran.ma.imperial.ac.uk/">Imperial College</a>. A full list of mirrors can be found <a href="https://cran.r-project.org/mirrors.html">here</a>.</p></li>
+<li><p>install RStudio. Go to <a href="https://www.rstudio.com/products/rstudio/download/#download">the RStudio download page</a>, select a version of RStudio appropriate for your laptop, download it and then install. Please check whether you can start RStudio.</p></li>
+<li><p>install <a href="https://rmarkdown.rstudio.com/">RMarkdown</a>, a very nice and easy tool to produce reports using RStudio. It is made available as an R package for Rstudio. One easy way to install it is as follows:</p></li>
+</ol>
+<ol style="list-style-type: lower-roman">
+<li><p>open RStudio</p></li>
+<li><p>click on the “File” menu on the top left, and choose “New file”&gt;“R Markdown”. If RMarkdown is not yet installed on your machine, this will prompt you to install it and any packages required. Just follow the instructions that appear on the screen.</p></li>
+</ol>
+<ol start="4" style="list-style-type: decimal">
+<li>download the course materials <a href="https://github.com/rxmenezes/RcourseNKI/R_course.zip">.zip file</a> (see below) to your laptop. Unpack the zip file to a directory, and please check whether you can open <code>index.html</code> file from the directory.</li>
+</ol>
 </div>
 <div id="materials" class="section level2">
 <h2><span class="header-section-number">1.4</span> Materials</h2>
-<p>The course materials are served:</p>
+<p>After the course material .zip file is downloaded, the course material can be assessed:</p>
 <ul>
-<li>as <a href="https://barmsijs.lumc.nl/R_course/index.html">HTML pages</a> at <a href="https://barmsijs.lumc.nl/R_course/index.html" class="uri">https://barmsijs.lumc.nl/R_course/index.html</a></li>
-<li>as a <a href="https://barmsijs.lumc.nl/R_course/R_course.zip">.zip file</a></li>
-<li>as a <a href="https://barmsijs.lumc.nl/R_course/R_course.tgz">.tar.gz file</a></li>
-<li>in <a href="https://git.lumc.nl/bce_core/R_course_2016">the course source git repository</a></li>
+<li>as HTML pages by opening <code>index.html</code> in any browser</li>
+<li>by clicking on the <code>RcourseNKI.Rproj</code> file, which will open the entire course as an R project</li>
+<li>via <a href="https://github.com/rxmenezes/RcourseNKI">the course source git repository</a></li>
 </ul>
-<p>The materials contain a <a href="https://barmsijs.lumc.nl/R_course/data"><code>data</code> directory</a> with the <strong>data</strong> <strong>files</strong> used in the presentations/tasks. The directory can be also accessed at <a href="https://barmsijs.lumc.nl/R_course/data" class="uri">https://barmsijs.lumc.nl/R_course/data</a></p>
+<p>The materials contain a <a href="https://github.com/rxmenezes/RcourseNKI/tree/master/data"><code>data</code> directory</a> with the <strong>data</strong> <strong>files</strong> used in the presentations/tasks. The directory can be also accessed at <a href="https://github.com/rxmenezes/RcourseNKI/tree/master/data" class="uri">https://github.com/rxmenezes/RcourseNKI/tree/master/data</a></p>
 </div>
 <div id="programme" class="section level2">
 <h2><span class="header-section-number">1.5</span> Programme</h2>
-<div id="first-nki-edition-june-15th-16th-18th" class="section level3">
-<h3><span class="header-section-number">1.5.1</span> First NKI edition, June 15th, 16th, 18th</h3>
+<div id="first-nki-edition-june-15th-16th-18th-2020" class="section level3">
+<h3><span class="header-section-number">1.5.1</span> First NKI edition, June 15th, 16th, 18th 2020</h3>
 <p>This course will be given online via Zoom. All course days are in the period 9:00-16:00, with the last hour reserved for general Q&amp;A.</p>
 </div>
 </div>
@@ -1571,6 +1578,7 @@ div.tocify {
 </ul></li>
 <li>Slot 3, Data types, part 2:
 <ul>
+<li><a href="03_new2018/02_rmarkdown.html">Combining text, scripts and output: RMarkdown</a> [<a href="03_new2018/02_rmarkdown.tasks.nocode.html">tasks</a>] [<a href="03_new2018/02_rmarkdown.tasks.code.html">solutions</a>]</li>
 <li><a href="03_new2018/01_lists.html">Lists</a> [<a href="03_new2018/01_lists.tasks.nocode.html">tasks</a>] [<a href="03_new2018/01_lists.tasks.code.html">solutions</a>]</li>
 <li><a href="03_new2018/02_S3_objects.html">Basic statistical tests</a> [<a href="03_new2018/02_S3_objects.tasks.nocode.html">tasks</a>] [<a href="03_new2018/02_S3_objects.tasks.code.html">solutions</a>]</li>
 <li><a href="03_new2018/03_regression.html">Regression and formula objects</a> [<a href="03_new2018/03_regression.tasks.nocode.html">tasks</a>] [<a href="03_new2018/03_regression.tasks.code.html">solutions</a>]</li>

@@ -89,7 +89,7 @@ d <- read.table( "data/pulse.tsv", header = TRUE, sep = "\t" )
 
 ```
 # To get 'pulse.tsv' directly from the server, use:
-# d <- read.table( url( "https://barmsijs.lumc.nl/R_course/data/pulse.tsv" ), header = TRUE, sep = "\t" )
+# d <- read.table( url( "https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.tsv" ), header = TRUE, sep = "\t" )
 ```
 
 ```r
@@ -122,7 +122,7 @@ d <- read.csv( "data/pulse.csv" );
 
 ```
 # To get 'pulse.csv' directly from the server, use:
-# d <- read.csv( url( "https://barmsijs.lumc.nl/R_course/data/pulse.csv" ) )
+# d <- read.csv( url( "https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.csv" ) )
 ```
 
 ```r
@@ -228,7 +228,7 @@ pulse <- read.table( "data/pulse.txt", header = TRUE, sep = "\t" )
 
 ```
 # To get 'pulse.txt' directly from the server, use:
-# pulse <- read.table( url( "https://barmsijs.lumc.nl/R_course/data/pulse.txt" ), header = TRUE, sep = "\t" )
+# pulse <- read.table( url( "https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.txt" ), header = TRUE, sep = "\t" )
 ```
 
 To shorten output we will use the first 20 rows of the `pulse` data frame:

@@ -15,8 +15,8 @@ else
 endif
 
 SHARK_DIR=/bam-export/$(MAIN_ID)
-R_COURSE_URL=https://barmsijs.lumc.nl/R_course
-R_COURSE_GIT=https://git.lumc.nl/bce_core/R_course_2016
+R_COURSE_URL=https://github.com/rxmenezes/RcourseNKI
+R_COURSE_GIT=https://github.com/rxmenezes/RcourseNKI
 PARAMS=params=list( RCourseGitURL="$(R_COURSE_GIT)", RCourseURL="$(R_COURSE_URL)" )
 
 SHARK_GROUP=5-A-SHARK_BioCentEXP
@@ -43,6 +43,7 @@ MAIN_TASK_DOCs=\
   02_new2018/02_selecting \
   02_new2018/03_data_frames \
   02_new2018/05_matrices \
+  03_new2018/02_rmarkdown \
 	03_new2018/01_lists \
 	03_new2018/02_S3_objects \
 	03_new2018/03_regression \

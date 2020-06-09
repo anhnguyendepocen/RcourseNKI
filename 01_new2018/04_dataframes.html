@@ -1672,10 +1672,10 @@ div.tocify {
 <h1><span class="header-section-number">1</span> Data frames (basics)</h1>
 <p>So we are now able to read in data sets (tables). A data set in R is called a <code>data.frame</code>.</p>
 <pre><code># To get 'pulse.txt' directly from the server, use:
-# pulse &lt;- read.table( url( &quot;https://barmsijs.lumc.nl/R_course/data/pulse.txt&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
+# pulse &lt;- read.table( url( &quot;https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.txt&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">pulse &lt;-<span class="st"> </span><span class="kw">read.delim</span>( <span class="st">&quot;../data/pulse.txt&quot;</span> )</a></code></pre></div>
 <pre><code># To get 'survey.txt' directly from the server, use:
-# survey &lt;- read.table( url( &quot;https://barmsijs.lumc.nl/R_course/data/survey.txt&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
+# survey &lt;- read.table( url( &quot;https://github.com/rxmenezes/RcourseNKI/tree/master/data/survey.txt&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">survey &lt;-<span class="st"> </span><span class="kw">read.delim</span>( <span class="st">&quot;../data/survey.txt&quot;</span> )</a></code></pre></div>
 <p>R can have many data sets in memory simultaneously. You will always have to specify which data set you are working in.</p>
 <div id="exploring" class="section level2">

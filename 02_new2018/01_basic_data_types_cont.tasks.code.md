@@ -137,7 +137,7 @@ lines <- catReadLines( "survey.txt", "lines" )
 
 ```
 # To get 'survey.txt' directly from the server, use:
-# lines <- readLines( url( "https://barmsijs.lumc.nl/R_course/data/survey.txt" ) )
+# lines <- readLines( url( "https://github.com/rxmenezes/RcourseNKI/tree/master/data/survey.txt" ) )
 ```
 
 ```r

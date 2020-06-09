@@ -52,7 +52,7 @@ The file `pulse.txt` is a tab-delimited text file. We can read it into R with
 
 ```
 # To get 'pulse.txt' directly from the server, use:
-# pulse <- read.table( url( "https://barmsijs.lumc.nl/R_course/data/pulse.txt" ), header = TRUE, sep = "\t" )
+# pulse <- read.table( url( "https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.txt" ), header = TRUE, sep = "\t" )
 ```
 
 ```r

@@ -1681,7 +1681,7 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw">read.csv</span>( <span class="st">&quot;data/pulse.csv&quot;</span> );</a></code></pre></div>
 <pre><code># To get 'pulse.csv' directly from the server, use:
-# d &lt;- read.csv( url( &quot;https://barmsijs.lumc.nl/R_course/data/pulse.csv&quot; ) )</code></pre>
+# d &lt;- read.csv( url( &quot;https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.csv&quot; ) )</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">str</span>( d )</a></code></pre></div>
 <pre><code>'data.frame':   110 obs. of  13 variables:
  $ id      : Factor w/ 110 levels &quot;1993_A&quot;,&quot;1993_B&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
@@ -1722,28 +1722,28 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">rows &lt;-<span class="st"> </span><span class="kw">sample</span>( <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>( d ), <span class="dv">10</span> )</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">d[ rows, ]</a></code></pre></div>
-<pre><code>        id    name height weight age gender smokes alcohol exercise ran pulse1
-110 1998_R    Gene    185   85.0  19   male     no     yes moderate sat     75
-2   1993_B Melanie    179   58.0  19 female     no     yes moderate ran     82
-100 1998_H   Haley    165   60.0  19 female    yes     yes      low ran     88
-24  1993_X  Tyrone    182   75.0  26   male    yes     yes moderate sat     80
-50  1996_B  Travis    167   70.0  22   male    yes     yes      low sat     92
-64  1996_P  Adrian    180  102.0  20   male     no     yes moderate sat     76
-41  1995_O Clinton    175   66.0  20   male     no     yes moderate sat     66
-78  1997_I     Tim    170   58.5  20   male     no      no      low sat     80
-82  1997_M   Ralph    171   71.0  41   male     no      no      low sat     52
-21  1993_U  Jerome    175   60.0  19   male     no      no      low sat     88
+<pre><code>        id     name height weight age gender smokes alcohol exercise ran pulse1
+34  1995_H    Eliza    164     66  23 female     no      no      low ran     74
+60  1996_L   Sidney    180     75  20   male     no     yes moderate ran     65
+4   1993_D   Travis    195     84  18   male     no     yes     high sat     71
+109 1998_Q    Lewis    170     65  18   male     no     yes     high sat     69
+102 1998_J     Raul     68     63  19   male     no      no moderate ran     88
+37  1995_K   Johnny    185     90  18   male     no      no      low ran     80
+15  1993_O Salvador    180     72  18   male     no     yes moderate sat     69
+110 1998_R     Gene    185     85  19   male     no     yes moderate sat     75
+54  1996_F  Brandie    171     67  18 female     no     yes      low sat     76
+59  1996_K Bridgett    160     49  19 female     no      no      low sat     80
     pulse2 year
+34     168 1995
+60      82 1996
+4       73 1993
+109     64 1998
+102    136 1998
+37     140 1995
+15      67 1993
 110     68 1998
-2      150 1993
-100    120 1998
-24      76 1993
-50      84 1996
-64      72 1996
-41      68 1995
-78      82 1997
-82      60 1997
-21      86 1993</code></pre>
+54      74 1996
+59      72 1996</code></pre>
 <ul>
 <li>Sorting (ordering) a table (by multiple keys):
 <ul>

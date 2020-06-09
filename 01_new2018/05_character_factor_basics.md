@@ -12,7 +12,7 @@ We will use the `pulse` and `survey` data again for illustration and exercises:
 
 ```
 # To get 'pulse.txt' directly from the server, use:
-# pulse <- read.table( url( "https://barmsijs.lumc.nl/R_course/data/pulse.txt" ), header = TRUE, sep = "\t" )
+# pulse <- read.table( url( "https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.txt" ), header = TRUE, sep = "\t" )
 ```
 
 ```r
@@ -22,7 +22,7 @@ pulse <- read.delim( "data/pulse.txt" )
 
 ```
 # To get 'survey.txt' directly from the server, use:
-# survey <- read.table( url( "https://barmsijs.lumc.nl/R_course/data/survey.txt" ), header = TRUE, sep = "\t" )
+# survey <- read.table( url( "https://github.com/rxmenezes/RcourseNKI/tree/master/data/survey.txt" ), header = TRUE, sep = "\t" )
 ```
 
 ```r

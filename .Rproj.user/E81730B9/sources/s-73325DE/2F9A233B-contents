@@ -1,0 +1,93 @@
+---
+title: "Basic statistical tests"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+```{r setup, include=FALSE}
+source( "../R_course_setup.R" );
+```
+
+
+```{r eval=1:2, echo=3:4}
+pulse <- read.delim("../data/pulse.txt")
+survey <- read.delim("../data/survey.txt")
+pulse <- read.delim("pulse.txt")
+survey <- read.delim("survey.txt")
+```
+
+
+# Statistical methods with R
+
+Statistical methods typically have their own pre-defined functions. Example: the t-test.
+
+## Statistical tests - the t test
+
+Suppose we are interested in finding a difference between `pulse1` and `pulse2` in the pulse data. These are two variables representing measurements per individual before (pulse1) and after (pulse2) an intervention. As such, measurements are paired so we apply a paired t test:
+
+```{r}
+t.test(pulse$pulse1, pulse$pulse2, paired=TRUE)
+```
+
+
+
+## Accessing the result
+
+The output on the screen is clear. But sometimes we want to extract parts of the output, say to put in a report, without having to include the entire output of the test. To do that, let us first save the result as an R object, and then check what it contains by using names().
+
+```{r}
+res <- t.test(pulse$pulse1, pulse$pulse2, paired=TRUE)
+names(res)
+class(res)
+```
+
+Note that the resulting object of `t.test` is a special type of object. It contains various components, including `r names(res)[1]` and `r names(res)[2]`. Each can be assessed by using a `$` sign, as in:
+
+```{r}
+res$statistic
+res$p.value
+```
+
+Note in particular that elements in this result involve different types and lengths. Indeed:
+
+```{r}
+class(res$p.value)
+class(res$alternative)
+length(res$p.value)
+length(res$conf.int)
+```
+
+This means that the object resulting from the t.test function is a list too.
+
+
+## Wilcoxon test
+
+Similarly to what we did above, we can apply a Wilcoxon test for these paired measurements and save results as an object. This can be done using:
+
+```{r}
+res <- wilcox.test(pulse$pulse1, pulse$pulse2, paired=TRUE)
+```
+
+
+Note that the syntax is the same as the one used for the t test. 
+
+We can also assess names and the class of the object created by the Wilcoxon test:
+
+```{r}
+names(res)
+class(res)
+```
+
+Note that the class of the object created by the wilcox.test function is the same as that for the object created by the t.test function.
+
+## Other statistical tests
+
+Other basic tests available include:
+
+- `chisq.test`
+- `fisher.test`
+- `binom.test`
+
+
+```{r results="asis", echo=FALSE, comment=""}
+catLinkTaskSection( "S3", "02_S3_objects.Rmd" )
+```

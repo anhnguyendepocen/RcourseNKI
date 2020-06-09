@@ -18,7 +18,7 @@ date: "09 juni 2020"
 
 ```
 # To get 'pulse.csv' directly from the server, use:
-# d <- read.csv( url( "https://barmsijs.lumc.nl/R_course/data/pulse.csv" ) )
+# d <- read.csv( url( "https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.csv" ) )
 ```
 
 

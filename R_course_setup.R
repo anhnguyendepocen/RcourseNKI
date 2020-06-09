@@ -1,7 +1,7 @@
 if( !exists( "params" ) ){ 
   params <- list( 
-    "RCourseGitURL" = "https://git.lumc.nl/bce_core/R_course_2016",
-    "RCourseURL"="https://git.lumc.nl/bce_core/R_course_2016/raw/master"
+    "RCourseGitURL" = "https://github.com/rxmenezes/RcourseNKI",
+    "RCourseURL" = "https://github.com/rxmenezes/RcourseNKI"
   ) 
 }
 
@@ -12,7 +12,7 @@ catReadTable <- function( fileName, varName ) {
     varName, ' <- ',
     'read.table( url( "', 
     params$RCourseURL, 
-    '/data/', 
+    '/tree/master/data/', 
     fileName, 
     '" ), header = TRUE, sep = "\\t" )\n' 
   ) );
@@ -27,7 +27,7 @@ catReadLines <- function( fileName, varName ) {
     varName, ' <- ',
     'readLines( url( "', 
     params$RCourseURL, 
-    '/data/', 
+    '/tree/master/data/', 
     fileName, 
     '" ) )\n' 
   ) );
@@ -44,7 +44,7 @@ catReadDelim <- function( fileName, varName = NULL ) {
   cat( paste0(
     'read.delim( url( "', 
     params$RCourseURL, 
-    '/data/', 
+    '/tree/master/data/', 
     fileName, 
     '" ) )\n' 
   ) )
@@ -59,7 +59,7 @@ catReadCsv <- function( fileName, varName = NULL, args = c() ) {
   cat( paste0(
     'read.csv( url( "', 
     params$RCourseURL, 
-    '/data/', 
+    '/tree/master/data/', 
     fileName, 
     '" )'
   ) );
@@ -80,7 +80,7 @@ catLoad <- function( fileName ) {
   cat( paste0(
     'load( url( "', 
     params$RCourseURL, 
-    '/data/', 
+    '/tree/master/data/', 
     fileName, 
     '" ) )\n' 
   ) )

@@ -1702,7 +1702,7 @@ div.tocify {
 <h3><span class="header-section-number">1.2.1</span> Reading tab-delimited text</h3>
 <p>The file <code>pulse.txt</code> is a tab-delimited text file. We can read it into R with</p>
 <pre><code># To get 'pulse.txt' directly from the server, use:
-# pulse &lt;- read.table( url( &quot;https://barmsijs.lumc.nl/R_course/data/pulse.txt&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
+# pulse &lt;- read.table( url( &quot;https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.txt&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">pulse &lt;-<span class="st"> </span><span class="kw">read.delim</span>( <span class="st">&quot;data/pulse.txt&quot;</span> )</a></code></pre></div>
 <p>We added <code>data/</code> because the file is in the data subfolder we just created.</p>
 <p>Note that we assigned <code>&lt;-</code> the result of <code>read.delim</code> to <code>pulse</code>. We have given our dataset the name <code>pulse</code>.</p>

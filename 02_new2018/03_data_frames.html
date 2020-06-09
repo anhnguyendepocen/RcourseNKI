@@ -1721,7 +1721,7 @@ E  Eve  16  FALSE</code></pre>
 <p>For files stored in <a href="https://en.wikipedia.org/wiki/Tab-separated_values">tab-separated files (<code>tsv</code>) format</a> use:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw">read.table</span>( <span class="st">&quot;data/pulse.tsv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span> )</a></code></pre></div>
 <pre><code># To get 'pulse.tsv' directly from the server, use:
-# d &lt;- read.table( url( &quot;https://barmsijs.lumc.nl/R_course/data/pulse.tsv&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
+# d &lt;- read.table( url( &quot;https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.tsv&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">str</span>( d )</a></code></pre></div>
 <pre><code>'data.frame':   110 obs. of  12 variables:
  $ name    : Factor w/ 106 levels &quot;Adeline&quot;,&quot;Adrian&quot;,..: 7 72 16 101 56 35 11 31 96 102 ...
@@ -1742,7 +1742,7 @@ E  Eve  16  FALSE</code></pre>
 <p>Data frames (tables) stored in files in <a href="https://en.wikipedia.org/wiki/Comma-separated_values">comma-separated values (<code>csv</code>) format</a> can be read with:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw">read.csv</span>( <span class="st">&quot;data/pulse.csv&quot;</span> );</a></code></pre></div>
 <pre><code># To get 'pulse.csv' directly from the server, use:
-# d &lt;- read.csv( url( &quot;https://barmsijs.lumc.nl/R_course/data/pulse.csv&quot; ) )</code></pre>
+# d &lt;- read.csv( url( &quot;https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.csv&quot; ) )</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">str</span>( d )</a></code></pre></div>
 <pre><code>'data.frame':   110 obs. of  13 variables:
  $ id      : Factor w/ 110 levels &quot;1993_A&quot;,&quot;1993_B&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
@@ -1821,7 +1821,7 @@ E  Eve  16  FALSE</code></pre>
 <p>Let’s discuss the data frame <code>pulse</code>:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">pulse &lt;-<span class="st"> </span><span class="kw">read.table</span>( <span class="st">&quot;data/pulse.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span> )</a></code></pre></div>
 <pre><code># To get 'pulse.txt' directly from the server, use:
-# pulse &lt;- read.table( url( &quot;https://barmsijs.lumc.nl/R_course/data/pulse.txt&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
+# pulse &lt;- read.table( url( &quot;https://github.com/rxmenezes/RcourseNKI/tree/master/data/pulse.txt&quot; ), header = TRUE, sep = &quot;\t&quot; )</code></pre>
 <p>To shorten output we will use the first 20 rows of the <code>pulse</code> data frame:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">pulse &lt;-<span class="st"> </span><span class="kw">head</span>( pulse, <span class="dv">20</span> )</a></code></pre></div>
 <div id="dimensions" class="section level3">
