@@ -51,9 +51,9 @@ Before the course **please prepare your laptop**:
 
 3. install [RMarkdown](https://rmarkdown.rstudio.com/),  a very nice and easy tool to produce reports using RStudio. It is made available as an R package for Rstudio. One easy way to install it is as follows:
 
-i) open RStudio
+-- open RStudio
 
-ii) click on the "File" menu on the top left, and choose "New file">"R Markdown". If RMarkdown is not yet installed on your machine, this will prompt you to install it and any packages required. Just follow the instructions that appear on the screen.
+-- click on the "File" menu on the top left, and choose "New file">"R Markdown". If RMarkdown is not yet installed on your machine, this will prompt you to install it and any packages required. Just follow the instructions that appear on the screen.
 
 
 4. download the course materials via a [.7z file](`r params$RCourseURL`/blob/master/RcourseNKI.7z) or a [.zip file](`r params$RCourseURL`/blob/master/RcourseNKI.zip) to your laptop. Unpack the compressed file to a directory, and please check whether you can open `index.html` file from the directory. Note that, for the first, you may have to install 7z.

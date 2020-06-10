@@ -1753,19 +1753,19 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">v &lt;-<span class="st"> </span><span class="dv">101</span><span class="op">:</span><span class="dv">110</span></a>
 <a class="sourceLine" id="cb24-2" data-line-number="2"><span class="kw">sample</span>( v )</a></code></pre></div>
-<pre><code> [1] 110 109 104 108 105 106 103 101 102 107</code></pre>
+<pre><code> [1] 107 110 106 109 102 101 103 108 104 105</code></pre>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">sample</span>( v )</a></code></pre></div>
-<pre><code> [1] 101 104 103 107 106 110 109 105 102 108</code></pre>
+<pre><code> [1] 101 107 106 105 110 108 104 102 109 103</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">sample</span>( v, <span class="dv">3</span> )</a></code></pre></div>
-<pre><code>[1] 101 108 106</code></pre>
+<pre><code>[1] 102 109 104</code></pre>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">sample</span>( v, <span class="dv">3</span> )</a></code></pre></div>
-<pre><code>[1] 110 109 102</code></pre>
+<pre><code>[1] 103 108 107</code></pre>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">sample</span>( v, <span class="dv">15</span> )</a></code></pre></div>
 <pre><code>Error in sample.int(length(x), size, replace, prob): cannot take a sample larger than the population when 'replace = FALSE'</code></pre>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">sample</span>( v, <span class="dv">15</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span> )</a></code></pre></div>
-<pre><code> [1] 103 110 101 107 106 109 107 105 104 104 109 105 102 106 103</code></pre>
+<pre><code> [1] 104 104 110 104 108 103 101 101 101 108 104 101 106 110 104</code></pre>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">sample</span>( v, <span class="dv">15</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span> )</a></code></pre></div>
-<pre><code> [1] 108 105 104 107 110 106 106 103 102 105 105 102 105 108 108</code></pre>
+<pre><code> [1] 104 103 106 102 110 109 107 101 104 102 107 109 101 105 109</code></pre>
 <ul>
 <li>Sort a vector: <code>sort</code>.
 <ul>
@@ -1775,9 +1775,9 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">v &lt;-<span class="st"> </span><span class="kw">sample</span>( letters, <span class="dv">10</span> )</a>
 <a class="sourceLine" id="cb38-2" data-line-number="2">v</a></code></pre></div>
-<pre><code> [1] &quot;p&quot; &quot;v&quot; &quot;k&quot; &quot;z&quot; &quot;b&quot; &quot;r&quot; &quot;i&quot; &quot;e&quot; &quot;a&quot; &quot;u&quot;</code></pre>
+<pre><code> [1] &quot;r&quot; &quot;c&quot; &quot;u&quot; &quot;n&quot; &quot;x&quot; &quot;o&quot; &quot;i&quot; &quot;g&quot; &quot;k&quot; &quot;z&quot;</code></pre>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">sort</span>( v )</a></code></pre></div>
-<pre><code> [1] &quot;a&quot; &quot;b&quot; &quot;e&quot; &quot;i&quot; &quot;k&quot; &quot;p&quot; &quot;r&quot; &quot;u&quot; &quot;v&quot; &quot;z&quot;</code></pre>
+<pre><code> [1] &quot;c&quot; &quot;g&quot; &quot;i&quot; &quot;k&quot; &quot;n&quot; &quot;o&quot; &quot;r&quot; &quot;u&quot; &quot;x&quot; &quot;z&quot;</code></pre>
 </div>
 <div id="extra-tasks-1" class="section level4">
 <h4><span class="header-section-number">1.2.1.2</span> Extra tasks</h4>
@@ -1790,9 +1790,9 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">v &lt;-<span class="st"> </span><span class="kw">sample</span>( <span class="dv">101</span><span class="op">:</span><span class="dv">110</span>, <span class="dv">15</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span> )</a>
 <a class="sourceLine" id="cb42-2" data-line-number="2">v</a></code></pre></div>
-<pre><code> [1] 109 104 104 102 107 101 104 105 107 104 109 103 102 109 109</code></pre>
+<pre><code> [1] 102 109 105 105 102 103 103 108 102 109 104 101 109 102 104</code></pre>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">unique</span>( v )</a></code></pre></div>
-<pre><code>[1] 109 104 102 107 101 105 103</code></pre>
+<pre><code>[1] 102 109 105 103 108 104 101</code></pre>
 <ul>
 <li>Reverse a vector: <code>rev</code>. (*)
 <ul>
@@ -1820,11 +1820,11 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">v &lt;-<span class="st"> </span><span class="kw">sample</span>( <span class="kw">c</span>( <span class="dv">0</span>, <span class="dv">1</span>, <span class="ot">NA</span> ), <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span> )</a>
 <a class="sourceLine" id="cb50-2" data-line-number="2">v</a></code></pre></div>
-<pre><code> [1]  0  1 NA NA  1  1  0  0  1  1</code></pre>
+<pre><code> [1]  0  0  1  0 NA  1 NA  0  0  0</code></pre>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw">is.na</span>( v )</a></code></pre></div>
-<pre><code> [1] FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<pre><code> [1] FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE</code></pre>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1">v[ <span class="op">!</span><span class="kw">is.na</span>( v ) ]</a></code></pre></div>
-<pre><code>[1] 0 1 1 1 0 0 1 1</code></pre>
+<pre><code>[1] 0 0 1 0 1 0 0 0</code></pre>
 </div>
 <div id="extra-tasks-2" class="section level4">
 <h4><span class="header-section-number">1.2.2.2</span> Extra tasks</h4>
@@ -1852,9 +1852,9 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">v &lt;-<span class="st"> </span><span class="kw">sample</span>( <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span> )</a>
 <a class="sourceLine" id="cb62-2" data-line-number="2">v</a></code></pre></div>
-<pre><code> [1] 4 4 2 4 3 1 1 1 3 3</code></pre>
+<pre><code> [1] 3 3 4 4 1 1 4 4 4 2</code></pre>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="kw">duplicated</span>( v )</a></code></pre></div>
-<pre><code> [1] FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE</code></pre>
+<pre><code> [1] FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE</code></pre>
 </div>
 </div>
 <div id="result-is-a-vector-of-indices" class="section level3">
@@ -1870,11 +1870,11 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1">v &lt;-<span class="st"> </span><span class="kw">sample</span>( <span class="dv">1</span><span class="op">:</span><span class="dv">1000000</span>, <span class="dv">10</span> )</a>
 <a class="sourceLine" id="cb66-2" data-line-number="2">v</a></code></pre></div>
-<pre><code> [1] 959761 736576 376545 263701 547457 434312 680615 835773 264245 746792</code></pre>
+<pre><code> [1] 447840 410012 107177 140938 417561 251047 349465 941227 199522 405012</code></pre>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="kw">which.max</span>( v )</a></code></pre></div>
-<pre><code>[1] 1</code></pre>
+<pre><code>[1] 8</code></pre>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">v[ <span class="kw">which.max</span>( v ) ]</a></code></pre></div>
-<pre><code>[1] 959761</code></pre>
+<pre><code>[1] 941227</code></pre>
 </div>
 <div id="extra-tasks-3" class="section level4">
 <h4><span class="header-section-number">1.2.3.2</span> Extra tasks</h4>
@@ -1888,9 +1888,9 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1">v &lt;-<span class="st"> </span><span class="kw">sample</span>( <span class="kw">c</span>( T, F ), <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span> )</a>
 <a class="sourceLine" id="cb72-2" data-line-number="2">v</a></code></pre></div>
-<pre><code> [1]  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE</code></pre>
+<pre><code> [1]  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE</code></pre>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="kw">which</span>( v )</a></code></pre></div>
-<pre><code>[1] 1 3 5 6 8</code></pre>
+<pre><code>[1] 1 4 5 7 9</code></pre>
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1">v[ <span class="kw">which</span>( v ) ]</a></code></pre></div>
 <pre><code>[1] TRUE TRUE TRUE TRUE TRUE</code></pre>
 <ul>
@@ -1919,11 +1919,11 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" data-line-number="1">v &lt;-<span class="st"> </span><span class="kw">sample</span>( LETTERS, <span class="dv">10</span> )</a>
 <a class="sourceLine" id="cb84-2" data-line-number="2">v</a></code></pre></div>
-<pre><code> [1] &quot;V&quot; &quot;Z&quot; &quot;Y&quot; &quot;X&quot; &quot;J&quot; &quot;M&quot; &quot;H&quot; &quot;Q&quot; &quot;I&quot; &quot;D&quot;</code></pre>
+<pre><code> [1] &quot;O&quot; &quot;C&quot; &quot;V&quot; &quot;X&quot; &quot;H&quot; &quot;W&quot; &quot;Z&quot; &quot;L&quot; &quot;R&quot; &quot;B&quot;</code></pre>
 <div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="kw">order</span>( v )</a></code></pre></div>
-<pre><code> [1] 10  7  9  5  6  8  1  4  3  2</code></pre>
+<pre><code> [1] 10  2  5  8  1  9  3  6  4  7</code></pre>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" data-line-number="1">v[ <span class="kw">order</span>( v ) ]</a></code></pre></div>
-<pre><code> [1] &quot;D&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;M&quot; &quot;Q&quot; &quot;V&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;</code></pre>
+<pre><code> [1] &quot;B&quot; &quot;C&quot; &quot;H&quot; &quot;L&quot; &quot;O&quot; &quot;R&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Z&quot;</code></pre>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" data-line-number="1">v[ <span class="kw">order</span>( v ) ] <span class="op">==</span><span class="st"> </span><span class="kw">sort</span>( v )</a></code></pre></div>
 <pre><code> [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" data-line-number="1"><span class="kw">all</span>( v[ <span class="kw">order</span>( v ) ] <span class="op">==</span><span class="st"> </span><span class="kw">sort</span>( v ) )</a></code></pre></div>
@@ -1943,11 +1943,11 @@ div.tocify {
 </ul>
 <div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" data-line-number="1">v &lt;-<span class="st"> </span><span class="kw">sample</span>( LETTERS, <span class="dv">10</span> )</a>
 <a class="sourceLine" id="cb94-2" data-line-number="2">v</a></code></pre></div>
-<pre><code> [1] &quot;K&quot; &quot;E&quot; &quot;D&quot; &quot;L&quot; &quot;S&quot; &quot;U&quot; &quot;B&quot; &quot;Y&quot; &quot;R&quot; &quot;W&quot;</code></pre>
+<pre><code> [1] &quot;Q&quot; &quot;J&quot; &quot;L&quot; &quot;B&quot; &quot;P&quot; &quot;C&quot; &quot;G&quot; &quot;K&quot; &quot;H&quot; &quot;T&quot;</code></pre>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" data-line-number="1"><span class="kw">order</span>( v )</a></code></pre></div>
-<pre><code> [1]  7  3  2  1  4  9  5  6 10  8</code></pre>
+<pre><code> [1]  4  6  7  9  2  8  3  5  1 10</code></pre>
 <div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" data-line-number="1"><span class="kw">rank</span>( v )</a></code></pre></div>
-<pre><code> [1]  4  3  2  5  7  8  1 10  6  9</code></pre>
+<pre><code> [1]  9  5  7  1  8  2  3  6  4 10</code></pre>
 </div>
 </div>
 </div>

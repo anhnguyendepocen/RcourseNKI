@@ -80,16 +80,12 @@ Before the course **please prepare your laptop**:
     easy tool to produce reports using RStudio. It is made available as
     an R package for Rstudio. One easy way to install it is as follows:
 
-<!-- -->
+– open RStudio
 
-1.  open RStudio
-
-2.  click on the “File” menu on the top left, and choose “New
-    file”&gt;“R Markdown”. If RMarkdown is not yet installed on your
-    machine, this will prompt you to install it and any packages
-    required. Just follow the instructions that appear on the screen.
-
-<!-- -->
+– click on the “File” menu on the top left, and choose “New file”&gt;“R
+Markdown”. If RMarkdown is not yet installed on your machine, this will
+prompt you to install it and any packages required. Just follow the
+instructions that appear on the screen.
 
 1.  download the course materials via a [.7z
     file](https://github.com/rxmenezes/RcourseNKI/blob/master/RcourseNKI.7z)
