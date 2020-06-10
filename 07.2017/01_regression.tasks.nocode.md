@@ -4,7 +4,7 @@ author:
 - affiliation: "Bioinformatics Center of Expertise, Medical Statistics & Bioinformatics, LUMC"
   company: "LUMC"
   name: "Jelle Goeman"
-date: "09 juni 2020"
+date: "10 juni 2020"
 ---
 
 # Formulae and regression (tasks)

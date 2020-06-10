@@ -1,7 +1,7 @@
 ---
 title: "Good programming practice (GPP)"
 author: ''
-date: "09 juni 2020"
+date: "10 juni 2020"
 ---
 
 
@@ -49,7 +49,7 @@ function (x, y)
     y <- as.vector(y)
     unique(y[match(as.vector(x), y, 0L)])
 }
-<bytecode: 0x56518abe08a8>
+<bytecode: 0x55d0b603d8a8>
 <environment: namespace:base>
 ```
 
@@ -68,7 +68,7 @@ typeof
 ```
 function (x) 
 .Internal(typeof(x))
-<bytecode: 0x5651891c50a0>
+<bytecode: 0x55d0b46220a0>
 <environment: namespace:base>
 ```
 

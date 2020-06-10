@@ -1,6 +1,6 @@
 ---
 title: "Basic statistical tests (tasks)"
-date: "09 juni 2020"
+date: "10 juni 2020"
 ---
 
 
@@ -416,7 +416,7 @@ chisq.test(t.ge, simulate.p.value=TRUE)
 	replicates)
 
 data:  t.ge
-X-squared = 6.3185, df = NA, p-value = 0.03748
+X-squared = 6.3185, df = NA, p-value = 0.04398
 ```
 
 ```r

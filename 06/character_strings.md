@@ -1,6 +1,6 @@
 ---
 title: "Character string processing & Pattern matching"
-date: "09 juni 2020"
+date: "10 juni 2020"
 ---
 
 

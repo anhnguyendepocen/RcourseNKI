@@ -1,6 +1,6 @@
 ---
 title: "R scripts and reports (Rmarkdown)"
-date: "09 juni 2020"
+date: "10 juni 2020"
 output: html_document
 ---
 

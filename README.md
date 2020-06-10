@@ -91,9 +91,10 @@ Before the course **please prepare your laptop**:
 
 <!-- -->
 
-1.  download the course materials via [.7z
-    file](https://github.com/rxmenezes/RcourseNKI/RcourseNKI.7z) or
-    [.zip file](https://github.com/rxmenezes/RcourseNKI/RcourseNKI.zip)
+1.  download the course materials via a [.7z
+    file](https://github.com/rxmenezes/RcourseNKI/blob/master/RcourseNKI.7z)
+    or a [.zip
+    file](https://github.com/rxmenezes/RcourseNKI/blob/master/RcourseNKI.zip)
     to your laptop. Unpack the compressed file to a directory, and
     please check whether you can open `index.html` file from the
     directory. Note that, for the first, you may have to install 7z.
@@ -101,18 +102,19 @@ Before the course **please prepare your laptop**:
 Materials
 ---------
 
-After the course material file is downloaded and uncompressed, the
-course material can be assessed:
+After the course material file is downloaded and uncompressed, it can be
+assessed:
 
--   as HTML pages by opening `index.html` in any browser
+-   as HTML pages by opening `index.html` in any browser. Useful for
+    checking schedule and instructions
 -   by clicking on the `RcourseNKI.Rproj` file, which will open the
-    entire course as an R project
+    entire course material as an R project in RStudio. Useful for doing
+    exercises, as you can then open the R files directly.
 
 The materials contain a [`data`
 directory](https://github.com/rxmenezes/RcourseNKI/tree/master/data)
 with the **data** **files** used in the presentations/tasks. The
-directory can be also accessed at
-<a href="https://github.com/rxmenezes/RcourseNKI/tree/master/data" class="uri">https://github.com/rxmenezes/RcourseNKI/tree/master/data</a>
+directory is also accessible when you open the project in RStudio.
 
 Programme
 ---------

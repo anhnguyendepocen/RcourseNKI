@@ -4,7 +4,7 @@ author:
 - affiliation: "Bioinformatics Center of Expertise, Medical Statistics & Bioinformatics, LUMC"
   company: "LUMC"
   name: "Szymon M. Kielbasa, R. Monajemi"
-date: "09 juni 2020"
+date: "10 juni 2020"
 always_allow_html: yes
 ---
 

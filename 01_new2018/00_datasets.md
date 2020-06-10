@@ -1,6 +1,6 @@
 ---
 title: "Data sets used"
-date: "09 juni 2020"
+date: "10 juni 2020"
 ---
 
 # Data sets

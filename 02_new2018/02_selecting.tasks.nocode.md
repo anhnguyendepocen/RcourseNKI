@@ -1,6 +1,6 @@
 ---
 title: "Selecting/indexing/subsetting (vector elements, data frame rows/columns, ...) (tasks)"
-date: "09 juni 2020"
+date: "10 juni 2020"
 ---
 
 

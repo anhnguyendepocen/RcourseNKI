@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2728668767",
+    "hash" : "0",
     "id" : "882C71B3",
     "lastKnownWriteTime" : 1591711659,
     "last_content_update" : 1591711659265,
     "path" : "~/Documents/NKI/courses/R course NKI/materials/R_course_setup.R",
     "project_path" : "R_course_setup.R",
     "properties" : {
-        "cursorPosition" : "135,0",
-        "scrollLine" : "112"
+        "cursorPosition" : "2,37",
+        "scrollLine" : "0"
     },
     "read_only" : false,
     "read_only_alternatives" : [
