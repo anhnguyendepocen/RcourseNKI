@@ -87,7 +87,7 @@ Markdown”. If RMarkdown is not yet installed on your machine, this will
 prompt you to install it and any packages required. Just follow the
 instructions that appear on the screen.
 
-1.  download the course materials via a [.7z
+4.  download the course materials via a [.7z
     file](https://github.com/rxmenezes/RcourseNKI/blob/master/RcourseNKI.7z)
     or a [.zip
     file](https://github.com/rxmenezes/RcourseNKI/blob/master/RcourseNKI.zip)
